@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-6">Deletando Corretora</h3>
+    <div class="card">
+        <div class="card-body m-2">
+            <p class="card-text h6">
+                Tem certeza de que deseja excluir a corretora  <strong class="h5 text-danger"> {{ object.name }}</strong> ?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+            <a href="{% url 'broker_list' %}" class="btn btn-primary mt-3"> cancelar e voltar para lista de
+                marcas</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

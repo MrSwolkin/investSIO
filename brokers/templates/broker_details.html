@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-6">Detalhes da {{ object.name }}</h3>
+    <div class="card col-md-9">
+        <div class="card-body">
+            <h3 class="card-title">{{object.name}}</h3>
+
+            <p class="card-text"><strong>N° da conta: </strong>{{object.account_number}}</p>
+            <p class="card-text"><strong>Pais: </strong>{{object.country}}</p>
+            <p class="card-text"><strong>Moeda Investada: </strong>{{object.currency}}</p>
+            {% if object.description %}
+                <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'broker_list' %}" class="btn btn-secondary mt-4">Voltar para lista de marcas</a>
+</div>
+
+{% endblock %}

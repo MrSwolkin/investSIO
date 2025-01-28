@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-7" >
+            <h3 class="display-6">Detalhes da {{ object.name }}</h3>
+        </div>
+        <div class="col-md-5" >
+            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary mt-4">Voltar para lista de
+                {{object.category}}</a>
+        </div>
+    </div>
+<div class="container mt-4">
+
+    </div>
+    <div class="card col-md-9">
+        <div class="card-body">
+            <h3 class="card-title">{{object.category}} {{object.name}}</h3>
+
+        <div class="row">
+            <p class="card-text col p-3"><strong>Categoria: </strong>{{object.category}}</p>
+            <p class="card-text col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
+            <p class="card-text col p-3"><strong>Setor: </strong>{{object.sector}}</p>
+        </div>
+            {% if object.description %}
+            <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
