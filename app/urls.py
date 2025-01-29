@@ -11,4 +11,6 @@ urlpatterns = [
 
     path("", include("brokers.urls")),
     path("", include("tickers.urls")),
+    path("", include("inflows.urls")),
+    path("", include("outflows.urls")),
 ]

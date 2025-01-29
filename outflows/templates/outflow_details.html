@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="display-6">Detalhes da {{ object.ticker }}</h3>
+    </div>
+    <div class="col-md-6">
+        <a href="{% url 'outflow_list'%}" class="btn btn-secondary mt-4">Voltar para lista de Vendas</a>
+    </div>
+</div>
+<div class="container mt-4">
+
+</div>
+<div class="card col-md-9">
+    <div class="card-body">
+        <h3 class="card-title"> Compra de {{object.ticker}}</h3>
+
+        <div class="row">
+            <p><strong>Data: </strong>{{object.date}}</p>
+            <p><strong>Quantidade: </strong>{{object.quantity}}</p>
+            <p><strong>Valor por cota: </strong>R$ {{object.cost_price}}</p>
+            <p><strong>Total: </strong>R$ {{object.total_price}}</p>
+        </div>
+        {% if object.description %}
+        <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+{% endblock %}

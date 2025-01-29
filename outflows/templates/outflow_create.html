@@ -3,17 +3,17 @@
 {% block content %}
 
 <div class="container mt-4">
-    <h5 class="display-4"> Cadastrar Ticker</h5>
+    <h5 class="display-4">nova Compra</h5>
     <div class="card">
         <div class="card-body">
             <form method="post" class="form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2"> salvar marcar</button>
+                <button type="submit" class="btn btn-primary mt-2">salvar marcar</button>
             </form>
         </div>
     </div>
-    <a href="{% url 'ticker_list' category=category %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista</a>
+    <a href="{% url 'outflow_list' %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista vendas</a>
 </div>
 
 {% endblock %}
