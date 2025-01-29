@@ -1,3 +1,4 @@
+from itertools import chain
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Ticker
@@ -28,7 +29,15 @@ class TickerCreateView(CreateView):
     model = Ticker
     template_name = "ticker_create.html"
     form_class = forms.TickerForms
-    success_url = reverse_lazy("tikcer_list")
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.kwargs.get("category")
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("ticker_list", kwargs={"category": self.kwargs.get("category")})
 
 
 class TickerDetailsView(DetailView):
@@ -37,13 +46,21 @@ class TickerDetailsView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ticker_id = self.object.id
-        #inflow = Inflow.objects.filter(ticker_id)
-        #outflow = Outflow.objects.filter(ticker_id)
         
-
+        inflows = Inflow.objects.filter(ticker=self.object)
+        outflows = Outflow.objects.filter(ticker=self.object)
+        
+        transactions = sorted(
+            chain(inflows, outflows),
+            key=lambda obj: obj.date,
+            reverse=True
+        )
         
         context["category_title"] = self.kwargs["category"]
+        context["inflows"] = inflows
+        context["outflows"] = outflows
+        context["transactions"] = transactions
+        
         return context
 
 
@@ -61,7 +78,7 @@ class TickerUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy("ticker_list", kwargs={"category": self.object.category.title})
 
-class TickerDeleteview(DeleteView):
+class TickerDeleteView(DeleteView):
     model = Ticker
     template_name = "ticker_delete.html"
     

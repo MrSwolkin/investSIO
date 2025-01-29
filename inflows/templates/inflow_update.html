@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container mt-4">
-    <h5 class="display-4"> Cadastrar Ticker</h5>
+    <h5 class="display-4">Editar Compra</h5>
     <div class="card">
         <div class="card-body">
             <form method="post" class="form">
@@ -13,7 +13,7 @@
             </form>
         </div>
     </div>
-    <a href="{% url 'ticker_list' category=category %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista</a>
+    <a href="{% url 'inflow_list'%}" class="btn btn-secondary mt-3"> cancelar e voltar para lista de Compras</a>
 </div>
 
 {% endblock %}

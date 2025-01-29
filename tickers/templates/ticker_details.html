@@ -12,12 +12,10 @@
         </div>
     </div>
 <div class="container mt-4">
-
     </div>
     <div class="card col-md-9">
         <div class="card-body">
             <h3 class="card-title">{{object.category}} {{object.name}}</h3>
-
         <div class="row">
             <p class="card-text col p-3"><strong>Categoria: </strong>{{object.category}}</p>
             <p class="card-text col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
@@ -27,6 +25,51 @@
             <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
             {% endif %}
         </div>
+    </div>
+    <div class="table-responsive col-md-9">
+        <table class="table table table-bordered rounded-2">
+            <thead class="thead-dark">
+                <tr class="text-center">
+                    <th>Data</th>
+                    <th>Ticker</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Valor por cota</th>
+                    <th>Total</th>
+                    <th>Corretora</th>
+                    <th>Ações</th>
+    
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.ticker }}</td>
+                    {% if transaction.transaction_type == "Compra" %}
+                        <td class="text-success">{{ transaction.transaction_type }}</td>
+                    {% else %}
+                        <td class="text-danger">{{ transaction.transaction_type }}</td>
+                    {% endif %}
+                    <td>{{ transaction.quantity }} un.</td>
+                    <td>R$ {{ transaction.cost_price }}</td>
+                    <td>R$ {{ transaction.total_price }}</td>
+                    <td>{{ transaction.broker }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'inflow_details' transaction.id %}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="{% url 'inflow_update' transaction.id %}" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'inflow_delete' transaction.id %}" class="btn btn-secondary btn-sm ">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

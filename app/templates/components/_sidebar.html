@@ -8,49 +8,65 @@
 
         <div class="collapse d-sm-block" id="menuCollapse">
           <ul class="nav flex-column align-items-start" id="menu">
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="{% url 'home' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-bank fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">Home</span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="#" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-speedometer2 fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">dashboard</span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="{% url 'broker_list' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-safe2 fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">Corretoras</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="{% url 'negociations' %}" class="nav-link px-0 align-middle text-white">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-arrow-left-right fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">Negociações</span>
               </a>
-            </li>
-            <li class="nav-item">
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="{% url 'inflow_list' %}">
+                    Compras
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'outflow_list' %}">
+                    Vendas
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'negociations' %}">Consolidado</a></li>
+              </ul>
+            </li> 
+            <li class="nav-item ms-3">
               <a href="{% url 'ticker_list' category='FII' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-building-up fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">FIIs</span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="{% url 'ticker_list' category='Ação' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-cash-coin fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">Ações Brasileiras</span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="{% url 'ticker_list' category='Stock' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-currency-dollar fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">Ações Americanas</span>
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item ms-3">
               <a href="{% url 'ticker_list' category='ETF' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-graph-up-arrow fs-3 text-primary"></i>
                 <span class="ms-3 text-primary">ETFs</span>

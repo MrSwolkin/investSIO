@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-6">Deletando uma Venda</h3>
+    <div class="card">
+        <div class="card-body m-2">
+            <p class="card-text h4">
+                Tem certeza de que deseja excluir a venda de <strong class="h5 text-danger"> {{ object.ticker }}</strong>
+                ?
+            </p>
+            <p><strong>Data: </strong>{{object.date}}</p>
+            <p><strong>Quantidade: </strong>{{object.quantity}}</p>
+            <p><strong>Valor por cota: </strong>R$ {{object.cost_price}}</p>
+            <p><strong>Total: </strong>R$ {{object.total_price}}</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+            <a href="{% url 'outflow_list' %}" class="btn btn-primary mt-3"> cancelar e voltar para lista de vendas</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

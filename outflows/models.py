@@ -8,7 +8,7 @@ class Outflow(models.Model):
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="outflows")
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     date = models.DateField()
     tax = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 

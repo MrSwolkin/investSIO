@@ -7,13 +7,11 @@ from tickers.models import Ticker
 
 
 class Inflow(models.Model):
-    broker = models.ForeignKey(
-        Broker, on_delete=models.PROTECT, related_name="inflows")
-    ticker = models.ForeignKey(
-        Ticker, on_delete=models.PROTECT, related_name="inflows")
+    broker = models.ForeignKey(Broker, on_delete=models.PROTECT, related_name="inflows")
+    ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="inflows")
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     date = models.DateField()
     tax = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
