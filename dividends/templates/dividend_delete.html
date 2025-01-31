@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-6">Deletando Dividendo</h3>
+    <div class="card">
+        <div class="card-body m-2">
+            <p class="card-text h6">
+                Tem certeza de que deseja excluir o dividendo de <strong class="h5 text-danger"> {{ object.ticker }}</strong>
+                ?
+            </p>
+                <p><strong>Data: </strong>{{ dividend.date }}</p>
+                <p><strong>Valor pago por cota: </strong>{{ dividend.value }}</p>
+                <p><strong>Quantidade de cotas: </strong>{{ dividend.quantity_quote }}</p>
+                <p><strong>Total pago: </strong>{{ dividend.total_value}}</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Deletar</button>
+            </form>
+            <a href="{% url 'dividends_list' %}" class="btn btn-primary mt-3"> cancelar e voltar para lista de
+                Dividendos</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

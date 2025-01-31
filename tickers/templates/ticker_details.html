@@ -14,7 +14,7 @@
 <div class="container mt-4">
     </div>
     <div class="card col-md-9">
-        <div class="card-body">
+        <div class="card-body text-bg-secondary rounded-2">
             <h3 class="card-title">{{object.category}} {{object.name}}</h3>
         <div class="row">
             <p class="card-text col p-3"><strong>Categoria: </strong>{{object.category}}</p>
@@ -26,8 +26,9 @@
             {% endif %}
         </div>
     </div>
-    <div class="table-responsive col-md-9">
-        <table class="table table table-bordered rounded-2">
+    <div class="table-responsive col-md-9 mt-4">
+        <h4 class="text-center mb-3">Negociações de {{object.name}}</h4>
+        <table class="table table table-bordered border border-black">
             <thead class="thead-dark">
                 <tr class="text-center">
                     <th>Data</th>
@@ -56,20 +57,47 @@
                     <td>R$ {{ transaction.total_price }}</td>
                     <td>{{ transaction.broker }}</td>
                     <td class="text-center">
-                        <a href="{% url 'inflow_details' transaction.id %}" class="btn btn-secondary btn-sm">
+                        
+                        {% if transaction.transaction_type == "Compra" %}
+                        <a href="{% url 'inflow_details' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{% url 'inflow_update' transaction.id %}" class="btn btn-secondary btn-sm">
+                        {% else %}
+                        <a href="{% url 'outflow_details' transaction.id %}" class="btn btn-dark btn-sm">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        {% endif %}
+
+                        {% if transaction.transaction_type == "Compra" %}
+                        <a href="{% url 'inflow_update' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a href="{% url 'inflow_delete' transaction.id %}" class="btn btn-secondary btn-sm ">
+                        {% else %}
+                        <a href="{% url 'outflow_update' transaction.id %}" class="btn btn-dark btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        {% endif %}
+
+                        {% if transaction.transaction_type == "Compra" %}
+                        <a href="{% url 'inflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-trash3-fill"></i>
                         </a>
+                        {% else %}
+                        <a href="{% url 'outflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
+                            <i class="bi bi-trash3-fill"></i>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div class="card col-md-3  border border-black">
+            <div class="card-body">
+                <h5 class="card-title">Total de conta de {{object.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                <h1>{{total_quantity}}</h1>
+                    
+            </div>
+        </div>
     </div>
 </div>
 

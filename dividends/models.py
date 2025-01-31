@@ -6,9 +6,16 @@ class Dividend(models.Model):
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="dividens")
     value = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
-    quantity_quote = models.IntegerField()
-    total_value = models.DecimalField(max_digits=10, decimal_places=2)
-    
+    quantity_quote = models.IntegerField(default=0)
+    total_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.quantity_quote and self.value:
+            self.total_value = self.value * self.quantity_quote
+        else:
+            self.total_value = 0
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ["-date"]
     
