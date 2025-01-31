@@ -7,6 +7,11 @@ from tickers.models import Ticker
 
 
 class Inflow(models.Model):
+    TYPE_CHOICES = [
+        ("Compra", "Compra"),
+        ("Subscrição", "Subscrição")
+    ]    
+
     broker = models.ForeignKey(Broker, on_delete=models.PROTECT, related_name="inflows")
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="inflows")
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -14,6 +19,7 @@ class Inflow(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     date = models.DateField()
     tax = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="Compras")
 
     def save(self, *args, **kwargs):
         if self.quantity and self.cost_price:
