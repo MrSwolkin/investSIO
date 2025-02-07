@@ -3,7 +3,7 @@ from itertools import chain
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Ticker
-from app.metrics import get_ticker_metrics
+from app import metrics
 from categories.models import Category
 from inflows.models import Inflow
 from outflows.models import Outflow
@@ -23,9 +23,9 @@ class TickerListView(ListView):
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
         category_title = self.kwargs["category"]
-            
+        
         context["category_title"] = category_title
-
+        context["metrics_category"] = metrics.get_total_category_invested(category_title)
         return context
 
 
@@ -38,7 +38,7 @@ class TickerCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["category"] = self.kwargs.get("category")        
-
+    
         return context
 
     def get_success_url(self):
@@ -60,16 +60,13 @@ class TickerDetailsView(DetailView):
             key=lambda obj: obj.date,
             reverse=True
         )
-        
-        total_inflow = inflows.aggregate(Sum("quantity"))["quantity__sum"] or 0
-        total_outflow = outflows.aggregate(Sum("quantity"))["quantity__sum"] or 0
-        total_quantity = total_inflow - total_outflow
+
         
         context["category_title"] = self.kwargs["category"]
         context["inflows"] = inflows
         context["outflows"] = outflows
-        context["transactions"] = transactions
-        context["total_quantity"] = total_quantity       
+        context["transactions"] = transactions    
+        context["ticker_metrics"] = metrics.get_ticker_metrics(self.object)
 
         return context
 

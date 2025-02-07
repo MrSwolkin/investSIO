@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-
     <div class="row">
         <div class="col-md-7" >
             <h3 class="display-6">Detalhes da {{ object.name }}</h3>
         </div>
         <div class="col-md-5" >
-            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary mt-4">Voltar para lista de
-                {{object.category}}</a>
+            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary mt-4">Volta para lista de {{object.category}}</a>
         </div>
     </div>
+
+    {% include "components/_tickers_metrics.html" %}
 <div class="container mt-4">
+    
     </div>
     <div class="card col-md-9">
         <div class="card-body text-bg-secondary rounded-2">
@@ -47,7 +48,7 @@
                 <tr>
                     <td>{{ transaction.date }}</td>
                     <td>{{ transaction.ticker }}</td>
-                    {% if transaction.transaction_type == "Compra" %}
+                    {% if transaction.transaction_type == "Compra" or "Subscrição" %}
                         <td class="text-success">{{ transaction.transaction_type }}</td>
                     {% else %}
                         <td class="text-danger">{{ transaction.transaction_type }}</td>
@@ -58,7 +59,7 @@
                     <td>{{ transaction.broker }}</td>
                     <td class="text-center">
                         
-                        {% if transaction.transaction_type == "Compra" %}
+                        {% if transaction.transaction_type == "Compra" or "Subscrição" %}
                         <a href="{% url 'inflow_details' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-eye"></i>
                         </a>
@@ -68,22 +69,24 @@
                         </a>
                         {% endif %}
 
-                        {% if transaction.transaction_type == "Compra" %}
+                        {% if transaction.transaction_type == "Compra" or "Subscrição" %}
                         <a href="{% url 'inflow_update' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         {% else %}
                         <a href="{% url 'outflow_update' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-pencil-square"></i>
+                        </a>
                         {% endif %}
 
-                        {% if transaction.transaction_type == "Compra" %}
+                        {% if transaction.transaction_type == "Compra" or "Subscrição" %}
                         <a href="{% url 'inflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-trash3-fill"></i>
                         </a>
                         {% else %}
                         <a href="{% url 'outflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
                             <i class="bi bi-trash3-fill"></i>
+                        </a>
                         {% endif %}
                     </td>
                 </tr>
@@ -92,7 +95,7 @@
         </table>
         <div class="card col-md-3  border border-black">
             <div class="card-body">
-                <h5 class="card-title">Total de conta de {{object.name}}</h5>
+                <h5 class="card-title">Total de cotas de {{object.name}}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
                 <h1>{{total_quantity}}</h1>
                     

@@ -11,7 +11,7 @@ class DividendForm(forms.ModelForm):
             "ticker": forms.Select(attrs={"class": "form-control mt-2"}),
             "value": forms.NumberInput(attrs={"class": "form-control mt-2"}),
             "date": forms.DateInput(attrs={"class": "form-control mt-2"}),
-            "quantity_quote": forms.NumberInput(attrs={"class": "form-control mt-2"})
+            "quantity_quote": forms.NumberInput(attrs={"class": "form-control mt-2", "placeholder": "Cálculo automático"})
         }
         
         labels = {

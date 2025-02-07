@@ -12,7 +12,7 @@ class Inflow(models.Model):
         ("Subscrição", "Subscrição")
     ]    
 
-    broker = models.ForeignKey(Broker, on_delete=models.PROTECT, related_name="inflows")
+    broker = models.ForeignKey(Broker, on_delete=models.PROTECT, related_name="inflows", null=True, blank=True)
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="inflows")
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
@@ -36,4 +36,5 @@ class Inflow(models.Model):
 
     @property
     def transaction_type(self):
-        return "Compra"
+        
+        return "Compra" if self.type == "compra" else "Subcrição"
