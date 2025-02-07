@@ -9,6 +9,13 @@ class InflowListView(ListView):
     template_name = "inflow_list.html"
     context_object_name = "inflows"
     
+    def get_queryset(self):
+        queryset =  super().get_queryset()
+        ticker = self.request.GET.get("ticker")
+        #if ticker:
+        #   queryset = queryset.filter(ticker__name__icontains=ticker)
+        print(ticker)
+        return queryset
 
 class InflowDetailsView(DetailView):
     model = Inflow
