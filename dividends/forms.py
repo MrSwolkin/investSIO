@@ -5,7 +5,7 @@ class DividendForm(forms.ModelForm):
     
     class Meta:
         model = models.Dividend
-        fields = ["ticker", "value", "date", "income_type"]
+        fields = ["ticker", "value", "date", "income_type", "currency"]
         
         widgets = {
             "ticker": forms.Select(attrs={"class": "form-control mt-2"}),
@@ -13,6 +13,7 @@ class DividendForm(forms.ModelForm):
             "date": forms.DateInput(attrs={"class": "form-control mt-2"}),
             #"quantity_quote": forms.NumberInput(attrs={"class": "form-control mt-2", "placeholder": "Cálculo automático"}),
             "income_type": forms.Select(attrs={"class": "form-control mt-2"}),
+            "currency": forms.Select(attrs={"class": "form-control mt-2"}),
         }   
         
         labels = {
@@ -21,4 +22,5 @@ class DividendForm(forms.ModelForm):
             "value": "Valor pago por conta", 
             "date": "Data de Pagamento", 
             #"quantity_quote": "quantidade de contas"
+            "currency": "Moeda",
         }

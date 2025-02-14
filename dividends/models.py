@@ -9,10 +9,15 @@ class Dividend(models.Model):
         ("J", "Juros de Capital Próprio"),
         ("A", "Amortização")
     ]
+    CURRENCY_CHOICES = [
+        ("BRL", "Real"),
+        ("USD", "Dólar"),
+    ]
 
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="dividens")
     value = models.DecimalField(max_digits=12, decimal_places=10)
     date = models.DateField()
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="BRL")
     quantity_quote = models.IntegerField(default=0)
     total_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     income_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="D")

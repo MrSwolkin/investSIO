@@ -9,7 +9,7 @@ class brokerForm(forms.ModelForm):
 
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control mt-2"}),
-            "account_number": forms.NumberInput(attrs={"class": "form-control mt-2"}),
+            "account_number": forms.TextInput(attrs={"class": "form-control mt-2"}),
             "country": forms.TextInput(attrs={"class": "form-control mt-2"}),
             "currency": forms.Select(attrs={"class": "form-control mt-2"}),
             "description": forms.Textarea(attrs={"class": "form-control mt-2", "rows": 3}),
