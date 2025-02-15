@@ -9,34 +9,130 @@ InvestSIO - HOME
     <div class="row">
         <div class="card col-md-3  border border-black">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">Total investido</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                <h1>R$100000,00</h1>
+                <h1>{{ total_inflows }}</h1>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                <h1>R$100000,00</h1>
+                <h5 class="card-title">Total investido no Brasil</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Total investido em BRL</h6>
+                <h1></h1>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                <h1>R$100000,00</h1>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="card col-md-10 mt-4  border-black">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <span>aqui vai ficar um graifco </span>
+                <h5 class="card-title">Total Investido no exterior</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">total invetido em USD e EUR</h6>
+
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="row mt-4">
+    <div class="col-md-10">
+        <div class="text-center mb-3">
+            <h5>Valor mensal Investido</h5>
+            <canvas id="myPurchaseChart"></canvas>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var purchaseDates = JSON.parse('{{ inflows_datas|safe }}');
+
+            const ctx = document.getElementById('myPurchaseChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: purchaseDates.labels,
+                    datasets: [{
+                        label: 'Valor investido',
+                        data: purchaseDates.values,
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="text-center">
+            <h5>Dividendos</h5>
+            <canvas id="myDividendsChart"></canvas>
+        </div>
+    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var lastSixMonths = JSON.parse('{{ last_six_months|safe }}')
+        var dividendsFiis = JSON.parse('{{ total_fiis|safe }}')
+        var dividendsAcoes = JSON.parse('{{ total_acoes|safe }}')
+        var dividendsStocks = JSON.parse('{{ total_stocks|safe }}')
+
+        const ctxDividends = document.getElementById('myDividendsChart');
+        new Chart(ctxDividends, {
+            type: 'bar',
+            data: {
+                labels: lastSixMonths.labels,
+                datasets: [
+                    {
+                        label: 'Fiis',
+                        data: dividendsFiis.values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Ações',
+                        data: dividendsAcoes.values,
+                        backgroundColor: 'rgba(41, 82, 246, 0.5)',
+                        borderColor: 'rgba(41, 82, 246, 0.5)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Stock',
+                        data: dividendsStocks.values,
+                        backgroundColor: 'rgba(48, 119, 17, 0.5)',
+                        borderColor: 'rgba(48, 119, 17, 0.5)',
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                // Elements options apply to all of the options unless overridden in a dataset
+                // In this case, we are setting the border of each horizontal bar to be 2px wide
+                elements: {
+                    bar: {
+                        borderWidth: 2,
+                    }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Dividendos mensais'
+                    }
+                }
+            },
+        });
+    });
+    
+    </script>
+</div>
+
 
 {% endblock %}

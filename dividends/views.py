@@ -4,6 +4,7 @@ from django.db.models.functions import ExtractMonth, ExtractYear
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from . import models, forms
+from app import metrics
 
 
 class DividendListView(ListView):
@@ -16,6 +17,7 @@ class DividendListView(ListView):
         ticker = self.request.GET.get("ticker")
         month = self.request.GET.get("month")
         year = self.request.GET.get("year")
+        currency = self.request.GET.get("currency")
         
         if ticker:
             queryset = queryset.filter(ticker__name=ticker)
@@ -25,14 +27,17 @@ class DividendListView(ListView):
         
         if month:
             queryset = queryset.filter(date__month=month)
-
+        
+        if currency:
+            queryset = queryset.filter(currency=currency)
+        
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
         anos = models.Dividend.objects.dates("date", "year", order="DESC")
-        meses = models.Dividend.objects.dates("date", "month", order="DESC")
+        currency = self.request.GET.get("currency", "BRL")
         context["anos"] = [data.year for data in anos]
     
         context["meses"] = {
@@ -40,23 +45,20 @@ class DividendListView(ListView):
             5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
             9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
         }
-        #agregando os dividendos
-        dividends_by_years_month = models.Dividend.objects.values("date__year", "date__month").annotate(total_value=Sum("total_value")).order_by("-date__year", "date__month")
-        dividends_dict = defaultdict(
-            lambda: {month: 0 for month in range(1, 13)})
-        for entry in dividends_by_years_month:
-            year = entry["date__year"]
-            month = entry["date__month"]
-            dividends_dict[year][month] = entry["total_value"]
-        context["dividends_by_year_and_month"] = dict(dividends_dict)
+        
+            
+        context["dividends_by_year_and_month"] = metrics.get_currency(currency)
+        context["selected_currency"] = currency
+        print(context["selected_currency"])
         return context
+
 
 class DividendCreateView(CreateView):
     model = models.Dividend
     template_name = "dividend_create.html"
     form_class = forms.DividendForm
     success_url = reverse_lazy("dividend_list")
-    
+
 
 class DividendUpdateView(UpdateView):
     model = models.Dividend
@@ -69,3 +71,4 @@ class DividendDeleteView(DeleteView):
     model = models.Dividend
     template_name = "dividend_delete.html"
     success_url = reverse_lazy("dividend_list")
+    

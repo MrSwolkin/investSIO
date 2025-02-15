@@ -1,14 +1,26 @@
 <div class="row mt-4 col-sm-12">
     <div class="">
-        <div class="table-responsive col-md-12">
+        <div class="col-md-2">
+            <form method="GET" action="{% url  'dividend_list'%}">
+                <h5>selecione a moeda:</h5>
+                <div class="input-group ">
+                    <select class="form-control col-md-6" name="currency" onchange="form.submit()">
+                        <option value="BRL" {% if request.GET.currency == 'BRL' %}selected{% endif %}>Real (BRL)</option>
+                        <option value="USD" {% if request.GET.currency == 'USD' %}selected{% endif %}>Dolar (USD)</option>
+                    </select>
+                    
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive mt-4 col-md-12">
             <table class="table table-striped table-bordered border border-black">
-                <h5 class="">Tabela de Proventos</h5>
+                <h5 class="">Tabela de Proventos em {{ selected_currency }}</h5>
                 <thead>
                     <th>Ano</th>
                     {% for num_mes, mes in meses.items %}
                         <th>{{ mes }}</th>
                     {% endfor  %}
-
+                        <th>total</th>
                 </thead>
                 <tbody>
                 {% for year, months in dividends_by_year_and_month.items %}
@@ -19,6 +31,7 @@
                             {{ value|floatformat:2 }}
                         </td>
                         {% endfor %}
+                        <td>0,00</td>
                     </tr>
                 {% endfor %}
                 </tbody>
