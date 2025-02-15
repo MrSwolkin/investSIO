@@ -4,11 +4,18 @@ from inflows.models import Inflow
 # Create your models here.
 
 class Dividend(models.Model):
+    TYPE_CHOICES = [
+        ("D", "Dividendo"),
+        ("J", "Juros de Capital Próprio"),
+        ("A", "Amortização")
+    ]
+
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="dividens")
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    value = models.DecimalField(max_digits=12, decimal_places=10)
     date = models.DateField()
     quantity_quote = models.IntegerField(default=0)
     total_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    income_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="D")
 
 
     def save(self, *args, **kwargs):
