@@ -6,26 +6,27 @@ InvestSIO - HOME
 
 {% block content %}
 <div>
-    <div class="row">
+    
+    <div class="row mt-4">
         <div class="card col-md-3  border border-black">
             <div class="card-body">
-                <h5 class="card-title">Total investido</h5>
+                <h5 class="card-title">Total investido em BRL</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                <h1>{{ total_inflows }}</h1>
+                <h1>R$ {{ total_applied.BRL|floatformat:2 }}</h1>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black">
             <div class="card-body">
-                <h5 class="card-title">Total investido no Brasil</h5>
+                <h5 class="card-title">Total investido em USD</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Total investido em BRL</h6>
-                <h1></h1>
+                <h1>USD {{ total_applied.USD|floatformat:2 }}</h1>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black">
             <div class="card-body">
-                <h5 class="card-title">Total Investido no exterior</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">total invetido em USD e EUR</h6>
-
+                <h5 class="card-title">Total Investido em EURO</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                <h1>EUR {{ total_applied.EUR|floatformat:2 }}</h1>
             </div>
         </div>
     </div>
@@ -49,7 +50,7 @@ InvestSIO - HOME
                 data: {
                     labels: purchaseDates.labels,
                     datasets: [{
-                        label: 'Valor investido',
+                        label: 'Valor investido em Reais',
                         data: purchaseDates.values,
                         borderWidth: 2,
                     }]
@@ -66,9 +67,9 @@ InvestSIO - HOME
     </script>
 </div>
 <div class="row mt-4">
-    <div class="col-md-6">
+    <div class="col-md-10">
         <div class="text-center">
-            <h5>Dividendos</h5>
+            <h3>Dividendos</h3>
             <canvas id="myDividendsChart"></canvas>
         </div>
     </div>
@@ -78,6 +79,7 @@ InvestSIO - HOME
         var dividendsFiis = JSON.parse('{{ total_fiis|safe }}')
         var dividendsAcoes = JSON.parse('{{ total_acoes|safe }}')
         var dividendsStocks = JSON.parse('{{ total_stocks|safe }}')
+        var dividendsEtfs = JSON.parse('{{ total_etfs|safe }}')
 
         const ctxDividends = document.getElementById('myDividendsChart');
         new Chart(ctxDividends, {
@@ -100,9 +102,16 @@ InvestSIO - HOME
                         borderWidth: 1
                     },
                     {
-                        label: 'Stock',
+                        label: 'Stocks',
                         data: dividendsStocks.values,
                         backgroundColor: 'rgba(48, 119, 17, 0.5)',
+                        borderColor: 'rgba(48, 119, 17, 0.5)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'ETFs',
+                        data: dividendsEtfs.values,
+                        backgroundColor: 'rgba(20, 63, 105, 0.5)',
                         borderColor: 'rgba(48, 119, 17, 0.5)',
                         borderWidth: 1
                     },
@@ -114,7 +123,7 @@ InvestSIO - HOME
                 // In this case, we are setting the border of each horizontal bar to be 2px wide
                 elements: {
                     bar: {
-                        borderWidth: 2,
+                        borderWidth: 3,
                     }
                 },
                 responsive: true,

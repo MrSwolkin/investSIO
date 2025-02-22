@@ -77,7 +77,7 @@ DIVIDENDOS
                     <td>{{ dividend.ticker }}</td>
                     <td>{{ dividend.currency }}</td>
                     <td>{{ dividend.income_type }}</td>
-                    <td>{{ dividend.value }}</td>
+                    <td>{{ dividend.value|floatformat:2 }}</td>
                     <td>{{ dividend.quantity_quote }}</td>
                     <td>{{ dividend.total_value }}</td>
                     <td class="text-center">

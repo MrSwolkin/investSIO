@@ -1,13 +1,15 @@
 from django.utils import timezone
+from django.utils.formats import number_format
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.db.models import Sum
 from collections import defaultdict
+
 from categories.models import Category
 from inflows.models import Inflow
 from outflows.models import Outflow
 from dividends.models import Dividend
-from django.utils.formats import number_format
+from brokers.models import Currency
 
 
 from tickers.models import Ticker
@@ -39,6 +41,10 @@ def get_ticker_metrics(ticker):
     )
 
 def get_total_category_invested(category):
+    '''Recebe como argumento a categoria de investimento, e 
+        usando a function get_ticker_metris() para auxiliar no calculo, 
+        nos retorna o total investido atualmente.
+    '''
     category_title = Category.objects.get(title=category)
     tickers = Ticker.objects.filter(category=category_title)
     
@@ -55,17 +61,31 @@ def get_total_invested():
     
     return(round(total_inflow, 2))
 
-def get_applied_value():
+def get_total_applied_by_currency():
+    currencies = Currency.objects.all()
+    
+    return {currency.code: Inflow.objects.filter(ticker__currency=currency).aggregate(total_price=Sum("total_price"))["total_price"] or 0 for currency in currencies}
+
+
+def get_applied_value(currency_code):
     months = ["0","Jan", "Fev", "Mar", "Abr", "Maio",
                 "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-    inflows_by_year_month = Inflow.objects.values("date__year", "date__month").annotate(total_price=Sum("total_price")).order_by("date__year", "date__month")
+
+    currency = Currency.objects.get(code=currency_code)    
+
+    inflows_by_year_month = (Inflow.objects.filter(ticker__currency=currency)
+        .values("date__year", "date__month")
+        .annotate(total_price=Sum("total_price"))
+        .order_by("date__year", "date__month")
+    
+    )
     labels = []
     values = []
     for item in inflows_by_year_month:
         month = months[item["date__month"]]
         year = item["date__year"]
         labels.append(f"{month} {year}")
-        values.append(float(item["total_price"]))
+        values.append(float(item["total_price"] or 0))
     
     return dict(
         labels=labels,
@@ -105,7 +125,6 @@ def get_total_dividends_category(category):
     return dict(
             values=values    
         )
-
 
 def get_currency(currency):
     dividends_by_years_month = Dividend.objects.filter(currency=currency).values(

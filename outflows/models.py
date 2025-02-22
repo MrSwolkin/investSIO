@@ -4,7 +4,8 @@ from tickers.models import Ticker
 
 
 class Outflow(models.Model):
-    broker = models.ForeignKey(Broker, on_delete=models.PROTECT, related_name="outflows")
+    broker = models.ForeignKey(
+        Broker, on_delete=models.PROTECT, related_name="outflows", null=True, blank=True)
     ticker = models.ForeignKey(Ticker, on_delete=models.PROTECT, related_name="outflows")
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
