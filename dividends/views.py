@@ -49,7 +49,6 @@ class DividendListView(ListView):
             
         context["dividends_by_year_and_month"] = metrics.get_currency(currency)
         context["selected_currency"] = currency
-        print(context["selected_currency"])
         return context
 
 

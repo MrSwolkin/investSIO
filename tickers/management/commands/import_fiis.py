@@ -32,8 +32,9 @@ class Command(BaseCommand):
 
                     ticker = Ticker.objects.get(name=ticker)
                     broker = Broker.objects.get(name=broker_name) if broker_name else None
-                    
+                    print(f"corretora passando em aqui {broker}")
                     if type in ["compra", "subscrição"]:
+                    
                         Inflow.objects.create(
                             ticker=ticker,
                             date=date,
@@ -43,6 +44,7 @@ class Command(BaseCommand):
                             cost_price=(cost_price),
                         )
                     elif type == "venda":
+                        print(f"corretora passando em venda {broker}")
                         Outflow.objects.create(
                             ticker=ticker,
                             date=date,

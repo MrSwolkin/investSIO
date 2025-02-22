@@ -19,9 +19,9 @@ class OutflowForms(forms.ModelForm):
 
         labels = {
             "ticker": "Ticker",
-            "broker": "Corretora",
+            "date": "Data",
             "cost_price": "Preço por cota",
             "quantity": "Quantidade de cotas",
-            "date": "Data",
+            "broker": "Corretora",
             "tax": "Taxa",
         }
