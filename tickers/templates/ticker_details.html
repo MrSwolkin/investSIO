@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-7" >
-            <h3 class="display-6">Detalhes da {{ object.name }}</h3>
+    <div class="row mb-3 col-md-12">
+        <div class="col-md-4" >
+            <h1 class="p-3">Lista de {{ object.name }}s</h1>
         </div>
-        <div class="col-md-5" >
-            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary mt-4">Volta para lista de {{object.category}}</a>
+        <div class="col-md-6" >
+            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary float-end">Volta para lista de {{object.category}}</a>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
 <div class="container mt-4">
     
     </div>
-    <div class="card col-md-9">
+    <div class="card col-md-10">
         <div class="card-body text-bg-secondary rounded-2">
             <h3 class="card-title">{{object.category}} {{object.name}}</h3>
         <div class="row">

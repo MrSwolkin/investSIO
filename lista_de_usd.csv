@@ -1,4 +1,4 @@
-ticker,date,type,quantity,cost_price,corretora
+ticker,date,type,quantity,cost_price,broker
 ES,06/01/2022,compra,3,89.1,Banco Inter
 ES,26/04/2022,compra,1,92.91,Banco Inter
 ES,24/04/2023,compra,3,79.02,Banco Inter

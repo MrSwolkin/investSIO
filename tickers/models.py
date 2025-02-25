@@ -1,10 +1,12 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from categories.models import Category
 from brokers.models import Currency
 
 
+
 class Ticker(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=10, unique=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="tickers")
     quantity = models.IntegerField(default=0)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, related_name="tickres")
@@ -16,3 +18,11 @@ class Ticker(models.Model):
         
     def __str__(self):
         return self.name
+    
+    def clean(self):
+        if Ticker.objects.filter(name=self.name).exists():
+            raise ValidationError("Ticker Já existente")
+        
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

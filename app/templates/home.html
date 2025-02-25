@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 
 {% block title %}
-InvestSIO - HOME
+InvestSIO - HOME - Dashboard
 {% endblock %}
 
 {% block content %}
 <div>
-    
-    <div class="row mt-4">
-        <div class="card col-md-3  border border-black">
+    <div class="row col-md-12 mt-4 justify-content-center">
+        <div class="card col-md-3  border border-black shadow-lg bg-body-tertiary rounded">
             <div class="card-body">
                 <h5 class="card-title">Total investido em BRL</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                
                 <h1>R$ {{ total_applied.BRL|floatformat:2 }}</h1>
             </div>
         </div>
-        <div class="card col-md-3 ms-5 border border-black">
+        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
             <div class="card-body">
                 <h5 class="card-title">Total investido em USD</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Total investido em BRL</h6>
+                
                 <h1>USD {{ total_applied.USD|floatformat:2 }}</h1>
             </div>
         </div>
-        <div class="card col-md-3 ms-5 border border-black">
+        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
             <div class="card-body">
                 <h5 class="card-title">Total Investido em EURO</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
@@ -32,20 +31,31 @@ InvestSIO - HOME
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div class="row mt-4">
-    <div class="col-md-10">
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-5">
         <div class="text-center mb-3">
-            <h5>Valor mensal Investido</h5>
+            <h3>Valor mensal Investido</h3>
             <canvas id="myPurchaseChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-5 ms-5">
+        <div class="text-center">
+            <h3>Dividendos</h3>
+            <canvas id="myDividendsChart"></canvas>
         </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var purchaseDates = JSON.parse('{{ inflows_datas|safe }}');
 
-            const ctx = document.getElementById('myPurchaseChart');
+            var lastSixMonths = JSON.parse('{{ last_six_months|safe }}')
+            var dividendsFiis = JSON.parse('{{ total_fiis|safe }}')
+            var dividendsAcoes = JSON.parse('{{ total_acoes|safe }}')
+            var dividendsStocks = JSON.parse('{{ total_stocks|safe }}')
+            var dividendsEtfs = JSON.parse('{{ total_etfs|safe }}')
 
-            new Chart(ctx, {
+            var ctxpurchaseDates = document.getElementById('myPurchaseChart');
+            var myPurchaseChart = new Chart(ctxpurchaseDates, {
                 type: 'bar',
                 data: {
                     labels: purchaseDates.labels,
@@ -63,84 +73,170 @@ InvestSIO - HOME
                     }
                 }
             });
+
+            var ctxDividends = document.getElementById('myDividendsChart');
+            var myDividendsChart = new Chart(ctxDividends, {
+                type: 'bar',
+                data: {
+                    labels: lastSixMonths.labels,
+                    datasets: [
+                        {
+                            label: 'Fiis',
+                            data: dividendsFiis.values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Ações',
+                            data: dividendsAcoes.values,
+                            backgroundColor: 'rgba(41, 82, 246, 0.5)',
+                            borderColor: 'rgba(41, 82, 246, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Stocks',
+                            data: dividendsStocks.values,
+                            backgroundColor: 'rgba(48, 119, 17, 0.5)',
+                            borderColor: 'rgba(48, 119, 17, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'ETFs',
+                            data: dividendsEtfs.values,
+                            backgroundColor: 'rgba(20, 63, 105, 0.5)',
+                            borderColor: 'rgba(48, 119, 17, 0.5)',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    elements: {
+                        bar: {
+                            borderWidth: 3,
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Dividendos mensais'
+                        }
+                    }
+                },
+            });
         });
     </script>
 </div>
-<div class="row mt-4">
-    <div class="col-md-10">
-        <div class="text-center">
-            <h3>Dividendos</h3>
-            <canvas id="myDividendsChart"></canvas>
+<div class="row mt-5">
+    <h3 class="text-center mb-4">Diversificação dos investimentos</h3>
+    <div class="col-md-4">
+        <div class="text-center p-4 mb-3">
+            <h5>Diversificação em ativos</h5>
+            <canvas id="myDiversificationByCategory"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center p-4 mb-3">
+            <h5>Diversificação em moedas</h5>
+            <canvas id="myDiversificationByCurrency"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center p-4 mb-3">
+            <h5>Diversificação em Corretoras</h5>
+            <canvas id="myDiversificationByBroker"></canvas>
         </div>
     </div>
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var lastSixMonths = JSON.parse('{{ last_six_months|safe }}')
-        var dividendsFiis = JSON.parse('{{ total_fiis|safe }}')
-        var dividendsAcoes = JSON.parse('{{ total_acoes|safe }}')
-        var dividendsStocks = JSON.parse('{{ total_stocks|safe }}')
-        var dividendsEtfs = JSON.parse('{{ total_etfs|safe }}')
+        document.addEventListener("DOMContentLoaded", function () {
+            var totalDiversity = JSON.parse('{{ chart_diversity|safe }}')
+            var totalCurrency = JSON.parse('{{ chart_total_applied|safe }}')
+            var totalBroker = JSON.parse('{{ chart_broker|safe }}')
 
-        const ctxDividends = document.getElementById('myDividendsChart');
-        new Chart(ctxDividends, {
-            type: 'bar',
-            data: {
-                labels: lastSixMonths.labels,
-                datasets: [
-                    {
-                        label: 'Fiis',
-                        data: dividendsFiis.values,
-                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
+            var ctxDiversification = document.getElementById('myDiversificationByCategory');
+            var myDiversificationByCategory = new Chart(ctxDiversification, {
+                type: "doughnut",
+                data: {
+                    labels: Object.keys(totalDiversity),
+                    datasets: [{
+                        data: Object.values(totalDiversity),
                         borderWidth: 1
-                    },
-                    {
-                        label: 'Ações',
-                        data: dividendsAcoes.values,
-                        backgroundColor: 'rgba(41, 82, 246, 0.5)',
-                        borderColor: 'rgba(41, 82, 246, 0.5)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Stocks',
-                        data: dividendsStocks.values,
-                        backgroundColor: 'rgba(48, 119, 17, 0.5)',
-                        borderColor: 'rgba(48, 119, 17, 0.5)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'ETFs',
-                        data: dividendsEtfs.values,
-                        backgroundColor: 'rgba(20, 63, 105, 0.5)',
-                        borderColor: 'rgba(48, 119, 17, 0.5)',
-                        borderWidth: 1
-                    },
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                // Elements options apply to all of the options unless overridden in a dataset
-                // In this case, we are setting the border of each horizontal bar to be 2px wide
-                elements: {
-                    bar: {
-                        borderWidth: 3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total investido em cada tipo de ativos'
+                        }
                     }
                 },
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Dividendos mensais'
+            });
+
+            var ctxDiversificationCurrency = document.getElementById('myDiversificationByCurrency');
+            var myDiversificationByCurrency = new Chart(ctxDiversificationCurrency, {
+                type: "doughnut",
+                data: {
+                    labels: Object.keys(totalCurrency),
+                    datasets: [{
+                        data: Object.values(totalCurrency),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total investido em tipos de moeda'
+                        }
                     }
-                }
-            },
+                },
+            });
+            var ctxDiversificationbroker = document.getElementById('myDiversificationByBroker');
+            var myDiversificationBybroker = new Chart(ctxDiversificationbroker, {
+                type: "doughnut",
+                data: {
+                    labels: Object.keys(totalBroker),
+                    datasets: [{
+                        data: Object.values(totalBroker),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total investido em cada corretora'
+                        }
+                    }
+                },
+            });
         });
-    });
-    
+
     </script>
+</div>
+<div class="row mt-4">
+    <h1>Novos dados</h1>
+</div>
+<div class="row mt-4">
+    <h1>Novos dados</h1>
 </div>
 
 

@@ -14,6 +14,8 @@ def home(request):
     total_dividends_stocks = metrics.get_total_dividends_category("Stock")
     total_dividends_etfs = metrics.get_total_dividends_category("ETF")
     total_applied = metrics.get_total_applied_by_currency()
+    chart_diversity = metrics.chart_total_category_invested()
+    brokers = metrics.get_total_applied_by_broker()
     
     context = {
         "total_inflows": total_inflows,
@@ -24,6 +26,9 @@ def home(request):
         "total_acoes": json.dumps(total_dividends_acoes),
         "total_stocks": json.dumps(total_dividends_stocks),
         "total_etfs": json.dumps(total_dividends_etfs),
+        "chart_diversity": json.dumps(chart_diversity),
+        "chart_total_applied": json.dumps(total_applied),
+        "chart_broker": json.dumps(brokers),
     }
 
     return render(request, "home.html", context)

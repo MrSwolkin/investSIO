@@ -14,7 +14,7 @@ class InflowListView(ListView):
         ticker = self.request.GET.get("ticker")
         #if ticker:
         #   queryset = queryset.filter(ticker__name__icontains=ticker)
-        print(ticker)
+
         return queryset
 
 class InflowDetailsView(DetailView):

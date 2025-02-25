@@ -14,16 +14,17 @@ class TickerListView(ListView):
     model = Ticker
     template_name = "ticker_list.html"
     context_object_name = "tickers"
-    
+
     def get_queryset(self):
         category_title = self.kwargs["category"]
         category = Category.objects.get(title=category_title)
         return Ticker.objects.filter(category=category)
-    
+
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
         category_title = self.kwargs["category"]
-        
+
+
         context["category_title"] = category_title
         context["metrics_category"] = metrics.get_total_category_invested(category_title)
         return context

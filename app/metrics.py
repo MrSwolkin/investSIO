@@ -9,7 +9,7 @@ from categories.models import Category
 from inflows.models import Inflow
 from outflows.models import Outflow
 from dividends.models import Dividend
-from brokers.models import Currency
+from brokers.models import Broker, Currency
 
 
 from tickers.models import Ticker
@@ -54,7 +54,22 @@ def get_total_category_invested(category):
         total_invested=number_format(total_invested, decimal_pos=2, force_grouping=True)
     )
 
+def chart_total_category_invested():
+    '''
+    Essa função se utiliza da função 'get_total_category_invested', para nos retornar em um dicioário
+    a categoria do ativos e o total investido.
+    Tendo como principal objetivo alimentar gráficos chartjs.
+    '''
+    category_title = Category.objects.all()
+    data = {category.title: get_total_category_invested(category)["total_invested"] for category in category_title}
+    json_data = {key: float(value.replace(".", "").replace(",",".")) for key, value in data.items() }
+    return json_data
+
+
 def get_total_invested():
+    '''
+    No retorna o total investido.
+    '''
     inflow = Inflow.objects.all()
     total_inflow = inflow.aggregate(
         Sum("total_price"))["total_price__sum"] or 0
@@ -62,12 +77,23 @@ def get_total_invested():
     return(round(total_inflow, 2))
 
 def get_total_applied_by_currency():
+    '''
+    Retorna o total aplicado em cada moeda. principal objetivo alimetar o gráfico chartjs.
+    '''
     currencies = Currency.objects.all()
-    
-    return {currency.code: Inflow.objects.filter(ticker__currency=currency).aggregate(total_price=Sum("total_price"))["total_price"] or 0 for currency in currencies}
+    data = {currency.code: Inflow.objects.filter(ticker__currency=currency).aggregate(
+        total_price=Sum("total_price"))["total_price"] or 0 for currency in currencies}
+
+    chart_currency_data = {key: float(value) for key,value in data.items()}    
+
+    return chart_currency_data
 
 
 def get_applied_value(currency_code):
+    '''
+    Nos retona a volume mensal aplicado em cada moeda. necessitando de um argumneto que no caso é o código
+    da moeda já cadastrada pelo usuário. 
+    '''
     months = ["0","Jan", "Fev", "Mar", "Abr", "Maio",
                 "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
@@ -77,8 +103,8 @@ def get_applied_value(currency_code):
         .values("date__year", "date__month")
         .annotate(total_price=Sum("total_price"))
         .order_by("date__year", "date__month")
-    
     )
+
     labels = []
     values = []
     for item in inflows_by_year_month:
@@ -93,6 +119,9 @@ def get_applied_value(currency_code):
     )
 
 def get_last_six_month():
+    '''
+    Tem como objetivo retornar os últimos 6 meses.
+    '''
     today = timezone.now().date()
     dates = [(today.replace(day=1) - relativedelta(months=i)) for i in range(6, -1, -1)]
     labels = [d.strftime("%b %Y") for d in dates]
@@ -114,7 +143,7 @@ def get_total_dividends_category(category):
         ticker__in=tickers, date__range=[dates[1], today]).values("date__year", "date__month").annotate(total=Sum("total_value"))
 
     for entry in total_dividends:
-        # Ex: "02-2025"
+
         key = f"{entry['date__month']:02d}-{entry['date__year']}"
         if key in months:
             months[key] += float(entry["total"])
@@ -127,6 +156,9 @@ def get_total_dividends_category(category):
         )
 
 def get_currency(currency):
+    '''
+    retorna os dividendos mensais de cada tipo de moeda. 
+    '''
     dividends_by_years_month = Dividend.objects.filter(currency=currency).values(
         "date__year", "date__month").annotate(total_value=Sum("total_value")).order_by("-date__year", "date__month")
     dividends_dict = defaultdict(
@@ -136,3 +168,11 @@ def get_currency(currency):
         month = entry["date__month"]
         dividends_dict[year][month] = entry["total_value"]
     return dict(dividends_dict)
+
+def get_total_applied_by_broker():
+    brokers = Broker.objects.all()
+    data = {broker.name: Inflow.objects.filter(broker=broker).aggregate(total_price=Sum("total_price"))["total_price"] or 0 for broker in brokers}    
+
+    total_in_broker = {key: float(value) for key,value in data.items()}
+
+    return total_in_broker
