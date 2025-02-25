@@ -37,4 +37,4 @@ class Inflow(models.Model):
     @property
     def transaction_type(self):
         
-        return "Compra" if self.type == "compra" else "Subscrição"
+        return "Compra" if self.type == "Compra" else "Subscrição"

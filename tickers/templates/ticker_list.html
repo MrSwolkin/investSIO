@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="row mb-3">
+<div class="row mb-3 col-md-12">
     <div class="col-md-4">
         <h1 class="p-3">Lista de {{ category_title }}s</h1>
     </div>
@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
     {% include "components/_category_metrics.html" %}
 </div>
-<div class="table-responsive col-md-9 mt-3 d-flex justify-content-center">
+<div class="table-responsive col-md-10 mt-3 pe-3 d-flex justify-content-center">
     <table class="table table-striped table-bordered border border-black">
         <thead class="thead-dark">
             <tr class="text-center">

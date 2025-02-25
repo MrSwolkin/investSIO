@@ -1,4 +1,4 @@
-ticker,date,type,quantity,cost_price,corretora
+ticker,date,type,quantity,cost_price,broker
 GRND3,06/12/2018,compra,100,7.97,Rico Investimentos
 GRND3,10/12/2018,compra,100,7.7,Rico Investimentos
 GRND3,02/03/2020,compra,40,9.9,Banco Inter

@@ -11,31 +11,25 @@
             <li class="nav-item ms-3">
               <a href="{% url 'home' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-bank fs-3 text-dark"></i>
-                <span class="ms-3 text-dark">Home</span>
-              </a>
-            </li>
-            <li class="nav-item ms-3">
-              <a href="#" class="nav-link px-0 align-middle text-white">
-                <i class="bi bi-speedometer2 fs-3 text-dark"></i>
-                <span class="ms-3 text-dark">dashboard</span>
+                <span class="ms-3 text-dark fw-bold">Home</span>
               </a>
             </li>
             <li class="nav-item ms-3">
               <a href="{% url 'broker_list' %}" class="nav-link px-0 align-middle text-white">
                 <i class="bi bi-safe2 fs-3 text-dark"></i>
-                <span class="ms-3 text-dark">Corretoras</span>
+                <span class="ms-3 text-dark fw-bold">Corretoras</span>
               </a>
             </li>
             <li class="nav-item dropdown ">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-currency-exchange fs-3 text-dark"></i>
-                <span class="ms-3 text-dark">Ativos</span>
+                <span class="ms-3 text-dark fw-bold">Ativos</span>
               </a>
               <ul class="dropdown-menu border border-black">
                 <li>
                   <a href="{% url 'ticker_list' category='FII' %}" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-building-up  text-dark"></i>
-                    <span class="ms-3 text-dark">FIIs</span>
+                    <span class="ms-3 text-dark fw-bold">FIIs</span>
                   </a>
                 </li>
                 <li>
@@ -44,7 +38,7 @@
                 <li>
                   <a href="{% url 'ticker_list' category='Ação' %}" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-cash-coin  text-dark"></i>
-                    <span class="ms-3 text-dark">Ações BR</span>
+                    <span class="ms-3 text-dark fw-bold">Ações BR</span>
                   </a>
                 </li>
                 <li>
@@ -53,7 +47,7 @@
                 <li>
                   <a href="{% url 'ticker_list' category='Stock' %}" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-currency-dollar  text-dark"></i>
-                    <span class="ms-3 text-dark">Ações USA</span>
+                    <span class="ms-3 text-dark fw-bold">Ações USA</span>
                   </a>
                 </li>
                 <li>
@@ -62,7 +56,7 @@
                 <li>
                   <a href="{% url 'ticker_list' category='ETF' %}" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-graph-up-arrow  text-dark"></i>
-                    <span class="ms-3 text-dark">ETFs</span>
+                    <span class="ms-3 text-dark fw-bold">ETFs</span>
                   </a>
                 </li>
               </ul>
@@ -70,7 +64,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-arrow-left-right fs-3 text-dark"></i>
-                <span class="ms-3 text-dark">Negociações</span>
+                <span class="ms-3 text-dark fw-bold">Negociações</span>
               </a>
               <ul class="dropdown-menu border border-black">
                 <li>
@@ -92,20 +86,20 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-cash text-dark fs-3"></i>
-                <span class="ms-3 text-dark">Dividendos</span>
+                <span class="ms-3 text-dark fw-bold">Dividendos</span>
               </a>
               <ul class="dropdown-menu border border-black">
                 <li>
                   <a href="{% url 'dividend_list' %}" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-cash text-dark"></i>
-                    <span class="ms-3 text-dark">Lista</span>
+                    <span class="ms-3 text-dark fw-bold">Lista</span>
                   </a>
                 </li>
                   <hr class="dropdown-divider">
                 <li>
                   <a href="#" class="nav-link px-0 align-middle text-white ms-3">
                     <i class="bi bi-cash text-dark"></i>
-                    <span class="ms-3 text-dark">Alerta</span>
+                    <span class="ms-3 text-dark fw-bold">Alerta</span>
                   </a>
                   </a>
                 </li>
@@ -124,37 +118,6 @@
             <li>
             </li>
           </ul>
-          <!--<div class="card" >
-            <div class="card-header text-primary">
-              Ativos
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <a href="{% url 'ticker_list' category='FII' %}" class="nav-link px-0 align-middle text-white">
-                  <i class="bi bi-building-up fs-3 text-primary"></i>
-                  <span class="ms-3 text-primary">FIIs</span>
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="{% url 'ticker_list' category='Ação' %}" class="nav-link px-0 align-middle text-white">
-                  <i class="bi bi-cash-coin fs-3 text-primary"></i>
-                  <span class="ms-3 text-primary">Ações Brasileiras</span>
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="{% url 'ticker_list' category='Stock' %}" class="nav-link px-0 align-middle text-white">
-                  <i class="bi bi-currency-dollar fs-3 text-primary"></i>
-                  <span class="ms-3 text-primary">Ações Americanas</span>
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="{% url 'ticker_list' category='ETF' %}" class="nav-link px-0 align-middle text-white">
-                  <i class="bi bi-graph-up-arrow fs-3 text-primary"></i>
-                  <span class="ms-3 text-primary">ETFs</span>
-                </a>
-              </li>
-            </ul>
-          </div>-->
         </div>
       </div>
   </div>

@@ -22,7 +22,7 @@ Negociações
             <tr>
                 <td>{{ transaction.date }}</td>
                 <td>{{ transaction.ticker }}</td>
-                {% if transaction.transaction_type == "Compra" %}
+                {% if transaction.transaction_type == "Compra" or transaction.transaction_type == "Subscrição"%}
                 <td class="text-success">{{ transaction.transaction_type }}</td>
                 {% else %}
                 <td class="text-danger">{{ transaction.transaction_type }}</td>

@@ -24,3 +24,10 @@ class TickerForms(forms.ModelForm):
             "sector": "Setor",
             "description": "Descrição"
         }
+        
+    def clean(self):
+        name = self.cleaned_data["name"]
+        
+        if models.Ticker.objects.filter(name=name).exists():
+            raise forms.ValidationError("Ticker Já cadastrado.")
+        return name
