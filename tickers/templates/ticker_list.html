@@ -12,7 +12,7 @@
     <div class="col-md-6">
         <a href="{% url 'ticker_create' category=category_title %}" class="btn btn-success float-end">
             <i class="bi bi-plus-lg"></i>
-            <span>Novo Ticker</span>
+            <span> {{ category_title }}</span>
         </a>
     </div>
 </div>
@@ -25,7 +25,6 @@
             <tr class="text-center">
                 <th>ID</th>
                 <th>Nome</th>
-                <th>categoria</th>
                 <th>quantidade</th>
                 <th>setor</th>
                 <th>Ações</th>
@@ -35,8 +34,10 @@
             {% for ticker in tickers %}
             <tr>
                 <td>{{ ticker.id }}</td>
-                <td><strong>{{ ticker.name }}</strong></td>
-                <td>{{ ticker.category.title }}</td>
+                <td><a href="{% url 'ticker_details' ticker.category.title ticker.id %}" class="text-dark">
+                    <strong>{{ ticker.name }}</strong>
+                    </a>
+                </td>
                 <td>{{ ticker.quantity }}</td>
                 <td>{{ ticker.sector }}</td>
                 <td class="text-center">

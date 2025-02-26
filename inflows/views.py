@@ -25,15 +25,28 @@ class InflowCreateView(CreateView):
     model = Inflow
     template_name = "inflow_create.html"
     form_class = forms.InflowForms
-    success_url = reverse_lazy("inflow_list")
+    
+
+    def get_success_url(self):
+        ticker = self.object.ticker
+        return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
+
 
 class InflowUpdateView(UpdateView):
     model = Inflow
     template_name = "inflow_update.html"
     form_class = forms.InflowForms
-    success_url = reverse_lazy("inflow_list")
+
+    def get_success_url(self):
+        ticker = self.object.ticker
+        return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
+
 
 class InflowDeleteView(DeleteView):
     model = Inflow
     template_name = "inflow_delete.html"
-    success_url = reverse_lazy("inflow_list")
+
+
+    def get_success_url(self):
+        ticker = self.object.ticker
+        return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})

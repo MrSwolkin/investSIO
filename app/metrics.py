@@ -33,12 +33,14 @@ def get_ticker_metrics(ticker):
     total_quantity = total_inflow - total_outflow 
 # preço medio
     avarange_price = total_price / total_quantity if total_quantity else 0
+# total de ativos por categorias
 
     return dict (
         total_price=round(total_price, 2),
         total_quantity=round(total_quantity, 2),
         avarange_price=round(avarange_price, 2)
     )
+
 
 def get_total_category_invested(category):
     '''Recebe como argumento a categoria de investimento, e 
@@ -48,11 +50,16 @@ def get_total_category_invested(category):
     category_title = Category.objects.get(title=category)
     tickers = Ticker.objects.filter(category=category_title)
     
+    amount_ticker_by_category = tickers.count()
     total_invested = sum(get_ticker_metrics(ticker)[
                 "total_price"] for ticker in tickers)
+    
     return dict(
-        total_invested=number_format(total_invested, decimal_pos=2, force_grouping=True)
+        total_invested=number_format(total_invested, decimal_pos=2, force_grouping=True),
+        amount_ticker_by_category=amount_ticker_by_category
+        
     )
+
 
 def chart_total_category_invested():
     '''
@@ -75,6 +82,7 @@ def get_total_invested():
         Sum("total_price"))["total_price__sum"] or 0
     
     return(round(total_inflow, 2))
+
 
 def get_total_applied_by_currency():
     '''
@@ -118,6 +126,7 @@ def get_applied_value(currency_code):
         values=values
     )
 
+
 def get_last_six_month():
     '''
     Tem como objetivo retornar os últimos 6 meses.
@@ -128,6 +137,7 @@ def get_last_six_month():
     return dict(
         labels=labels
         )
+
 
 def get_total_dividends_category(category):
     today = timezone.now().date()
@@ -155,6 +165,7 @@ def get_total_dividends_category(category):
             values=values    
         )
 
+
 def get_currency(currency):
     '''
     retorna os dividendos mensais de cada tipo de moeda. 
@@ -169,6 +180,7 @@ def get_currency(currency):
         dividends_dict[year][month] = entry["total_value"]
     return dict(dividends_dict)
 
+
 def get_total_applied_by_broker():
     brokers = Broker.objects.all()
     data = {broker.name: Inflow.objects.filter(broker=broker).aggregate(total_price=Sum("total_price"))["total_price"] or 0 for broker in brokers}    
@@ -176,3 +188,4 @@ def get_total_applied_by_broker():
     total_in_broker = {key: float(value) for key,value in data.items()}
 
     return total_in_broker
+
