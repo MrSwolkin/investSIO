@@ -35,7 +35,10 @@ Compras de ativos
             {% for outflow in outflows %}
             <tr>
                 <td>{{ outflow.date }}</td>
-                <td>{{ outflow.ticker }}</td>
+                <td><a href="{% url 'ticker_details' outflow.ticker.category.title outflow.ticker.id %}" class="text-dark">
+                        <strong>{{ outflow.ticker }}</strong>
+                    </a>
+                </td>
                 <td>{{ outflow.quantity }} un.</td>
                 <td>R$ {{ outflow.cost_price }}</td>
                 <td>R$ {{ outflow.total_price }}</td>

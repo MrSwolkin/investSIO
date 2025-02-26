@@ -19,10 +19,4 @@ class Ticker(models.Model):
     def __str__(self):
         return self.name
     
-    def clean(self):
-        if Ticker.objects.filter(name=self.name).exists():
-            raise ValidationError("Ticker Já existente")
-        
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
+    

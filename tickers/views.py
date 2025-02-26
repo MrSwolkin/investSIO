@@ -84,7 +84,7 @@ class TickerUpdateView(UpdateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy("ticker_list", kwargs={"category": self.object.category.title})
+        return reverse_lazy("ticker_details", kwargs={"category": self.object.category.title, "pk": self.object.id})
 
 class TickerDeleteView(DeleteView):
     model = Ticker
@@ -97,4 +97,4 @@ class TickerDeleteView(DeleteView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy("ticker_list", kwargs={"category": self.object.category.title})
+        return reverse_lazy("ticker_details", kwargs={"category": self.object.category.title, "pk": self.object.id})

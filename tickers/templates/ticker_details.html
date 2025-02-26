@@ -16,20 +16,20 @@
     </div>
     <div class="card col-md-10">
         <div class="card-body text-bg-secondary rounded-2">
-            <h3 class="card-title">{{object.category}} {{object.name}}</h3>
+            <h3 class="card-title fs-1">{{object.category}} - {{object.name}}</h3>
         <div class="row">
-            <p class="card-text col p-3"><strong>Categoria: </strong>{{object.category}}</p>
-            <p class="card-text col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
-            <p class="card-text col p-3"><strong>Setor: </strong>{{object.sector}}</p>
+            <p class="card-text fs-4 col p-3"><strong>Categoria: </strong>{{object.category}}</p>
+            <p class="card-text fs-4 col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
+            <p class="card-text fs-4 col p-3"><strong>Setor: </strong>{{object.sector}}</p>
         </div>
             {% if object.description %}
-            <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
+            <p class="card-text fs-4"><strong>Descrição:</strong>{{object.description}}</p>
             {% endif %}
         </div>
     </div>
     <div class="table-responsive col-md-10 mt-4">
         <h4 class="text-center mb-3">Negociações de {{object.name}}</h4>
-        <table class="table table table-bordered border border-black">
+        <table class="table table-stripedtable-striped table-bordered border border-black">
             <thead class="thead-dark">
                 <tr class="text-center">
                     <th>Data</th>
@@ -86,14 +86,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="card col-md-3  border border-black">
-            <div class="card-body">
-                <h5 class="card-title">Total de cotas de {{object.name}}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                <h1>{{total_quantity}}</h1>
-                    
-            </div>
-        </div>
     </div>
 </div>
 

@@ -35,7 +35,10 @@ Compras de ativos
             {% for inflow in inflows %}
             <tr class="border border-dark">
                 <td>{{ inflow.date }}</td>
-                <td>{{ inflow.ticker }}</td>
+                <td><a href="{% url 'ticker_details' inflow.ticker.category.title inflow.ticker.id %}" class="text-dark">
+                        <strong>{{ inflow.ticker }}</strong>
+                    </a>
+                </td>
                 <td>{{ inflow.quantity }} un.</td>
                 <td>R$ {{ inflow.cost_price }}</td>
                 <td>R$ {{ inflow.total_price }}</td>
