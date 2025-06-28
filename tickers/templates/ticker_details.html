@@ -15,8 +15,12 @@
     
     </div>
     <div class="card col-md-10">
-        <div class="card-body text-bg-secondary rounded-2">
-            <h3 class="card-title fs-1">{{object.category}} - {{object.name}}</h3>
+        <div class="card-body  rounded-2 ">
+            <img src="{{ticker_icon_url}}" alt=""  width="50" height="50">
+            <div class="row">
+                <h3 class="card-title fs-1">{{ticker_long_name}} - {{object.name}}</h3>
+                <p class="card-text fs-4 col p-3"><strong>Preço Atual: </strong>{{ticker_price}}</p>
+            </div>
         <div class="row">
             <p class="card-text fs-4 col p-3"><strong>Categoria: </strong>{{object.category}}</p>
             <p class="card-text fs-4 col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
@@ -33,7 +37,6 @@
             <thead class="thead-dark">
                 <tr class="text-center">
                     <th>Data</th>
-                    <th>Ticker</th>
                     <th>Tipo</th>
                     <th>Quantidade</th>
                     <th>Valor por cota</th>
@@ -47,7 +50,6 @@
                 {% for transaction in transactions %}
                 <tr>
                     <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.ticker }}</td>
                     {% if transaction.transaction_type == "Compra" or transaction.transaction_type == "Subscrição" %}
                         <td class="text-success">{{ transaction.transaction_type }}</td>
                     {% else %}

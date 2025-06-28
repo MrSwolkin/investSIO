@@ -15,13 +15,18 @@ from brokers.models import Broker, Currency
 from tickers.models import Ticker
 
 # criar a metrica de ticker
-def get_ticker_metrics(ticker):
+def get_ticker_metrics(ticker, target_date=None):
     '''recebe como argumento um ticker do banco de dados
         e retorna metricas como:
         total investido, total de cotas, e preco medio.
     '''
     inflows = Inflow.objects.filter(ticker=ticker)
-    outflows = Outflow.objects.filter(ticker=ticker)    
+    outflows = Outflow.objects.filter(ticker=ticker)
+    
+    if target_date:
+        inflows = inflows.objects.filter(date__lte=target_date)
+        outflows = outflows.objects.filter(date_lte=target_date)
+        
 # total de cotas de um ticker
     total_price_ticker_inflow = inflows.aggregate(Sum("total_price"))["total_price__sum"] or 0
     total_price_ticker_outflow = outflows.aggregate(Sum("total_price"))[

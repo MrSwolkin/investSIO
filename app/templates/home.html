@@ -11,21 +11,44 @@ InvestSIO - HOME - Dashboard
             <div class="card-body">
                 <h5 class="card-title">Total investido em BRL</h5>
                 
-                <h1>R$ {{ total_applied.BRL|floatformat:2 }}</h1>
+                <h3>R$ {{ total_applied.BRL|floatformat:2 }}</h3>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
             <div class="card-body">
                 <h5 class="card-title">Total investido em USD</h5>
                 
-                <h1>USD {{ total_applied.USD|floatformat:2 }}</h1>
+                <h3>USD {{ total_applied.USD|floatformat:2 }}</h3>
             </div>
         </div>
         <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
             <div class="card-body">
                 <h5 class="card-title">Total Investido em EURO</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                <h1>EUR {{ total_applied.EUR|floatformat:2 }}</h1>
+                <h3>EUR {{ total_applied.EUR|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row col-md-12 mt-4 justify-content-center">
+        <div class="card col-md-3  border border-black shadow-lg bg-body-black rounded">
+            <div class="card-body">
+                <h5 class="card-title">Taxa IPCA</h5>
+                <h3>{{ ipca }}%</h3>
+            </div>
+        </div>
+        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
+            <div class="card-body">
+                <h5 class="card-title">Taxa SELIC</h5>
+                <h3>{{ selic }}%</h3>
+            </div>
+        </div>
+        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
+            <div class="card-body">
+                <h5 class="card-title">Taxa CDI</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                <h3>{{ cdi }}%</h3>
             </div>
         </div>
     </div>
@@ -232,12 +255,7 @@ InvestSIO - HOME - Dashboard
 
     </script>
 </div>
-<div class="row mt-4">
-    <h1>Novos dados</h1>
-</div>
-<div class="row mt-4">
-    <h1>Novos dados</h1>
-</div>
+
 
 
 {% endblock %}

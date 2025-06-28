@@ -2,8 +2,11 @@ import json
 from django.shortcuts import render
 from inflows.models import Inflow
 from outflows.models import Outflow
+from services.fees_br import GetFeeBr
 from itertools import chain
 from . import metrics
+
+get_fee = GetFeeBr()
 
 def home(request):
     total_inflows = metrics.get_total_invested()
@@ -16,6 +19,10 @@ def home(request):
     total_applied = metrics.get_total_applied_by_currency()
     chart_diversity = metrics.chart_total_category_invested()
     brokers = metrics.get_total_applied_by_broker()
+    ipca = get_fee.get_taxa("IPCA")
+    selic = get_fee.get_taxa("SELIC")
+    cdi = get_fee.get_taxa("CDI")
+    
     
     context = {
         "total_inflows": total_inflows,
@@ -29,6 +36,10 @@ def home(request):
         "chart_diversity": json.dumps(chart_diversity),
         "chart_total_applied": json.dumps(total_applied),
         "chart_broker": json.dumps(brokers),
+        "ipca": ipca["valor"],
+        "selic": selic["valor"],
+        "cdi": cdi["valor"],
+        
     }
 
     return render(request, "home.html", context)
