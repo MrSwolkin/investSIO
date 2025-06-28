@@ -1,3 +1,4 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Inflow
@@ -21,31 +22,33 @@ class InflowDetailsView(DetailView):
     model = Inflow
     template_name = "inflow_details.html"
 
-class InflowCreateView(CreateView):
+
+class InflowCreateView(SuccessMessageMixin, CreateView):
     model = Inflow
     template_name = "inflow_create.html"
     form_class = forms.InflowForms
-    
+    success_message = "Compra criada com sucesso."
 
     def get_success_url(self):
         ticker = self.object.ticker
         return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
 
 
-class InflowUpdateView(UpdateView):
+class InflowUpdateView(SuccessMessageMixin, UpdateView):
     model = Inflow
     template_name = "inflow_update.html"
     form_class = forms.InflowForms
+    success_message = "Atualização ralizada com sucesso."
 
     def get_success_url(self):
         ticker = self.object.ticker
         return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
 
 
-class InflowDeleteView(DeleteView):
+class InflowDeleteView(SuccessMessageMixin, DeleteView):
     model = Inflow
     template_name = "inflow_delete.html"
-
+    success_message = "Item deletado com sucesso."
 
     def get_success_url(self):
         ticker = self.object.ticker

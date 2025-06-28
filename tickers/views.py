@@ -2,6 +2,7 @@ from django.db.models import Sum
 from itertools import chain
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from services.get_ticker_details import Get_ticker_data
 from .models import Ticker
 from app import metrics
 from categories.models import Category
@@ -9,6 +10,7 @@ from inflows.models import Inflow
 from outflows.models import Outflow
 from . import forms
 
+get_ticker_details = Get_ticker_data()
 
 class TickerListView(ListView):
     model = Ticker
@@ -24,9 +26,9 @@ class TickerListView(ListView):
         context =  super().get_context_data(**kwargs)
         category_title = self.kwargs["category"]
 
-
         context["category_title"] = category_title
         context["metrics_category"] = metrics.get_total_category_invested(category_title)
+
         return context
 
 
@@ -55,6 +57,7 @@ class TickerDetailsView(DetailView):
         
         inflows = Inflow.objects.filter(ticker=self.object)
         outflows = Outflow.objects.filter(ticker=self.object)
+        ticker_details_api = get_ticker_details.get_ticker(code_ticekr=self.object)
         
         transactions = sorted(
             chain(inflows, outflows),
@@ -68,7 +71,9 @@ class TickerDetailsView(DetailView):
         context["outflows"] = outflows
         context["transactions"] = transactions    
         context["ticker_metrics"] = metrics.get_ticker_metrics(self.object)
-
+        context["ticker_price"] = ticker_details_api["regularMarketPrice"]
+        context["ticker_icon_url"] = ticker_details_api["logourl"]
+        context["ticker_long_name"] = ticker_details_api["longName"]
         return context
 
 

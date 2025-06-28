@@ -5,7 +5,7 @@ from inflows.models import Inflow
 
 class Dividend(models.Model):
     TYPE_CHOICES = [
-        ("D", "Dividendo"),
+        ("D", "Dividendos"),
         ("J", "Juros de Capital Próprio"),
         ("A", "Amortização")
     ]
@@ -30,7 +30,7 @@ class Dividend(models.Model):
                 date__lte=self.date    
             ).aggregate(total=models.Sum("quantity"))["total"] or 0
             
-            self.total_value = self.value * self.quantity_quote if self.value and self.quantity_quote else 0
+            self.total_value = float(self.value) * float(self.quantity_quote) if self.value and self.quantity_quote else 0
         super().save(*args, **kwargs)
 
     class Meta:
