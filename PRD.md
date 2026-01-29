@@ -1,0 +1,934 @@
+# PRD - Product Requirements Document
+## InvestSIO - Modernizacao Completa (Frontend + Backend)
+
+**Versao:** 3.0
+**Data:** 29/01/2026
+**Status:** Aprovado
+**Framework:** Django 6.0.1 + django-tailwind 4.0.0
+
+---
+
+## Sumario Executivo
+
+O **InvestSIO** e uma aplicacao Django para gerenciamento de investimentos pessoais. Este documento detalha a modernizacao completa do sistema, abrangendo:
+
+- **Backend:** Seguranca, performance, qualidade de codigo e escalabilidade
+- **Frontend:** Migracao para TailwindCSS com design system moderno e responsivo
+
+---
+
+## Indice
+
+1. [Estado Atual](#1-estado-atual)
+2. [Problemas Identificados](#2-problemas-identificados)
+3. [Visao do Produto](#3-visao-do-produto)
+4. [Epicos e Sprints](#4-epicos-e-sprints)
+5. [Sprint Backlog Detalhado](#5-sprint-backlog-detalhado)
+6. [Especificacoes Tecnicas](#6-especificacoes-tecnicas)
+7. [Definition of Done (DoD)](#7-definition-of-done-dod)
+8. [Metricas de Sucesso](#8-metricas-de-sucesso)
+9. [Dependencias](#9-dependencias)
+10. [Referencias](#10-referencias)
+
+---
+
+## 1. Estado Atual
+
+### 1.1 Stack Tecnologica
+
+| Camada | Tecnologia | Versao | Status |
+|--------|------------|--------|--------|
+| Backend | Django | 6.0.1 | Atual |
+| Backend | Python | 3.13 | Atual |
+| Database | SQLite | 3 | A migrar |
+| Frontend | Bootstrap | 5.3.3 | A remover |
+| Frontend | TailwindCSS | - | A implementar |
+| Icons | Bootstrap Icons | 1.11.3 | Manter |
+| Charts | Chart.js | Latest | Manter |
+
+### 1.2 Arquitetura Atual
+
+```
+investSIO/
+├── app/                 # Projeto principal
+├── brokers/             # CRUD corretoras
+├── tickers/             # CRUD ativos
+├── inflows/             # CRUD compras
+├── outflows/            # CRUD vendas
+├── dividends/           # CRUD dividendos
+├── categories/          # Categorias
+├── portifolio/          # Vazio (remover)
+└── services/            # APIs externas
+```
+
+---
+
+## 2. Problemas Identificados
+
+### 2.1 Backend
+
+| Severidade | Problema | Impacto |
+|------------|----------|---------|
+| CRITICO | DEBUG=True em producao | Seguranca |
+| CRITICO | SECRET_KEY exposta | Seguranca |
+| CRITICO | Token API hardcoded | Seguranca |
+| CRITICO | Views sem autenticacao | Seguranca |
+| CRITICO | N+1 queries | Performance |
+| CRITICO | Sem paginacao | Performance |
+| CRITICO | Sem testes | Qualidade |
+| ALTO | Sem indices em FKs | Performance |
+| ALTO | Sem cache | Performance |
+| ALTO | Sem logging | Observabilidade |
+| MEDIO | SQLite em producao | Escalabilidade |
+| MEDIO | Sem API REST | Extensibilidade |
+
+### 2.2 Frontend
+
+| Severidade | Problema | Impacto |
+|------------|----------|---------|
+| ALTO | Sem identidade visual | UX |
+| ALTO | Paleta monocromatica | UX |
+| ALTO | Sem tema escuro | UX |
+| ALTO | Responsividade limitada | UX |
+| MEDIO | Formularios basicos | UX |
+| MEDIO | Sem microinteracoes | UX |
+| MEDIO | Sem estados de loading | UX |
+
+---
+
+## 3. Visao do Produto
+
+### 3.1 Objetivos
+
+1. **Seguranca:** Sistema protegido com autenticacao e configuracoes seguras
+2. **Performance:** Tempo de resposta < 500ms com cache e queries otimizadas
+3. **Qualidade:** Cobertura de testes >= 80%
+4. **UX:** Interface moderna, responsiva e acessivel
+5. **Escalabilidade:** Arquitetura preparada para crescimento
+
+### 3.2 Personas
+
+- **Investidor Individual:** Gerencia portfolio pessoal de investimentos
+- **Desenvolvedor:** Mantem e evolui o sistema
+
+---
+
+## 4. Epicos e Sprints
+
+### 4.1 Visao Geral
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ROADMAP DE IMPLEMENTACAO                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  SPRINT 1 ──► SPRINT 2 ──► SPRINT 3 ──► SPRINT 4 ──► SPRINT 5  │
+│  Seguranca    Performance   Frontend     CRUD         Polish     │
+│  & Config     & Database    Foundation   Redesign     & Deploy   │
+│                                                                  │
+│  [████████]   [████████]   [████████]   [████████]   [████████] │
+│   2 semanas    2 semanas    2 semanas    2 semanas    1 semana   │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 Resumo de Sprints
+
+| Sprint | Foco | Duracao | Story Points |
+|--------|------|---------|--------------|
+| Sprint 1 | Seguranca e Configuracao | 2 semanas | 34 pts |
+| Sprint 2 | Performance e Database | 2 semanas | 29 pts |
+| Sprint 3 | Frontend Foundation | 2 semanas | 34 pts |
+| Sprint 4 | CRUD Redesign | 2 semanas | 29 pts |
+| Sprint 5 | Polish e Deploy | 1 semana | 18 pts |
+| **Total** | | **9 semanas** | **144 pts** |
+
+---
+
+## 5. Sprint Backlog Detalhado
+
+### Sprint 1: Seguranca e Configuracao
+
+**Objetivo:** Tornar o sistema seguro e configuravel por ambiente.
+
+**Duracao:** 2 semanas
+
+---
+
+#### EPIC-001: Configuracao de Ambiente
+
+**US-001: Variaveis de Ambiente** `[8 pts]` `[CRITICO]`
+
+> Como desenvolvedor, quero usar variaveis de ambiente para que credenciais nao fiquem expostas no codigo.
+
+**Tarefas:**
+- [ ] **T-001.1:** Instalar django-environ
+  ```bash
+  pip install django-environ
+  ```
+- [ ] **T-001.2:** Criar arquivo `.env` na raiz
+  ```env
+  DEBUG=True
+  SECRET_KEY=sua-chave-secreta-aqui
+  ALLOWED_HOSTS=localhost,127.0.0.1
+  BRAPI_TOKEN=seu-token-aqui
+  ```
+- [ ] **T-001.3:** Criar arquivo `.env.example` (sem valores sensiveis)
+- [ ] **T-001.4:** Adicionar `.env` ao `.gitignore`
+- [ ] **T-001.5:** Atualizar `settings.py` para usar `environ.Env()`
+- [ ] **T-001.6:** Atualizar `services/get_ticker_details.py` para usar env
+
+**Criterios de Aceitacao:**
+- [ ] Nenhuma credencial no codigo-fonte
+- [ ] Sistema funciona com `.env`
+- [ ] `.env` nao esta no git
+
+---
+
+**US-002: Separacao de Settings** `[5 pts]` `[CRITICO]`
+
+> Como desenvolvedor, quero settings separados por ambiente para facilitar deploy.
+
+**Tarefas:**
+- [ ] **T-002.1:** Criar pasta `app/settings/`
+- [ ] **T-002.2:** Criar `app/settings/__init__.py`
+- [ ] **T-002.3:** Criar `app/settings/base.py` (configuracoes comuns)
+- [ ] **T-002.4:** Criar `app/settings/dev.py` (desenvolvimento)
+- [ ] **T-002.5:** Criar `app/settings/prod.py` (producao)
+- [ ] **T-002.6:** Atualizar `manage.py` e `wsgi.py`
+- [ ] **T-002.7:** Documentar uso em `docs/GETTING_STARTED.md`
+
+**Criterios de Aceitacao:**
+- [ ] `python manage.py runserver` usa settings.dev
+- [ ] Settings de prod tem DEBUG=False
+- [ ] Documentacao atualizada
+
+---
+
+#### EPIC-002: Autenticacao e Autorizacao
+
+**US-003: Protecao de Views** `[8 pts]` `[CRITICO]`
+
+> Como usuario, quero que minhas informacoes sejam protegidas por login.
+
+**Tarefas:**
+- [ ] **T-003.1:** Adicionar `LoginRequiredMixin` em `brokers/views.py`
+- [ ] **T-003.2:** Adicionar `LoginRequiredMixin` em `tickers/views.py`
+- [ ] **T-003.3:** Adicionar `LoginRequiredMixin` em `inflows/views.py`
+- [ ] **T-003.4:** Adicionar `LoginRequiredMixin` em `outflows/views.py`
+- [ ] **T-003.5:** Adicionar `LoginRequiredMixin` em `dividends/views.py`
+- [ ] **T-003.6:** Adicionar `@login_required` em `app/views.py` (home, negociations)
+- [ ] **T-003.7:** Configurar `LOGIN_URL` em settings
+- [ ] **T-003.8:** Criar template `registration/login.html`
+
+**Criterios de Aceitacao:**
+- [ ] Todas as views requerem login
+- [ ] Usuarios nao autenticados sao redirecionados
+- [ ] Pagina de login funcional
+
+---
+
+**US-004: Validacao de Input** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero validar inputs para prevenir ataques.
+
+**Tarefas:**
+- [ ] **T-004.1:** Validar parametro `ticker` em `dividends/views.py`
+- [ ] **T-004.2:** Validar parametro `name` em `brokers/views.py`
+- [ ] **T-004.3:** Validar parametro `category` em `tickers/views.py`
+- [ ] **T-004.4:** Criar helper `app/utils/validators.py`
+- [ ] **T-004.5:** Adicionar testes de validacao
+
+**Criterios de Aceitacao:**
+- [ ] Parametros invalidos retornam 404
+- [ ] Sem SQL injection possivel
+- [ ] Testes passando
+
+---
+
+#### EPIC-003: Logging e Monitoramento
+
+**US-005: Configuracao de Logging** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero logs estruturados para debugar problemas.
+
+**Tarefas:**
+- [ ] **T-005.1:** Criar pasta `logs/` na raiz
+- [ ] **T-005.2:** Adicionar `logs/` ao `.gitignore`
+- [ ] **T-005.3:** Configurar LOGGING em `settings/base.py`
+- [ ] **T-005.4:** Adicionar logs em `services/get_ticker_details.py`
+- [ ] **T-005.5:** Adicionar logs em `services/fees_br.py`
+- [ ] **T-005.6:** Adicionar logs em views criticas
+
+**Criterios de Aceitacao:**
+- [ ] Logs gravados em arquivo
+- [ ] Logs de erro em API externa
+- [ ] Formato consistente
+
+---
+
+**US-006: Tratamento de Erros** `[3 pts]` `[ALTO]`
+
+> Como usuario, quero ver mensagens de erro amigaveis quando algo falha.
+
+**Tarefas:**
+- [ ] **T-006.1:** Adicionar try/catch em `services/get_ticker_details.py`
+- [ ] **T-006.2:** Adicionar try/catch em `services/fees_br.py`
+- [ ] **T-006.3:** Criar template `templates/errors/500.html`
+- [ ] **T-006.4:** Criar template `templates/errors/404.html`
+- [ ] **T-006.5:** Configurar handlers em `urls.py`
+
+**Criterios de Aceitacao:**
+- [ ] APIs falhando nao quebram a pagina
+- [ ] Mensagens de erro amigaveis
+- [ ] Erros logados
+
+---
+
+### Sprint 2: Performance e Database
+
+**Objetivo:** Otimizar queries e preparar para escala.
+
+**Duracao:** 2 semanas
+
+---
+
+#### EPIC-004: Otimizacao de Queries
+
+**US-007: Indices em Models** `[5 pts]` `[CRITICO]`
+
+> Como desenvolvedor, quero indices para queries mais rapidas.
+
+**Tarefas:**
+- [ ] **T-007.1:** Adicionar `db_index=True` em `Inflow.ticker`
+- [ ] **T-007.2:** Adicionar `db_index=True` em `Inflow.broker`
+- [ ] **T-007.3:** Adicionar `db_index=True` em `Inflow.date`
+- [ ] **T-007.4:** Adicionar `db_index=True` em `Outflow.ticker`, `broker`, `date`
+- [ ] **T-007.5:** Adicionar `db_index=True` em `Dividend.ticker`, `date`
+- [ ] **T-007.6:** Adicionar `Meta.indexes` compostos
+- [ ] **T-007.7:** Criar e aplicar migrations
+
+**Criterios de Aceitacao:**
+- [ ] Migrations criadas sem erro
+- [ ] Indices aplicados no banco
+
+---
+
+**US-008: Select Related** `[5 pts]` `[CRITICO]`
+
+> Como desenvolvedor, quero eliminar N+1 queries.
+
+**Tarefas:**
+- [ ] **T-008.1:** Adicionar `select_related()` em `InflowListView`
+- [ ] **T-008.2:** Adicionar `select_related()` em `OutflowListView`
+- [ ] **T-008.3:** Adicionar `select_related()` em `DividendListView`
+- [ ] **T-008.4:** Adicionar `select_related()` em `TickerDetailsView`
+- [ ] **T-008.5:** Otimizar `app/metrics.py`
+- [ ] **T-008.6:** Instalar django-debug-toolbar para verificar
+
+**Criterios de Aceitacao:**
+- [ ] ListViews com no maximo 3 queries
+- [ ] Debug toolbar mostrando queries otimizadas
+
+---
+
+**US-009: Paginacao** `[3 pts]` `[CRITICO]`
+
+> Como usuario, quero paginacao para carregar dados mais rapido.
+
+**Tarefas:**
+- [ ] **T-009.1:** Adicionar `paginate_by = 25` em todas as ListViews
+- [ ] **T-009.2:** Criar componente `_pagination.html`
+- [ ] **T-009.3:** Adicionar paginacao nos templates de lista
+- [ ] **T-009.4:** Otimizar `negociations()` view
+
+**Criterios de Aceitacao:**
+- [ ] Listas paginadas com 25 itens
+- [ ] Navegacao entre paginas funcional
+
+---
+
+#### EPIC-005: Cache
+
+**US-010: Configuracao de Cache** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero cache para reduzir carga no banco.
+
+**Tarefas:**
+- [ ] **T-010.1:** Instalar django-redis e redis
+- [ ] **T-010.2:** Configurar CACHES em settings
+- [ ] **T-010.3:** Adicionar cache em `app/metrics.py`
+- [ ] **T-010.4:** Adicionar `@cache_page` em `home()` view
+- [ ] **T-010.5:** Documentar invalidacao de cache
+
+**Criterios de Aceitacao:**
+- [ ] Dashboard carrega em < 500ms (cached)
+- [ ] Cache invalida ao criar/atualizar dados
+
+---
+
+#### EPIC-006: Validacoes de Models
+
+**US-011: Validators em Models** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero validacoes para garantir integridade.
+
+**Tarefas:**
+- [ ] **T-011.1:** Adicionar `MinValueValidator` em `Inflow.quantity`
+- [ ] **T-011.2:** Adicionar `MinValueValidator` em `Inflow.cost_price`
+- [ ] **T-011.3:** Adicionar metodo `clean()` em `Inflow`
+- [ ] **T-011.4:** Repetir para `Outflow` e `Dividend`
+- [ ] **T-011.5:** Criar testes de validacao
+
+**Criterios de Aceitacao:**
+- [ ] Nao permite quantidade <= 0
+- [ ] Nao permite data futura
+- [ ] Testes passando
+
+---
+
+#### EPIC-007: Testes
+
+**US-012: Setup de Testes** `[3 pts]` `[CRITICO]`
+
+> Como desenvolvedor, quero infraestrutura de testes.
+
+**Tarefas:**
+- [ ] **T-012.1:** Instalar pytest, pytest-django, pytest-cov
+- [ ] **T-012.2:** Criar `pytest.ini`
+- [ ] **T-012.3:** Criar `conftest.py` com fixtures
+- [ ] **T-012.4:** Criar pasta `tests/` em cada app
+
+**Criterios de Aceitacao:**
+- [ ] `pytest` executa sem erro
+- [ ] Estrutura de testes criada
+
+---
+
+**US-013: Testes de Models** `[3 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero testes unitarios de models.
+
+**Tarefas:**
+- [ ] **T-013.1:** Criar testes para `Broker`
+- [ ] **T-013.2:** Criar testes para `Ticker`
+- [ ] **T-013.3:** Criar testes para `Inflow`
+- [ ] **T-013.4:** Criar testes para `Outflow`
+- [ ] **T-013.5:** Criar testes para `Dividend`
+
+**Criterios de Aceitacao:**
+- [ ] Cobertura de models >= 80%
+- [ ] Testes de validacao incluidos
+
+---
+
+### Sprint 3: Frontend Foundation
+
+**Objetivo:** Configurar TailwindCSS e criar design system.
+
+**Duracao:** 2 semanas
+
+---
+
+#### EPIC-008: Setup TailwindCSS
+
+**US-014: Instalacao Django-Tailwind** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero TailwindCSS integrado ao Django.
+
+**Tarefas:**
+- [ ] **T-014.1:** Instalar django-tailwind e django-browser-reload
+- [ ] **T-014.2:** Executar `python manage.py tailwind init`
+- [ ] **T-014.3:** Executar `python manage.py tailwind install`
+- [ ] **T-014.4:** Atualizar `INSTALLED_APPS`
+- [ ] **T-014.5:** Atualizar `MIDDLEWARE`
+- [ ] **T-014.6:** Atualizar `urls.py` com browser-reload
+- [ ] **T-014.7:** Testar `python manage.py tailwind start`
+
+**Criterios de Aceitacao:**
+- [ ] Tailwind compila sem erros
+- [ ] Hot reload funcionando
+
+---
+
+**US-015: Configuracao do Design System** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero um design system consistente.
+
+**Tarefas:**
+- [ ] **T-015.1:** Configurar `tailwind.config.js` com cores customizadas
+- [ ] **T-015.2:** Configurar fontes (Inter, Poppins)
+- [ ] **T-015.3:** Configurar animacoes customizadas
+- [ ] **T-015.4:** Criar `input.css` com componentes base
+- [ ] **T-015.5:** Definir classes utilitarias (.btn, .card, .input, etc)
+
+**Criterios de Aceitacao:**
+- [ ] Design tokens definidos
+- [ ] Componentes CSS criados
+- [ ] Dark mode habilitado
+
+---
+
+#### EPIC-009: Layout Principal
+
+**US-016: Template Base** `[5 pts]` `[ALTO]`
+
+> Como usuario, quero uma interface moderna e consistente.
+
+**Tarefas:**
+- [ ] **T-016.1:** Remover Bootstrap do `base.html`
+- [ ] **T-016.2:** Adicionar `{% tailwind_css %}`
+- [ ] **T-016.3:** Criar estrutura responsiva
+- [ ] **T-016.4:** Implementar sistema de mensagens moderno
+- [ ] **T-016.5:** Testar em mobile e desktop
+
+**Criterios de Aceitacao:**
+- [ ] Pagina carrega sem Bootstrap
+- [ ] Layout responsivo
+- [ ] Dark mode aplicado
+
+---
+
+**US-017: Header e Sidebar** `[8 pts]` `[ALTO]`
+
+> Como usuario, quero navegacao intuitiva e moderna.
+
+**Tarefas:**
+- [ ] **T-017.1:** Redesenhar `_header.html`
+- [ ] **T-017.2:** Adicionar logo e branding
+- [ ] **T-017.3:** Adicionar busca global
+- [ ] **T-017.4:** Adicionar menu de usuario
+- [ ] **T-017.5:** Redesenhar `_sidebar.html`
+- [ ] **T-017.6:** Implementar dropdowns com Alpine.js
+- [ ] **T-017.7:** Implementar sidebar colapsavel em mobile
+- [ ] **T-017.8:** Adicionar botoes de acao rapida
+
+**Criterios de Aceitacao:**
+- [ ] Header fixo funcional
+- [ ] Sidebar responsiva
+- [ ] Dropdowns animados
+
+---
+
+#### EPIC-010: Componentes UI
+
+**US-018: Componentes Base** `[8 pts]` `[MEDIO]`
+
+> Como desenvolvedor, quero componentes reutilizaveis.
+
+**Tarefas:**
+- [ ] **T-018.1:** Criar `components/ui/_button.html`
+- [ ] **T-018.2:** Criar `components/ui/_card.html`
+- [ ] **T-018.3:** Criar `components/ui/_metric_card.html`
+- [ ] **T-018.4:** Criar `components/ui/_badge.html`
+- [ ] **T-018.5:** Criar `components/ui/_table.html`
+- [ ] **T-018.6:** Criar `components/ui/_modal.html`
+- [ ] **T-018.7:** Criar `components/ui/_alert.html`
+- [ ] **T-018.8:** Criar `components/ui/_empty_state.html`
+
+**Criterios de Aceitacao:**
+- [ ] Componentes documentados
+- [ ] Variantes implementadas
+- [ ] Usados via `{% include %}`
+
+---
+
+**US-019: Componentes de Form** `[3 pts]` `[MEDIO]`
+
+> Como desenvolvedor, quero formularios estilizados.
+
+**Tarefas:**
+- [ ] **T-019.1:** Criar `components/forms/_form_field.html`
+- [ ] **T-019.2:** Criar widgets Tailwind em `app/widgets.py`
+- [ ] **T-019.3:** Atualizar forms existentes
+
+**Criterios de Aceitacao:**
+- [ ] Inputs estilizados
+- [ ] Validacao visual
+- [ ] Labels e erros exibidos
+
+---
+
+### Sprint 4: CRUD Redesign
+
+**Objetivo:** Redesenhar todas as paginas CRUD.
+
+**Duracao:** 2 semanas
+
+---
+
+#### EPIC-011: Dashboard
+
+**US-020: Redesign Dashboard** `[8 pts]` `[ALTO]`
+
+> Como usuario, quero um dashboard informativo e bonito.
+
+**Tarefas:**
+- [ ] **T-020.1:** Redesenhar `home.html` com grid responsivo
+- [ ] **T-020.2:** Implementar cards de metricas com gradientes
+- [ ] **T-020.3:** Configurar Chart.js para tema escuro
+- [ ] **T-020.4:** Redesenhar graficos de diversificacao
+- [ ] **T-020.5:** Adicionar loading skeletons
+- [ ] **T-020.6:** Otimizar para mobile
+
+**Criterios de Aceitacao:**
+- [ ] Metricas exibidas com gradientes
+- [ ] Graficos em tema escuro
+- [ ] Responsivo em todas as telas
+
+---
+
+#### EPIC-012: Templates CRUD
+
+**US-021: Brokers CRUD** `[5 pts]` `[MEDIO]`
+
+> Como usuario, quero gerenciar corretoras com interface moderna.
+
+**Tarefas:**
+- [ ] **T-021.1:** Redesenhar `broker_list.html`
+- [ ] **T-021.2:** Redesenhar `broker_create.html`
+- [ ] **T-021.3:** Redesenhar `broker_update.html`
+- [ ] **T-021.4:** Redesenhar `broker_details.html`
+- [ ] **T-021.5:** Implementar modal de delecao
+
+**Criterios de Aceitacao:**
+- [ ] Lista com tabela moderna
+- [ ] Formularios estilizados
+- [ ] Modal de confirmacao
+
+---
+
+**US-022: Tickers CRUD** `[5 pts]` `[MEDIO]`
+
+> Como usuario, quero gerenciar ativos com interface moderna.
+
+**Tarefas:**
+- [ ] **T-022.1:** Redesenhar `ticker_list.html`
+- [ ] **T-022.2:** Redesenhar `ticker_create.html`
+- [ ] **T-022.3:** Redesenhar `ticker_update.html`
+- [ ] **T-022.4:** Redesenhar `ticker_details.html`
+- [ ] **T-022.5:** Implementar modal de delecao
+
+**Criterios de Aceitacao:**
+- [ ] Lista filtrada por categoria
+- [ ] Detalhes com metricas visuais
+- [ ] Integracao com API de precos
+
+---
+
+**US-023: Inflows CRUD** `[5 pts]` `[MEDIO]`
+
+> Como usuario, quero registrar compras com interface moderna.
+
+**Tarefas:**
+- [ ] **T-023.1:** Redesenhar `inflow_list.html`
+- [ ] **T-023.2:** Redesenhar `inflow_create.html`
+- [ ] **T-023.3:** Redesenhar `inflow_update.html`
+- [ ] **T-023.4:** Redesenhar `inflow_details.html`
+- [ ] **T-023.5:** Implementar modal de delecao
+
+**Criterios de Aceitacao:**
+- [ ] Lista com filtros
+- [ ] Formulario com selects modernos
+- [ ] Paginacao funcional
+
+---
+
+**US-024: Outflows e Dividends CRUD** `[6 pts]` `[MEDIO]`
+
+> Como usuario, quero gerenciar vendas e dividendos.
+
+**Tarefas:**
+- [ ] **T-024.1:** Redesenhar templates de Outflows
+- [ ] **T-024.2:** Redesenhar templates de Dividends
+- [ ] **T-024.3:** Redesenhar `negociations.html`
+- [ ] **T-024.4:** Adicionar filtros avancados
+- [ ] **T-024.5:** Implementar export (opcional)
+
+**Criterios de Aceitacao:**
+- [ ] Todas as paginas redesenhadas
+- [ ] Consistencia visual
+
+---
+
+### Sprint 5: Polish e Deploy
+
+**Objetivo:** Finalizar, testar e preparar deploy.
+
+**Duracao:** 1 semana
+
+---
+
+#### EPIC-013: Quality Assurance
+
+**US-025: Code Cleanup** `[3 pts]` `[MEDIO]`
+
+> Como desenvolvedor, quero codigo limpo e organizado.
+
+**Tarefas:**
+- [ ] **T-025.1:** Corrigir typo `OuflowListView` -> `OutflowListView`
+- [ ] **T-025.2:** Corrigir typo `dividens` -> `dividends`
+- [ ] **T-025.3:** Remover codigo comentado
+- [ ] **T-025.4:** Remover app `portifolio/`
+- [ ] **T-025.5:** Adicionar docstrings em funcoes principais
+
+**Criterios de Aceitacao:**
+- [ ] Zero typos
+- [ ] Codigo comentado removido
+- [ ] Docstrings em funcoes publicas
+
+---
+
+**US-026: Testes E2E** `[5 pts]` `[ALTO]`
+
+> Como desenvolvedor, quero garantir que tudo funciona.
+
+**Tarefas:**
+- [ ] **T-026.1:** Criar testes de views
+- [ ] **T-026.2:** Testar fluxo de login
+- [ ] **T-026.3:** Testar CRUD de brokers
+- [ ] **T-026.4:** Testar CRUD de inflows
+- [ ] **T-026.5:** Verificar cobertura >= 70%
+
+**Criterios de Aceitacao:**
+- [ ] Testes passando
+- [ ] Cobertura >= 70%
+
+---
+
+#### EPIC-014: Acessibilidade e Performance
+
+**US-027: Acessibilidade** `[3 pts]` `[MEDIO]`
+
+> Como usuario com deficiencia, quero usar o sistema.
+
+**Tarefas:**
+- [ ] **T-027.1:** Adicionar atributos ARIA
+- [ ] **T-027.2:** Verificar contraste de cores (WCAG AA)
+- [ ] **T-027.3:** Testar navegacao por teclado
+- [ ] **T-027.4:** Adicionar `alt` em imagens
+
+**Criterios de Aceitacao:**
+- [ ] Score Lighthouse >= 90
+- [ ] Navegacao por teclado funcional
+
+---
+
+**US-028: Performance Final** `[3 pts]` `[MEDIO]`
+
+> Como usuario, quero paginas rapidas.
+
+**Tarefas:**
+- [ ] **T-028.1:** Purge CSS nao utilizado
+- [ ] **T-028.2:** Minificar assets
+- [ ] **T-028.3:** Verificar Lighthouse Performance
+- [ ] **T-028.4:** Otimizar imagens
+
+**Criterios de Aceitacao:**
+- [ ] CSS < 30KB gzipped
+- [ ] FCP < 1.5s
+- [ ] LCP < 2.5s
+
+---
+
+#### EPIC-015: Documentacao
+
+**US-029: Atualizacao de Docs** `[4 pts]` `[BAIXO]`
+
+> Como desenvolvedor, quero documentacao atualizada.
+
+**Tarefas:**
+- [ ] **T-029.1:** Atualizar `docs/GETTING_STARTED.md`
+- [ ] **T-029.2:** Atualizar `docs/ARCHITECTURE.md`
+- [ ] **T-029.3:** Documentar design system
+- [ ] **T-029.4:** Criar `CHANGELOG.md`
+
+**Criterios de Aceitacao:**
+- [ ] Docs refletem estado atual
+- [ ] Changelog completo
+
+---
+
+## 6. Especificacoes Tecnicas
+
+### 6.1 Design System
+
+#### Paleta de Cores (Dark Theme)
+
+| Token | Hex | Tailwind | Uso |
+|-------|-----|----------|-----|
+| `bg-base` | `#0f172a` | `slate-900` | Background principal |
+| `bg-surface` | `#1e293b` | `slate-800` | Cards, modais |
+| `bg-elevated` | `#334155` | `slate-700` | Hover states |
+| `text-primary` | `#f1f5f9` | `slate-100` | Titulos |
+| `text-secondary` | `#cbd5e1` | `slate-300` | Labels |
+
+#### Gradientes
+
+| Nome | Classes | Uso |
+|------|---------|-----|
+| Primary | `from-blue-500 to-cyan-500` | CTAs |
+| Success | `from-emerald-500 to-teal-500` | Compras |
+| Danger | `from-red-500 to-pink-500` | Vendas |
+
+### 6.2 Componentes CSS
+
+Ver arquivo `input.css` para implementacao completa.
+
+### 6.3 Estrutura de Settings
+
+```
+app/settings/
+├── __init__.py
+├── base.py      # Configuracoes comuns
+├── dev.py       # DEBUG=True, SQLite
+└── prod.py      # DEBUG=False, PostgreSQL
+```
+
+---
+
+## 7. Definition of Done (DoD)
+
+Uma tarefa so e considerada **DONE** quando:
+
+### Codigo
+- [ ] Codigo escrito e funcionando
+- [ ] Sem erros de lint
+- [ ] Sem warnings no console
+- [ ] Code review aprovado (se aplicavel)
+
+### Testes
+- [ ] Testes unitarios passando
+- [ ] Cobertura >= 70% (novas funcionalidades)
+- [ ] Testes manuais realizados
+
+### Documentacao
+- [ ] Docstrings adicionadas
+- [ ] Docs atualizados (se necessario)
+
+### UX
+- [ ] Responsivo (mobile, tablet, desktop)
+- [ ] Acessivel (navegacao por teclado)
+- [ ] Feedback visual (loading, success, error)
+
+---
+
+## 8. Metricas de Sucesso
+
+### 8.1 Performance
+
+| Metrica | Meta | Ferramenta |
+|---------|------|------------|
+| First Contentful Paint | < 1.5s | Lighthouse |
+| Largest Contentful Paint | < 2.5s | Lighthouse |
+| Time to Interactive | < 3s | Lighthouse |
+| Cumulative Layout Shift | < 0.1 | Lighthouse |
+| Database Queries/Page | < 10 | Debug Toolbar |
+
+### 8.2 Qualidade
+
+| Metrica | Meta | Ferramenta |
+|---------|------|------------|
+| Test Coverage | >= 70% | pytest-cov |
+| Lighthouse Performance | >= 90 | Lighthouse |
+| Lighthouse Accessibility | >= 90 | Lighthouse |
+| Security Vulnerabilities | 0 | Django check |
+
+### 8.3 UX
+
+| Metrica | Meta | Metodo |
+|---------|------|--------|
+| Mobile Usability | >= 90 | Lighthouse |
+| Contraste WCAG AA | 100% | Lighthouse |
+| Tempo para tarefa | -30% | Teste usuario |
+
+---
+
+## 9. Dependencias
+
+### 9.1 requirements.txt (Atualizado)
+
+```txt
+# Core
+Django==6.0.1
+requests==2.32.5
+python-dateutil==2.9.0.post0
+
+# Configuracao
+django-environ==0.11.2
+
+# Frontend
+django-tailwind[reload]==4.0.0
+django-browser-reload==1.12.1
+
+# Performance
+django-redis==5.4.0
+redis==5.0.1
+
+# Debug (dev only)
+django-debug-toolbar==4.2.0
+
+# Testes
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-cov==4.1.0
+
+# Database (producao)
+psycopg2-binary==2.9.9
+
+# API REST (futuro)
+djangorestframework==3.14.0
+```
+
+### 9.2 CDNs
+
+```html
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Alpine.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+```
+
+---
+
+## 10. Referencias
+
+### Documentacao Oficial
+- [Django Documentation](https://docs.djangoproject.com/)
+- [Django-Tailwind](https://django-tailwind.readthedocs.io/)
+- [TailwindCSS](https://tailwindcss.com/docs)
+- [Alpine.js](https://alpinejs.dev/)
+
+### Best Practices
+- [Django Security](https://docs.djangoproject.com/en/5.0/topics/security/)
+- [Django Performance](https://docs.djangoproject.com/en/5.0/topics/performance/)
+- [Two Scoops of Django](https://www.feldroy.com/books/two-scoops-of-django-3-x)
+
+### Documentacao do Projeto
+- [Getting Started](./docs/GETTING_STARTED.md)
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Models](./docs/MODELS.md)
+- [Backend Improvements](./docs/BACKEND_IMPROVEMENTS.md)
+
+---
+
+## Historico de Versoes
+
+| Versao | Data | Autor | Mudancas |
+|--------|------|-------|----------|
+| 1.0 | 29/01/2026 | Claude AI | Versao inicial (frontend) |
+| 2.0 | 29/01/2026 | Claude AI | Adicao django-tailwind |
+| 3.0 | 29/01/2026 | Claude AI | Unificacao frontend+backend em sprints |
+
+---
+
+**Documento aprovado por:** Product Owner
+**Data de aprovacao:** 29/01/2026
+**Proxima revisao:** Apos Sprint 3
