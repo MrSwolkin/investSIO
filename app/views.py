@@ -1,4 +1,5 @@
 import json
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from inflows.models import Inflow
 from outflows.models import Outflow
@@ -8,6 +9,8 @@ from . import metrics
 
 get_fee = GetFeeBr()
 
+
+@login_required
 def home(request):
     total_inflows = metrics.get_total_invested()
     inflows_datas = metrics.get_applied_value("BRL")
@@ -44,6 +47,8 @@ def home(request):
 
     return render(request, "home.html", context)
 
+
+@login_required
 def negociations(request):
     inflow = Inflow.objects.all()
     outflow = Outflow.objects.all()

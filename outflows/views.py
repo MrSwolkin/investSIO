@@ -1,29 +1,31 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Outflow
 from . import forms
 
-class OuflowListView(ListView):
+
+class OuflowListView(LoginRequiredMixin, ListView):
     model = Outflow
     template_name = "outflow_list.html"
     context_object_name = "outflows"
 
 
-class OutflowDetailsView(DetailView):
+class OutflowDetailsView(LoginRequiredMixin, DetailView):
     model = Outflow
     template_name = "outflow_details.html"
-    
 
-class OutflowCreateView(SuccessMessageMixin, CreateView):
+
+class OutflowCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Outflow
     template_name = "outflow_create.html"
     form_class = forms.OutflowForms
     success_url = reverse_lazy("outflow_list")
     success_message = "Venda criada com sucesso."
-    
 
-class OutflowUpdateView(SuccessMessageMixin, UpdateView):
+
+class OutflowUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Outflow
     template_name = "outflow_update.html"
     form_class = forms.OutflowForms
@@ -31,7 +33,7 @@ class OutflowUpdateView(SuccessMessageMixin, UpdateView):
     success_message = "Atualização efetuada com sucesso."
 
 
-class OutflowDeleteView(SuccessMessageMixin, DeleteView):
+class OutflowDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Outflow
     template_name = "outflow_delete.html"
     success_url = reverse_lazy("outflow_list")

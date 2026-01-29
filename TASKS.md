@@ -63,19 +63,19 @@
 > Como usuario, quero que minhas informacoes sejam protegidas por login.
 
 **Tarefas:**
-- [ ] **T-003.1:** Adicionar `LoginRequiredMixin` em `brokers/views.py`
-- [ ] **T-003.2:** Adicionar `LoginRequiredMixin` em `tickers/views.py`
-- [ ] **T-003.3:** Adicionar `LoginRequiredMixin` em `inflows/views.py`
-- [ ] **T-003.4:** Adicionar `LoginRequiredMixin` em `outflows/views.py`
-- [ ] **T-003.5:** Adicionar `LoginRequiredMixin` em `dividends/views.py`
-- [ ] **T-003.6:** Adicionar `@login_required` em `app/views.py` (home, negociations)
-- [ ] **T-003.7:** Configurar `LOGIN_URL` em settings
-- [ ] **T-003.8:** Criar template `registration/login.html`
+- [X] **T-003.1:** Adicionar `LoginRequiredMixin` em `brokers/views.py`
+- [X] **T-003.2:** Adicionar `LoginRequiredMixin` em `tickers/views.py`
+- [X] **T-003.3:** Adicionar `LoginRequiredMixin` em `inflows/views.py`
+- [X] **T-003.4:** Adicionar `LoginRequiredMixin` em `outflows/views.py`
+- [X] **T-003.5:** Adicionar `LoginRequiredMixin` em `dividends/views.py`
+- [X] **T-003.6:** Adicionar `@login_required` em `app/views.py` (home, negociations)
+- [X] **T-003.7:** Configurar `LOGIN_URL` em settings
+- [X] **T-003.8:** Criar template `registration/login.html`
 
 **Criterios de Aceitacao:**
-- [ ] Todas as views requerem login
-- [ ] Usuarios nao autenticados sao redirecionados
-- [ ] Pagina de login funcional
+- [X] Todas as views requerem login
+- [X] Usuarios nao autenticados sao redirecionados
+- [X] Pagina de login funcional
 
 ---
 
@@ -84,16 +84,16 @@
 > Como desenvolvedor, quero validar inputs para prevenir ataques.
 
 **Tarefas:**
-- [ ] **T-004.1:** Validar parametro `ticker` em `dividends/views.py`
-- [ ] **T-004.2:** Validar parametro `name` em `brokers/views.py`
-- [ ] **T-004.3:** Validar parametro `category` em `tickers/views.py`
-- [ ] **T-004.4:** Criar helper `app/utils/validators.py`
-- [ ] **T-004.5:** Adicionar testes de validacao
+- [X] **T-004.1:** Validar parametro `ticker` em `dividends/views.py`
+- [X] **T-004.2:** Validar parametro `name` em `brokers/views.py`
+- [X] **T-004.3:** Validar parametro `category` em `tickers/views.py`
+- [X] **T-004.4:** Criar helper `app/utils/validators.py`
+- [X] **T-004.5:** Adicionar testes de validacao
 
 **Criterios de Aceitacao:**
-- [ ] Parametros invalidos retornam 404
-- [ ] Sem SQL injection possivel
-- [ ] Testes passando
+- [X] Parametros invalidos retornam 404
+- [X] Sem SQL injection possivel
+- [X] Testes passando
 
 ---
 
