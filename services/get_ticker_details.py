@@ -1,10 +1,11 @@
 import requests
+from django.conf import settings
 
 
 class Get_ticker_data:
     def __init__(self):
         self.__base_url = "https://brapi.dev/api/quote"
-        self.__base_token = "2SqXLtCk9gzmBiTNtm1iz8"
+        self.__base_token = settings.BRAPI_TOKEN
 
     def get_ticker(self, code_ticekr):
         response = requests.get(
