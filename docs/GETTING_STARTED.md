@@ -35,25 +35,97 @@ source venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt
 ```
 
-### 4. Aplicar migracoes
+### 4. Configurar variaveis de ambiente
+
+Copie o arquivo `.env.example` para `.env` e configure as variaveis:
+
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com suas configuracoes:
+
+```env
+DEBUG=True
+SECRET_KEY=sua-chave-secreta-aqui
+ALLOWED_HOSTS=localhost,127.0.0.1
+BRAPI_TOKEN=seu-token-brapi-aqui
+```
+
+### 5. Aplicar migracoes
 
 ```bash
 python3 manage.py migrate
 ```
 
-### 5. Criar superusuario (opcional)
+### 6. Criar superusuario (opcional)
 
 ```bash
 python3 manage.py createsuperuser
 ```
 
-### 6. Rodar o servidor
+### 7. Rodar o servidor
 
 ```bash
 python3 manage.py runserver
 ```
 
 O sistema estara disponivel em: `http://localhost:8000`
+
+## Estrutura de Settings
+
+O projeto usa settings separados por ambiente:
+
+```
+app/settings/
+├── __init__.py
+├── base.py      # Configuracoes comuns
+├── dev.py       # Desenvolvimento (DEBUG=True, SQLite)
+└── prod.py      # Producao (DEBUG=False, PostgreSQL)
+```
+
+### Desenvolvimento (padrao)
+
+Por padrao, `manage.py` usa `app.settings.dev`:
+
+```bash
+python3 manage.py runserver
+```
+
+### Producao
+
+Para usar settings de producao, defina a variavel de ambiente:
+
+```bash
+export DJANGO_SETTINGS_MODULE=app.settings.prod
+python3 manage.py runserver
+```
+
+Ou especifique diretamente:
+
+```bash
+python3 manage.py runserver --settings=app.settings.prod
+```
+
+### Variaveis de ambiente para producao
+
+Adicione ao `.env` para producao:
+
+```env
+DEBUG=False
+SECRET_KEY=chave-segura-para-producao
+ALLOWED_HOSTS=seudominio.com,www.seudominio.com
+
+# PostgreSQL
+DB_NAME=investsio
+DB_USER=postgres
+DB_PASSWORD=senha-segura
+DB_HOST=localhost
+DB_PORT=5432
+
+# HTTPS
+SECURE_SSL_REDIRECT=True
+```
 
 ## URLs Principais
 
@@ -74,12 +146,10 @@ O sistema estara disponivel em: `http://localhost:8000`
 Django==6.0.1
 requests==2.32.5
 python-dateutil==2.9.0.post0
+django-environ==0.11.2
 ```
 
 ## Banco de Dados
 
-O projeto usa SQLite por padrao. O arquivo do banco e `db.sqlite3` na raiz do projeto.
-
-## Ambiente de Desenvolvimento
-
-O projeto esta configurado com `DEBUG=True`. Para producao, altere em `app/settings.py`.
+- **Desenvolvimento:** SQLite (`db.sqlite3` na raiz)
+- **Producao:** PostgreSQL (configurar via `.env`)
