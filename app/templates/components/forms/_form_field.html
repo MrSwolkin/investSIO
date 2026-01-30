@@ -1,0 +1,53 @@
+{# Reusable form field component with Tailwind styling #}
+{# Usage: {% include 'components/forms/_form_field.html' with field=form.field_name %} #}
+
+<div class="mb-4">
+    {# Label #}
+    {% if field.label %}
+        <label for="{{ field.id_for_label }}" class="label">
+            {{ field.label }}
+            {% if field.field.required %}
+                <span class="text-red-400">*</span>
+            {% endif %}
+        </label>
+    {% endif %}
+
+    {# Input field with conditional error styling #}
+    {% if field.errors %}
+        {# Field with errors - add error classes dynamically #}
+        {{ field }}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var field = document.getElementById('{{ field.id_for_label }}');
+                if (field) {
+                    field.classList.remove('input', 'select', 'textarea');
+                    field.classList.add('input-error');
+                }
+            });
+        </script>
+    {% else %}
+        {# Field without errors - render normally #}
+        {{ field }}
+    {% endif %}
+
+    {# Error messages #}
+    {% if field.errors %}
+        <div class="mt-1.5 space-y-1">
+            {% for error in field.errors %}
+                <p class="text-sm text-red-400 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Help text #}
+    {% if field.help_text %}
+        <p class="mt-1.5 text-sm text-text-muted">
+            {{ field.help_text|safe }}
+        </p>
+    {% endif %}
+</div>

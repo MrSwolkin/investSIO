@@ -1,0 +1,81 @@
+<!--
+  Metric Card Component - T-018.3
+
+  Dashboard metric card with gradient backgrounds and optional change indicator.
+
+  Parameters:
+    - value: The main metric value to display (required)
+    - label: Description label (required)
+    - icon: Bootstrap Icon class (e.g., "bi-wallet2")
+    - variant: primary|success|danger (default: primary) - determines gradient color
+    - change: Optional percentage change value (e.g., "+5.2%")
+    - change_positive: Boolean indicating if change is positive (default: true)
+    - class: Additional CSS classes (optional)
+
+  Usage Examples:
+
+    Basic metric card:
+    {% include "components/ui/_metric_card.html" with value="R$ 125.450,00" label="Patrimônio Total" icon="bi-wallet2" %}
+
+    Success variant with positive change:
+    {% include "components/ui/_metric_card.html" with value="R$ 8.320,50" label="Rendimentos" icon="bi-graph-up-arrow" variant="success" change="+12.5%" change_positive=True %}
+
+    Danger variant with negative change:
+    {% include "components/ui/_metric_card.html" with value="R$ -2.150,00" label="Prejuízo" icon="bi-graph-down-arrow" variant="danger" change="-3.2%" change_positive=False %}
+
+    Primary variant without change indicator:
+    {% include "components/ui/_metric_card.html" with value="42" label="Total de Ativos" icon="bi-collection" variant="primary" %}
+-->
+
+{% comment %} Set default values {% endcomment %}
+{% if not variant %}{% with variant="primary" %}{% endwith %}{% endif %}
+
+{% comment %} Determine card class based on variant {% endcomment %}
+{% if variant == "success" %}
+  {% with card_class="metric-card-gradient-success" %}
+{% elif variant == "danger" %}
+  {% with card_class="metric-card-gradient-danger" %}
+{% else %}
+  {% with card_class="metric-card-gradient-primary" %}
+{% endif %}
+
+<div class="{{ card_class }} {{ class }}">
+  <div class="flex items-start justify-between">
+    <div class="flex-1">
+      {% comment %} Label {% endcomment %}
+      <p class="metric-label mb-2">{{ label }}</p>
+
+      {% comment %} Value {% endcomment %}
+      <p class="metric-value mb-3">{{ value }}</p>
+
+      {% comment %} Change Indicator {% endcomment %}
+      {% if change %}
+        <div class="flex items-center gap-2">
+          {% if change_positive %}
+            <span class="text-emerald-400 text-sm font-medium flex items-center gap-1">
+              <i class="bi bi-arrow-up"></i>
+              {{ change }}
+            </span>
+          {% else %}
+            <span class="text-red-400 text-sm font-medium flex items-center gap-1">
+              <i class="bi bi-arrow-down"></i>
+              {{ change }}
+            </span>
+          {% endif %}
+          <span class="text-text-muted text-xs">vs. mês anterior</span>
+        </div>
+      {% endif %}
+    </div>
+
+    {% comment %} Icon {% endcomment %}
+    {% if icon %}
+      <div class="flex-shrink-0">
+        <div class="w-12 h-12 rounded-lg bg-bg-base/30 flex items-center justify-center">
+          <i class="{{ icon }} text-2xl {% if variant == 'success' %}text-emerald-400{% elif variant == 'danger' %}text-red-400{% else %}text-blue-400{% endif %}"></i>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endwith %}

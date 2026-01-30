@@ -327,16 +327,16 @@
 > Como usuario, quero uma interface moderna e consistente.
 
 **Tarefas:**
-- [ ] **T-016.1:** Remover Bootstrap do `base.html`
-- [ ] **T-016.2:** Adicionar `{% tailwind_css %}`
-- [ ] **T-016.3:** Criar estrutura responsiva
-- [ ] **T-016.4:** Implementar sistema de mensagens moderno
-- [ ] **T-016.5:** Testar em mobile e desktop
+- [X] **T-016.1:** Remover Bootstrap do `base.html`
+- [X] **T-016.2:** Adicionar `{% tailwind_css %}`
+- [X] **T-016.3:** Criar estrutura responsiva
+- [X] **T-016.4:** Implementar sistema de mensagens moderno
+- [X] **T-016.5:** Testar em mobile e desktop
 
 **Criterios de Aceitacao:**
-- [ ] Pagina carrega sem Bootstrap
-- [ ] Layout responsivo
-- [ ] Dark mode aplicado
+- [X] Pagina carrega sem Bootstrap
+- [X] Layout responsivo
+- [X] Dark mode aplicado
 
 ---
 
@@ -345,19 +345,19 @@
 > Como usuario, quero navegacao intuitiva e moderna.
 
 **Tarefas:**
-- [ ] **T-017.1:** Redesenhar `_header.html`
-- [ ] **T-017.2:** Adicionar logo e branding
-- [ ] **T-017.3:** Adicionar busca global
-- [ ] **T-017.4:** Adicionar menu de usuario
-- [ ] **T-017.5:** Redesenhar `_sidebar.html`
-- [ ] **T-017.6:** Implementar dropdowns com Alpine.js
-- [ ] **T-017.7:** Implementar sidebar colapsavel em mobile
-- [ ] **T-017.8:** Adicionar botoes de acao rapida
+- [X] **T-017.1:** Redesenhar `_header.html`
+- [X] **T-017.2:** Adicionar logo e branding
+- [X] **T-017.3:** Adicionar busca global
+- [X] **T-017.4:** Adicionar menu de usuario
+- [X] **T-017.5:** Redesenhar `_sidebar.html`
+- [X] **T-017.6:** Implementar dropdowns com Alpine.js
+- [X] **T-017.7:** Implementar sidebar colapsavel em mobile
+- [X] **T-017.8:** Adicionar botoes de acao rapida
 
 **Criterios de Aceitacao:**
-- [ ] Header fixo funcional
-- [ ] Sidebar responsiva
-- [ ] Dropdowns animados
+- [X] Header fixo funcional
+- [X] Sidebar responsiva
+- [X] Dropdowns animados
 
 ---
 
@@ -368,19 +368,19 @@
 > Como desenvolvedor, quero componentes reutilizaveis.
 
 **Tarefas:**
-- [ ] **T-018.1:** Criar `components/ui/_button.html`
-- [ ] **T-018.2:** Criar `components/ui/_card.html`
-- [ ] **T-018.3:** Criar `components/ui/_metric_card.html`
-- [ ] **T-018.4:** Criar `components/ui/_badge.html`
-- [ ] **T-018.5:** Criar `components/ui/_table.html`
-- [ ] **T-018.6:** Criar `components/ui/_modal.html`
-- [ ] **T-018.7:** Criar `components/ui/_alert.html`
-- [ ] **T-018.8:** Criar `components/ui/_empty_state.html`
+- [X] **T-018.1:** Criar `components/ui/_button.html`
+- [X] **T-018.2:** Criar `components/ui/_card.html`
+- [X] **T-018.3:** Criar `components/ui/_metric_card.html`
+- [X] **T-018.4:** Criar `components/ui/_badge.html`
+- [X] **T-018.5:** Criar `components/ui/_table.html`
+- [X] **T-018.6:** Criar `components/ui/_modal.html`
+- [X] **T-018.7:** Criar `components/ui/_alert.html`
+- [X] **T-018.8:** Criar `components/ui/_empty_state.html`
 
 **Criterios de Aceitacao:**
-- [ ] Componentes documentados
-- [ ] Variantes implementadas
-- [ ] Usados via `{% include %}`
+- [X] Componentes documentados
+- [X] Variantes implementadas
+- [X] Usados via `{% include %}`
 
 ---
 
@@ -389,14 +389,14 @@
 > Como desenvolvedor, quero formularios estilizados.
 
 **Tarefas:**
-- [ ] **T-019.1:** Criar `components/forms/_form_field.html`
-- [ ] **T-019.2:** Criar widgets Tailwind em `app/widgets.py`
-- [ ] **T-019.3:** Atualizar forms existentes
+- [X] **T-019.1:** Criar `components/forms/_form_field.html`
+- [X] **T-019.2:** Criar widgets Tailwind em `app/widgets.py`
+- [X] **T-019.3:** Atualizar forms existentes
 
 **Criterios de Aceitacao:**
-- [ ] Inputs estilizados
-- [ ] Validacao visual
-- [ ] Labels e erros exibidos
+- [X] Inputs estilizados
+- [X] Validacao visual
+- [X] Labels e erros exibidos
 
 ---
 
@@ -415,17 +415,17 @@
 > Como usuario, quero um dashboard informativo e bonito.
 
 **Tarefas:**
-- [ ] **T-020.1:** Redesenhar `home.html` com grid responsivo
-- [ ] **T-020.2:** Implementar cards de metricas com gradientes
-- [ ] **T-020.3:** Configurar Chart.js para tema escuro
-- [ ] **T-020.4:** Redesenhar graficos de diversificacao
-- [ ] **T-020.5:** Adicionar loading skeletons
-- [ ] **T-020.6:** Otimizar para mobile
+- [X] **T-020.1:** Redesenhar `home.html` com grid responsivo
+- [X] **T-020.2:** Implementar cards de metricas com gradientes
+- [X] **T-020.3:** Configurar Chart.js para tema escuro
+- [X] **T-020.4:** Redesenhar graficos de diversificacao
+- [X] **T-020.5:** Adicionar loading skeletons
+- [X] **T-020.6:** Otimizar para mobile
 
 **Criterios de Aceitacao:**
-- [ ] Metricas exibidas com gradientes
-- [ ] Graficos em tema escuro
-- [ ] Responsivo em todas as telas
+- [X] Metricas exibidas com gradientes
+- [X] Graficos em tema escuro
+- [X] Responsivo em todas as telas
 
 ---
 
@@ -436,16 +436,16 @@
 > Como usuario, quero gerenciar corretoras com interface moderna.
 
 **Tarefas:**
-- [ ] **T-021.1:** Redesenhar `broker_list.html`
-- [ ] **T-021.2:** Redesenhar `broker_create.html`
-- [ ] **T-021.3:** Redesenhar `broker_update.html`
-- [ ] **T-021.4:** Redesenhar `broker_details.html`
-- [ ] **T-021.5:** Implementar modal de delecao
+- [X] **T-021.1:** Redesenhar `broker_list.html`
+- [X] **T-021.2:** Redesenhar `broker_create.html`
+- [X] **T-021.3:** Redesenhar `broker_update.html`
+- [X] **T-021.4:** Redesenhar `broker_details.html`
+- [X] **T-021.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista com tabela moderna
-- [ ] Formularios estilizados
-- [ ] Modal de confirmacao
+- [X] Lista com tabela moderna
+- [X] Formularios estilizados
+- [X] Modal de confirmacao
 
 ---
 
@@ -454,16 +454,16 @@
 > Como usuario, quero gerenciar ativos com interface moderna.
 
 **Tarefas:**
-- [ ] **T-022.1:** Redesenhar `ticker_list.html`
-- [ ] **T-022.2:** Redesenhar `ticker_create.html`
-- [ ] **T-022.3:** Redesenhar `ticker_update.html`
-- [ ] **T-022.4:** Redesenhar `ticker_details.html`
-- [ ] **T-022.5:** Implementar modal de delecao
+- [X] **T-022.1:** Redesenhar `ticker_list.html`
+- [X] **T-022.2:** Redesenhar `ticker_create.html`
+- [X] **T-022.3:** Redesenhar `ticker_update.html`
+- [X] **T-022.4:** Redesenhar `ticker_details.html`
+- [X] **T-022.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista filtrada por categoria
-- [ ] Detalhes com metricas visuais
-- [ ] Integracao com API de precos
+- [X] Lista filtrada por categoria
+- [X] Detalhes com metricas visuais
+- [X] Integracao com API de precos
 
 ---
 
@@ -472,16 +472,16 @@
 > Como usuario, quero registrar compras com interface moderna.
 
 **Tarefas:**
-- [ ] **T-023.1:** Redesenhar `inflow_list.html`
-- [ ] **T-023.2:** Redesenhar `inflow_create.html`
-- [ ] **T-023.3:** Redesenhar `inflow_update.html`
-- [ ] **T-023.4:** Redesenhar `inflow_details.html`
-- [ ] **T-023.5:** Implementar modal de delecao
+- [X] **T-023.1:** Redesenhar `inflow_list.html`
+- [X] **T-023.2:** Redesenhar `inflow_create.html`
+- [X] **T-023.3:** Redesenhar `inflow_update.html`
+- [X] **T-023.4:** Redesenhar `inflow_details.html`
+- [X] **T-023.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista com filtros
-- [ ] Formulario com selects modernos
-- [ ] Paginacao funcional
+- [X] Lista com filtros
+- [X] Formulario com selects modernos
+- [X] Paginacao funcional
 
 ---
 
@@ -490,15 +490,15 @@
 > Como usuario, quero gerenciar vendas e dividendos.
 
 **Tarefas:**
-- [ ] **T-024.1:** Redesenhar templates de Outflows
-- [ ] **T-024.2:** Redesenhar templates de Dividends
-- [ ] **T-024.3:** Redesenhar `negociations.html`
-- [ ] **T-024.4:** Adicionar filtros avancados
+- [X] **T-024.1:** Redesenhar templates de Outflows
+- [X] **T-024.2:** Redesenhar templates de Dividends
+- [X] **T-024.3:** Redesenhar `negociations.html`
+- [X] **T-024.4:** Adicionar filtros avancados
 - [ ] **T-024.5:** Implementar export (opcional)
 
 **Criterios de Aceitacao:**
-- [ ] Todas as paginas redesenhadas
-- [ ] Consistencia visual
+- [X] Todas as paginas redesenhadas
+- [X] Consistencia visual
 
 ---
 

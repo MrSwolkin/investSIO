@@ -1,33 +1,276 @@
 {% extends "base.html" %}
 
+{% block title %}{{ object.ticker }} - Venda - InvestSIO{% endblock %}
+
 {% block content %}
+<!-- Page Header with Breadcrumb -->
+<div class="mb-6">
+  <nav class="flex items-center gap-2 text-sm text-text-secondary mb-3">
+    <a href="{% url 'outflow_list' %}" class="hover:text-text-primary transition-colors">Vendas</a>
+    <i class="bi bi-chevron-right text-xs"></i>
+    <span class="text-text-primary">Detalhes</span>
+  </nav>
 
-<div class="row">
-    <div class="col-md-6">
-        <h3 class="display-6">Detalhes da {{ object.ticker }}</h3>
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4" x-data="{ showDeleteModal: false }">
+    <div>
+      <h1 class="text-3xl font-display font-bold text-text-primary mb-2 flex items-center gap-3">
+        <i class="bi bi-graph-down text-red-400"></i>
+        Venda de {{ object.ticker }}
+      </h1>
+      <p class="text-text-secondary">Detalhes da venda do ativo</p>
     </div>
-    <div class="col-md-6">
-        <a href="{% url 'outflow_list'%}" class="btn btn-secondary mt-4">Voltar para lista de Vendas</a>
+
+    <div class="flex items-center gap-3">
+      {% include "components/ui/_button.html" with text="Editar" icon="bi-pencil" variant="primary" size="sm" href="/outflows/"|add:object.id|add:"/update/" %}
+
+      <button
+        @click="showDeleteModal = true"
+        class="btn btn-danger btn-sm"
+      >
+        <i class="bi bi-trash"></i>
+        Excluir
+      </button>
     </div>
-</div>
-<div class="container mt-4">
 
-</div>
-<div class="card col-md-9">
-    <div class="card-body">
-        <h3 class="card-title"> Compra de {{object.ticker}}</h3>
+    <!-- Delete Confirmation Modal -->
+    <template x-if="showDeleteModal">
+      <div>
+        <!-- Backdrop -->
+        <div
+          class="modal-backdrop"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          @click="showDeleteModal = false"
+        ></div>
 
-        <div class="row">
-            <p><strong>Data: </strong>{{object.date}}</p>
-            <p><strong>Quantidade: </strong>{{object.quantity}}</p>
-            <p><strong>Valor por cota: </strong>R$ {{object.cost_price}}</p>
-            <p><strong>Total: </strong>R$ {{object.total_price}}</p>
+        <!-- Modal Dialog -->
+        <div
+          class="modal"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          @click.self="showDeleteModal = false"
+        >
+          <div class="modal-content max-w-md">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20">
+                  <i class="bi bi-exclamation-triangle text-red-400 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-text-primary">Confirmar Exclusão</h3>
+              </div>
+              <button
+                @click="showDeleteModal = false"
+                class="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <i class="bi bi-x-lg text-xl"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <p class="text-text-secondary mb-4">
+                Tem certeza que deseja excluir a venda de <strong class="text-text-primary">{{ object.ticker }}</strong>?
+              </p>
+              <div class="alert alert-warning">
+                <i class="bi bi-info-circle-fill"></i>
+                <p class="text-sm">Esta ação não pode ser desfeita. O registro de venda será permanentemente removido.</p>
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button
+                @click="showDeleteModal = false"
+                class="btn btn-secondary"
+              >
+                Cancelar
+              </button>
+              <a
+                href="{% url 'outflow_delete' object.id %}"
+                class="btn btn-danger"
+              >
+                <i class="bi bi-trash"></i>
+                Excluir
+              </a>
+            </div>
+          </div>
         </div>
-        {% if object.description %}
-        <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
-        {% endif %}
-    </div>
+      </div>
+    </template>
+  </div>
 </div>
+
+<!-- Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Main Information Card -->
+  <div class="lg:col-span-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-red-500/20 to-pink-500/20">
+            <i class="bi bi-info-circle text-red-400 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-text-primary">Informações da Venda</h3>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="space-y-6">
+          <!-- Ticker -->
+          <div>
+            <label class="label">Ativo</label>
+            <a href="{% url 'ticker_details' object.ticker.category.title object.ticker.id %}" class="text-text-primary font-medium text-lg hover:text-brand-primary transition-colors flex items-center gap-2 w-fit">
+              <i class="bi bi-box-arrow-up-right text-sm"></i>
+              {{ object.ticker }}
+            </a>
+          </div>
+
+          <!-- Date -->
+          <div>
+            <label class="label">Data da Venda</label>
+            <p class="text-text-primary font-medium text-lg">{{ object.date|date:"d/m/Y" }}</p>
+          </div>
+
+          <!-- Quantity -->
+          <div>
+            <label class="label">Quantidade</label>
+            <div class="flex items-baseline gap-2">
+              <p class="text-text-primary font-semibold text-2xl">{{ object.quantity }}</p>
+              <span class="text-text-secondary text-sm">unidades</span>
+            </div>
+          </div>
+
+          <!-- Cost Price -->
+          <div>
+            <label class="label">Valor por Cota</label>
+            <p class="text-text-primary font-mono text-lg">R$ {{ object.cost_price|floatformat:2 }}</p>
+          </div>
+
+          <!-- Total Price -->
+          <div class="p-4 bg-gradient-to-br from-red-500/10 to-pink-500/10 rounded-lg border border-red-500/20">
+            <label class="label text-red-300">Valor Total da Venda</label>
+            <p class="text-red-400 font-bold text-3xl font-mono">R$ {{ object.total_price|floatformat:2 }}</p>
+          </div>
+
+          <!-- Broker -->
+          <div>
+            <label class="label">Corretora</label>
+            <div>
+              <span class="badge badge-neutral text-base px-3 py-1">{{ object.broker }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          {% if object.description %}
+            <div>
+              <label class="label">Descrição</label>
+              <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+                <p class="text-text-secondary whitespace-pre-line">{{ object.description }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="lg:col-span-1 space-y-6">
+    <!-- Quick Stats Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-lg font-semibold text-text-primary">Resumo</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-4">
+          <!-- Unit Price -->
+          <div class="flex items-center justify-between p-3 bg-bg-base rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-500/20">
+                <i class="bi bi-currency-dollar text-blue-400"></i>
+              </div>
+              <div>
+                <p class="text-xs text-text-secondary">Preço Unitário</p>
+                <p class="text-lg font-semibold text-text-primary font-mono">R$ {{ object.cost_price|floatformat:2 }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="flex items-center justify-between p-3 bg-bg-base rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-purple-500/20">
+                <i class="bi bi-hash text-purple-400"></i>
+              </div>
+              <div>
+                <p class="text-xs text-text-secondary">Quantidade</p>
+                <p class="text-lg font-semibold text-text-primary">{{ object.quantity }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="flex items-center justify-between p-3 bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-lg border border-red-500/30">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/30">
+                <i class="bi bi-cash-stack text-red-300"></i>
+              </div>
+              <div>
+                <p class="text-xs text-red-300">Total</p>
+                <p class="text-lg font-semibold text-red-400 font-mono">R$ {{ object.total_price|floatformat:2 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-lg font-semibold text-text-primary">Ações Rápidas</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-2">
+          <a href="{% url 'outflow_update' object.id %}" class="flex items-center gap-3 p-3 rounded-lg bg-bg-base hover:bg-bg-elevated transition-colors group">
+            <i class="bi bi-pencil text-brand-primary group-hover:scale-110 transition-transform"></i>
+            <span class="text-text-secondary group-hover:text-text-primary transition-colors">Editar informações</span>
+          </a>
+
+          <a href="{% url 'outflow_list' %}" class="flex items-center gap-3 p-3 rounded-lg bg-bg-base hover:bg-bg-elevated transition-colors group">
+            <i class="bi bi-arrow-left text-brand-primary group-hover:scale-110 transition-transform"></i>
+            <span class="text-text-secondary group-hover:text-text-primary transition-colors">Voltar para lista</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metadata Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider">Metadados</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-3">
+          <div>
+            <p class="text-xs text-text-muted">ID</p>
+            <p class="text-sm text-text-primary font-mono">{{ object.id }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

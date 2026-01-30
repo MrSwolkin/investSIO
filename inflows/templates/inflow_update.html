@@ -1,19 +1,148 @@
 {% extends "base.html" %}
 
+{% block title %}Editar Compra{% endblock %}
+
 {% block content %}
+<!-- T-023.3: Inflow Update Form -->
+<div class="container mx-auto px-4 py-6 max-w-4xl">
 
-<div class="container mt-4">
-    <h5 class="display-4">Editar Compra</h5>
-    <div class="card">
-        <div class="card-body">
-            <form method="post" class="form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2"> salvar marcar</button>
-            </form>
-        </div>
+  <!-- Page Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-3 mb-2">
+      <a href="{% url 'inflow_list' %}" class="text-text-secondary hover:text-text-primary transition-colors">
+        <i class="bi bi-arrow-left text-xl"></i>
+      </a>
+      <h1 class="text-3xl font-display font-bold text-text-primary">
+        <i class="bi bi-pencil-square text-gradient-success"></i>
+        Editar Compra
+      </h1>
     </div>
-    <a href="{% url 'inflow_list'%}" class="btn btn-secondary mt-3"> cancelar e voltar para lista de Compras</a>
-</div>
+    <p class="text-sm text-text-secondary ml-11">
+      Atualize as informações da compra de {{ object.ticker.symbol }}
+    </p>
+  </div>
 
+  <!-- Form Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-text-primary">
+          <i class="bi bi-file-earmark-text"></i>
+          Dados da Compra
+        </h3>
+        <span class="badge-success">
+          <i class="bi bi-calendar3"></i>
+          {{ object.date|date:"d/m/Y" }}
+        </span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Form Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Ticker Field -->
+          <div class="md:col-span-2">
+            {% include "components/forms/_form_field.html" with field=form.ticker %}
+          </div>
+
+          <!-- Type Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.type %}
+          </div>
+
+          <!-- Broker Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.broker %}
+          </div>
+
+          <!-- Date Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.date %}
+          </div>
+
+          <!-- Quantity Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.quantity %}
+          </div>
+
+          <!-- Cost Price Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.cost_price %}
+          </div>
+
+          <!-- Tax Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.tax %}
+          </div>
+
+        </div>
+
+        <!-- Warning Alert -->
+        <div class="alert-warning">
+          <i class="bi bi-exclamation-triangle text-xl"></i>
+          <div>
+            <p class="font-medium">Atenção</p>
+            <p class="text-sm mt-1">
+              Ao alterar os dados desta compra, certifique-se de que as informações estão corretas para manter a precisão do seu portfólio.
+            </p>
+          </div>
+        </div>
+
+        <!-- Current Total Display -->
+        {% if object.total_price %}
+          <div class="bg-bg-elevated rounded-lg p-4 border border-border-default">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-text-secondary">Total Atual</span>
+              <span class="text-2xl font-bold text-emerald-400">
+                R$ {{ object.total_price|floatformat:2 }}
+              </span>
+            </div>
+            <p class="text-xs text-text-muted mt-2">
+              {{ object.quantity }} cotas × R$ {{ object.cost_price|floatformat:2 }}
+            </p>
+          </div>
+        {% endif %}
+
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-4">
+          <button type="submit" class="btn btn-success btn-lg w-full sm:w-auto">
+            <i class="bi bi-check-circle"></i>
+            Salvar Alterações
+          </button>
+          <a href="{% url 'inflow_details' object.id %}" class="btn btn-secondary btn-lg w-full sm:w-auto">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+          <a href="{% url 'inflow_list' %}" class="btn btn-ghost btn-lg w-full sm:w-auto">
+            <i class="bi bi-list"></i>
+            Voltar para Lista
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="flex items-center justify-between mt-6 p-4 bg-bg-surface rounded-lg border border-border-default">
+    <div class="flex items-center gap-2">
+      <i class="bi bi-lightning text-brand-warning"></i>
+      <span class="text-sm text-text-secondary">Ações Rápidas</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="{% url 'inflow_details' object.id %}" class="btn btn-ghost btn-sm">
+        <i class="bi bi-eye"></i>
+        Ver Detalhes
+      </a>
+      <button @click="deleteModal = true" class="btn btn-danger btn-sm" x-data="{ deleteModal: false }">
+        <i class="bi bi-trash"></i>
+        Excluir
+      </button>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

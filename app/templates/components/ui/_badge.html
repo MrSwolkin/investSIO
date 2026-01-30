@@ -1,0 +1,53 @@
+<!--
+  Badge Component - T-018.4
+
+  Small badge component for labels and status indicators.
+
+  Parameters:
+    - text: Badge text (required)
+    - variant: primary|success|danger|warning|neutral (default: neutral)
+    - icon: Optional Bootstrap Icon class (e.g., "bi-check-circle")
+    - class: Additional CSS classes (optional)
+
+  Usage Examples:
+
+    Neutral badge:
+    {% include "components/ui/_badge.html" with text="Ativo" %}
+
+    Success badge with icon:
+    {% include "components/ui/_badge.html" with text="Aprovado" variant="success" icon="bi-check-circle" %}
+
+    Danger badge:
+    {% include "components/ui/_badge.html" with text="Cancelado" variant="danger" icon="bi-x-circle" %}
+
+    Warning badge:
+    {% include "components/ui/_badge.html" with text="Pendente" variant="warning" icon="bi-clock" %}
+
+    Primary badge:
+    {% include "components/ui/_badge.html" with text="Nova" variant="primary" icon="bi-star-fill" %}
+-->
+
+{% comment %} Set default variant {% endcomment %}
+{% if not variant %}{% with variant="neutral" %}{% endwith %}{% endif %}
+
+{% comment %} Determine badge class based on variant {% endcomment %}
+{% if variant == "primary" %}
+  {% with badge_class="badge-primary" %}
+{% elif variant == "success" %}
+  {% with badge_class="badge-success" %}
+{% elif variant == "danger" %}
+  {% with badge_class="badge-danger" %}
+{% elif variant == "warning" %}
+  {% with badge_class="badge-warning" %}
+{% else %}
+  {% with badge_class="badge-neutral" %}
+{% endif %}
+
+<span class="{{ badge_class }} {{ class }}">
+  {% if icon %}
+    <i class="{{ icon }} text-xs"></i>
+  {% endif %}
+  {{ text }}
+</span>
+
+{% endwith %}

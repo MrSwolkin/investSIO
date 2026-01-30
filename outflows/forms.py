@@ -1,4 +1,5 @@
 from django import forms
+from app.widgets import TailwindSelect, TailwindNumberInput, TailwindDateInput
 from . import models
 
 
@@ -9,12 +10,12 @@ class OutflowForms(forms.ModelForm):
         fields = ["ticker", "broker", "cost_price", "quantity", "date", "tax"]
 
         widgets = {
-            "ticker": forms.Select(attrs={"class": "form-control mt-2"}),
-            "broker": forms.Select(attrs={"class": "form-control mt-2"}),
-            "cost_price": forms.NumberInput(attrs={"class": "form-control mt-2"}),
-            "quantity": forms.NumberInput(attrs={"class": "form-control mt-2"}),
-            "date": forms.DateInput(attrs={"class": "form-control mt-2", "placeholder": "MM/DD/AAAA"}),
-            "tax": forms.NumberInput(attrs={"class": "form-control mt-2"}),
+            "ticker": TailwindSelect(),
+            "broker": TailwindSelect(),
+            "cost_price": TailwindNumberInput(),
+            "quantity": TailwindNumberInput(),
+            "date": TailwindDateInput(attrs={"placeholder": "MM/DD/AAAA"}),
+            "tax": TailwindNumberInput(),
         }
 
         labels = {

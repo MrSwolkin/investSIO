@@ -1,22 +1,22 @@
 from django import forms
+from app.widgets import TailwindTextInput, TailwindSelect, TailwindTextarea
 from . import models
 
 
 class TickerForms(forms.ModelForm):
-    
+
     class Meta:
         model = models.Ticker
         fields = ["name", "category", "currency", "sector", "description"]
-        
 
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control mt-2"}),
-            "category": forms.Select(attrs={"class": "form-control mt-2"}),
-            "currency": forms.Select(attrs={"class": "form-control mt-2"}),
-            "sector": forms.TextInput(attrs={"class": "form-control mt-2"}),
-            "description": forms.Textarea(attrs={"class": "form-control mt-2", "rows": 3}),
+            "name": TailwindTextInput(),
+            "category": TailwindSelect(),
+            "currency": TailwindSelect(),
+            "sector": TailwindTextInput(),
+            "description": TailwindTextarea(),
         }
-        
+
         labels = {
             "name": "Código do Ticker",
             "category": "Categoria",

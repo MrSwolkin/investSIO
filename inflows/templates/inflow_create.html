@@ -1,19 +1,126 @@
 {% extends "base.html" %}
 
+{% block title %}Nova Compra{% endblock %}
+
 {% block content %}
+<!-- T-023.2: Inflow Create Form -->
+<div class="container mx-auto px-4 py-6 max-w-4xl">
 
-<div class="container mt-4">
-    <h5 class="display-4">Nova Compra</h5>
-    <div class="card">
-        <div class="card-body">
-            <form method="post" class="form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2">salvar marcar</button>
-            </form>
-        </div>
+  <!-- Page Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-3 mb-2">
+      <a href="{% url 'inflow_list' %}" class="text-text-secondary hover:text-text-primary transition-colors">
+        <i class="bi bi-arrow-left text-xl"></i>
+      </a>
+      <h1 class="text-3xl font-display font-bold text-text-primary">
+        <i class="bi bi-cart-plus text-gradient-success"></i>
+        Nova Compra
+      </h1>
     </div>
-    <a href="{% url 'inflow_list' %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista compras</a>
-</div>
+    <p class="text-sm text-text-secondary ml-11">
+      Registre uma nova compra ou subscrição de ativos
+    </p>
+  </div>
 
+  <!-- Form Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="text-lg font-semibold text-text-primary">
+        <i class="bi bi-file-earmark-text"></i>
+        Dados da Compra
+      </h3>
+    </div>
+
+    <div class="card-body">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Form Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Ticker Field -->
+          <div class="md:col-span-2">
+            {% include "components/forms/_form_field.html" with field=form.ticker %}
+          </div>
+
+          <!-- Type Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.type %}
+          </div>
+
+          <!-- Broker Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.broker %}
+          </div>
+
+          <!-- Date Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.date %}
+          </div>
+
+          <!-- Quantity Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.quantity %}
+          </div>
+
+          <!-- Cost Price Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.cost_price %}
+          </div>
+
+          <!-- Tax Field -->
+          <div>
+            {% include "components/forms/_form_field.html" with field=form.tax %}
+          </div>
+
+        </div>
+
+        <!-- Info Alert -->
+        <div class="alert-info">
+          <i class="bi bi-info-circle text-xl"></i>
+          <div>
+            <p class="font-medium">Dica</p>
+            <p class="text-sm mt-1">
+              O valor total da compra será calculado automaticamente multiplicando a quantidade pelo preço por cota.
+            </p>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-4">
+          <button type="submit" class="btn btn-success btn-lg w-full sm:w-auto">
+            <i class="bi bi-check-circle"></i>
+            Salvar Compra
+          </button>
+          <a href="{% url 'inflow_list' %}" class="btn btn-secondary btn-lg w-full sm:w-auto">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Help Card -->
+  <div class="card mt-6">
+    <div class="card-body">
+      <div class="flex items-start gap-3">
+        <i class="bi bi-question-circle text-2xl text-brand-primary"></i>
+        <div>
+          <h4 class="font-semibold text-text-primary mb-2">Precisa de ajuda?</h4>
+          <ul class="text-sm text-text-secondary space-y-1 list-disc list-inside">
+            <li><strong>Ticker:</strong> Selecione o ativo que você está comprando</li>
+            <li><strong>Tipo:</strong> Escolha entre Compra (aquisição normal) ou Subscrição (direito de preferência)</li>
+            <li><strong>Corretora:</strong> Selecione a corretora onde realizou a operação</li>
+            <li><strong>Data:</strong> Informe a data de execução da compra</li>
+            <li><strong>Quantidade:</strong> Número de cotas/ações adquiridas</li>
+            <li><strong>Preço por cota:</strong> Valor unitário pago por cada cota</li>
+            <li><strong>Taxa:</strong> Valor das taxas de corretagem (opcional)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

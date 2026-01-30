@@ -1,0 +1,59 @@
+<!--
+  Empty State Component - T-018.8
+
+  Empty state component for when no data is available.
+
+  Parameters:
+    - icon: Bootstrap Icon class (required)
+    - title: Main message (required)
+    - description: Secondary descriptive text (optional)
+    - action_text: Optional button text (e.g., "Criar Primeiro Item")
+    - action_href: Optional button link URL
+    - action_variant: Button variant (default: primary)
+    - class: Additional CSS classes (optional)
+
+  Usage Examples:
+
+    Basic empty state:
+    {% include "components/ui/_empty_state.html" with icon="bi-inbox" title="Nenhum item encontrado" description="Não há dados para exibir no momento." %}
+
+    Empty state with action button:
+    {% include "components/ui/_empty_state.html" with icon="bi-folder-plus" title="Nenhuma corretora cadastrada" description="Comece criando sua primeira corretora para gerenciar seus investimentos." action_text="Criar Corretora" action_href="/brokers/create/" %}
+
+    Empty search results:
+    {% include "components/ui/_empty_state.html" with icon="bi-search" title="Nenhum resultado encontrado" description="Tente ajustar seus filtros de busca." %}
+
+    Empty state with success action button:
+    {% include "components/ui/_empty_state.html" with icon="bi-graph-up" title="Nenhum dividendo registrado" description="Registre seus primeiros dividendos recebidos." action_text="Registrar Dividendo" action_href="/dividends/create/" action_variant="success" %}
+-->
+
+{% comment %} Set default action variant {% endcomment %}
+{% if not action_variant %}{% with action_variant="primary" %}{% endwith %}{% endif %}
+
+<div class="empty-state {{ class }}">
+  {% comment %} Icon {% endcomment %}
+  {% if icon %}
+    <div class="empty-state-icon">
+      <i class="{{ icon }} text-6xl"></i>
+    </div>
+  {% endif %}
+
+  {% comment %} Title {% endcomment %}
+  {% if title %}
+    <h3 class="empty-state-title">{{ title }}</h3>
+  {% endif %}
+
+  {% comment %} Description {% endcomment %}
+  {% if description %}
+    <p class="empty-state-description">{{ description }}</p>
+  {% endif %}
+
+  {% comment %} Action Button {% endcomment %}
+  {% if action_text and action_href %}
+    <div class="mt-6">
+      {% include "components/ui/_button.html" with text=action_text href=action_href variant=action_variant %}
+    </div>
+  {% endif %}
+</div>
+
+{% endwith %}

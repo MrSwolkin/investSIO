@@ -1,33 +1,336 @@
 {% extends "base.html" %}
 
+{% block title %}Detalhes da Compra - {{ object.ticker.symbol }}{% endblock %}
+
 {% block content %}
+<!-- T-023.4: Inflow Details View -->
+<div class="container mx-auto px-4 py-6 max-w-6xl">
 
-<div class="row">
-    <div class="col-md-6">
-        <h3 class="display-6">Detalhes da {{ object.ticker }}</h3>
+  <!-- Page Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-3 mb-2">
+      <a href="{% url 'inflow_list' %}" class="text-text-secondary hover:text-text-primary transition-colors">
+        <i class="bi bi-arrow-left text-xl"></i>
+      </a>
+      <h1 class="text-3xl font-display font-bold text-text-primary">
+        <i class="bi bi-file-earmark-text text-gradient-success"></i>
+        Detalhes da Compra
+      </h1>
     </div>
-    <div class="col-md-6">
-        <a href="{% url 'inflow_list'%}" class="btn btn-secondary mt-4">Voltar para lista de Compras</a>
-    </div>
-</div>
-<div class="container mt-4">
+    <p class="text-sm text-text-secondary ml-11">
+      Informações completas sobre a compra de {{ object.ticker.symbol }}
+    </p>
+  </div>
 
-</div>
-<div class="card col-md-9">
-    <div class="card-body">
-        <h3 class="card-title"> Compra de {{object.ticker}}</h3>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <div class="row">
-            <p><strong>Data: </strong>{{object.date}}</p>
-            <p><strong>Quantidade: </strong>{{object.quantity}}</p>
-            <p><strong>Valor por cota: </strong>R$ {{object.cost_price}}</p>
-            <p><strong>Total: </strong>R$ {{object.total_price}}</p>
+    <!-- Main Information Card -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Ticker Information -->
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-text-primary">
+              <i class="bi bi-graph-up"></i>
+              Informações do Ativo
+            </h3>
+            {% if object.type == "Compra" %}
+              {% include "components/ui/_badge.html" with text="Compra" variant="success" icon="bi-cart-plus" %}
+            {% else %}
+              {% include "components/ui/_badge.html" with text="Subscrição" variant="primary" icon="bi-file-earmark-plus" %}
+            {% endif %}
+          </div>
         </div>
-        {% if object.description %}
-        <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
-        {% endif %}
+        <div class="card-body">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Ticker -->
+            <div>
+              <label class="label">Ticker</label>
+              <a href="{% url 'ticker_details' object.ticker.category.title object.ticker.id %}"
+                 class="text-2xl font-bold text-brand-primary hover:text-brand-secondary transition-colors block">
+                {{ object.ticker.symbol }}
+              </a>
+              <p class="text-sm text-text-muted mt-1">{{ object.ticker.name|default:"" }}</p>
+            </div>
+
+            <!-- Category -->
+            <div>
+              <label class="label">Categoria</label>
+              <div class="flex items-center gap-2 mt-1">
+                <i class="bi bi-tag text-text-muted"></i>
+                <span class="text-text-primary font-medium">{{ object.ticker.category.title|default:"N/A" }}</span>
+              </div>
+            </div>
+
+            <!-- Broker -->
+            <div>
+              <label class="label">Corretora</label>
+              <div class="flex items-center gap-2 mt-1">
+                <i class="bi bi-building text-text-muted"></i>
+                <span class="text-text-primary font-medium">{{ object.broker.name|default:"N/A" }}</span>
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div>
+              <label class="label">Data da Compra</label>
+              <div class="flex items-center gap-2 mt-1">
+                <i class="bi bi-calendar3 text-text-muted"></i>
+                <span class="text-text-primary font-medium">{{ object.date|date:"d/m/Y" }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Details -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-lg font-semibold text-text-primary">
+            <i class="bi bi-cash-stack"></i>
+            Detalhes Financeiros
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Quantity -->
+            <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+              <label class="label">Quantidade</label>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-3xl font-bold text-text-primary">{{ object.quantity }}</span>
+                <span class="text-sm text-text-secondary">cotas</span>
+              </div>
+            </div>
+
+            <!-- Cost Price -->
+            <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+              <label class="label">Preço por Cota</label>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-sm text-text-secondary">R$</span>
+                <span class="text-3xl font-bold text-text-primary">{{ object.cost_price|floatformat:2 }}</span>
+              </div>
+            </div>
+
+            <!-- Tax -->
+            <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+              <label class="label">Taxa de Corretagem</label>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-sm text-text-secondary">R$</span>
+                <span class="text-3xl font-bold text-text-primary">{{ object.tax|floatformat:2 }}</span>
+              </div>
+            </div>
+
+            <!-- Total Price -->
+            <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-lg p-4 border border-emerald-500/20">
+              <label class="label">Valor Total</label>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-sm text-emerald-400">R$</span>
+                <span class="text-3xl font-bold text-emerald-400">{{ object.total_price|floatformat:2 }}</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Calculation Detail -->
+          <div class="mt-6 p-4 bg-bg-base rounded-lg border border-border-default">
+            <div class="flex items-center gap-2 text-sm text-text-secondary mb-2">
+              <i class="bi bi-calculator"></i>
+              <span>Cálculo do Valor Total</span>
+            </div>
+            <div class="font-mono text-text-primary">
+              <span class="text-emerald-400">{{ object.quantity }}</span>
+              <span class="text-text-secondary"> × </span>
+              <span class="text-brand-primary">R$ {{ object.cost_price|floatformat:2 }}</span>
+              <span class="text-text-secondary"> = </span>
+              <span class="text-emerald-400 font-bold">R$ {{ object.total_price|floatformat:2 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Sidebar Actions -->
+    <div class="space-y-6">
+
+      <!-- Action Buttons -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-lg font-semibold text-text-primary">
+            <i class="bi bi-lightning"></i>
+            Ações Rápidas
+          </h3>
+        </div>
+        <div class="card-body space-y-3">
+          <a href="{% url 'inflow_update' object.id %}" class="btn btn-primary w-full">
+            <i class="bi bi-pencil"></i>
+            Editar Compra
+          </a>
+          <a href="{% url 'inflow_list' %}" class="btn btn-secondary w-full">
+            <i class="bi bi-list"></i>
+            Voltar para Lista
+          </a>
+          <button @click="deleteModal = true"
+                  class="btn btn-danger w-full"
+                  x-data="{ deleteModal: false }">
+            <i class="bi bi-trash"></i>
+            Excluir Compra
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-lg font-semibold text-text-primary">
+            <i class="bi bi-graph-up-arrow"></i>
+            Estatísticas
+          </h3>
+        </div>
+        <div class="card-body space-y-4">
+
+          <!-- Average Cost per Share -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm text-text-secondary">Custo Médio/Cota</span>
+              <i class="bi bi-info-circle text-text-muted" title="Inclui taxas de corretagem"></i>
+            </div>
+            <div class="text-2xl font-bold text-text-primary">
+              R$ {{ object.cost_price|floatformat:2 }}
+            </div>
+          </div>
+
+          <!-- Percentage of Tax -->
+          {% if object.tax > 0 %}
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-text-secondary">Taxa sobre Total</span>
+              </div>
+              <div class="text-2xl font-bold text-text-primary">
+                {% widthratio object.tax object.total_price 100 %}%
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- Investment Type Badge -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm text-text-secondary">Tipo de Operação</span>
+            </div>
+            <div class="flex items-center gap-2">
+              {% if object.type == "Compra" %}
+                <i class="bi bi-cart-plus text-emerald-400"></i>
+                <span class="font-medium text-text-primary">Compra Regular</span>
+              {% else %}
+                <i class="bi bi-file-earmark-plus text-blue-400"></i>
+                <span class="font-medium text-text-primary">Subscrição</span>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Related Links -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-lg font-semibold text-text-primary">
+            <i class="bi bi-link-45deg"></i>
+            Links Relacionados
+          </h3>
+        </div>
+        <div class="card-body space-y-2">
+          <a href="{% url 'ticker_details' object.ticker.category.title object.ticker.id %}"
+             class="flex items-center justify-between p-2 rounded-lg hover:bg-bg-elevated transition-colors group">
+            <span class="text-sm text-text-secondary group-hover:text-text-primary">
+              Ver Detalhes do Ticker
+            </span>
+            <i class="bi bi-arrow-right text-text-muted group-hover:text-brand-primary"></i>
+          </a>
+          {% if object.broker %}
+            <a href="#"
+               class="flex items-center justify-between p-2 rounded-lg hover:bg-bg-elevated transition-colors group">
+              <span class="text-sm text-text-secondary group-hover:text-text-primary">
+                Ver Corretora
+              </span>
+              <i class="bi bi-arrow-right text-text-muted group-hover:text-brand-primary"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div x-data="{ deleteModal: false }">
+  <template x-if="deleteModal">
+    <div class="modal-backdrop"
+         x-show="deleteModal"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="deleteModal = false">
+    </div>
+
+    <div class="modal"
+         x-show="deleteModal"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95">
+
+      <div class="modal-content max-w-md">
+        <div class="modal-header">
+          <h3 class="text-lg font-semibold text-text-primary">
+            <i class="bi bi-exclamation-triangle text-red-400"></i>
+            Confirmar Exclusão
+          </h3>
+          <button @click="deleteModal = false" class="text-text-secondary hover:text-text-primary transition-colors">
+            <i class="bi bi-x-lg text-xl"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p class="text-text-secondary mb-4">
+            Tem certeza que deseja excluir esta compra?
+          </p>
+          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <i class="bi bi-exclamation-circle text-red-400"></i>
+              <div class="text-sm text-red-400">
+                <p class="font-medium">Esta ação não pode ser desfeita!</p>
+                <p class="mt-1">Todos os dados relacionados a esta compra serão permanentemente removidos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button @click="deleteModal = false" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </button>
+          <a href="{% url 'inflow_delete' object.id %}" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            Excluir Compra
+          </a>
+        </div>
+      </div>
+    </div>
+  </template>
 </div>
 
 {% endblock %}

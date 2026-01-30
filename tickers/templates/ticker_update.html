@@ -1,20 +1,100 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}
+    Editar Ticker - InvestSIO
+{% endblock %}
 
-<div class="container mt-4">
-    <h5 class="display-4"> Cadastrar Ticker</h5>
+{% block content %}
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-3xl font-display font-bold text-text-primary mb-2">
+            <i class="bi bi-pencil-square text-brand-primary"></i>
+            Editar Ticker
+        </h1>
+        <p class="text-text-secondary text-sm">
+            Atualize as informações de {{ object.name }}
+        </p>
+    </div>
+</div>
+
+<!-- Form Card -->
+<div class="max-w-2xl">
     <div class="card">
+        <div class="card-header">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-text-primary">
+                        Informações do Ticker
+                    </h3>
+                    <p class="text-sm text-text-secondary mt-1">
+                        {{ object.name }} - {{ object.category }}
+                    </p>
+                </div>
+                {% if object.category.title == "Ações" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="primary" icon="bi-graph-up" %}
+                {% elif object.category.title == "FIIs" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="success" icon="bi-building" %}
+                {% elif object.category.title == "ETFs" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="warning" icon="bi-collection" %}
+                {% else %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="neutral" icon="bi-tag" %}
+                {% endif %}
+            </div>
+        </div>
+
         <div class="card-body">
-            <form method="post" class="form">
+            <form method="post" class="space-y-6">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2"> salvar marcar</button>
+
+                {% for field in form %}
+                    {% include "components/forms/_form_field.html" with field=field %}
+                {% endfor %}
+
+                <div class="flex items-center justify-end gap-3 pt-6 border-t border-border-default">
+                    <a href="{% url 'ticker_details' object.category.title object.id %}"
+                       class="btn btn-secondary">
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i>
+                        Salvar Alterações
+                    </button>
+                </div>
             </form>
         </div>
     </div>
-    <a href="{% url 'ticker_list' category=category %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista de
-        {{object.category}}</a>
+
+    <!-- Warning Card -->
+    <div class="card mt-6 bg-amber-500/5 border-amber-500/20">
+        <div class="card-body">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                    <i class="bi bi-exclamation-triangle text-2xl text-amber-400"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-semibold text-amber-400 mb-2">
+                        Atenção ao editar
+                    </h4>
+                    <ul class="text-sm text-text-secondary space-y-1">
+                        <li class="flex items-start gap-2">
+                            <i class="bi bi-dot text-amber-400"></i>
+                            <span>Alterar o código do ticker pode afetar integrações com APIs</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="bi bi-dot text-amber-400"></i>
+                            <span>Mudanças na categoria podem afetar relatórios existentes</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="bi bi-dot text-amber-400"></i>
+                            <span>As transações já registradas não serão alteradas</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
