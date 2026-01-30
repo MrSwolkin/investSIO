@@ -1,94 +1,263 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <div class="row mb-3 col-md-12">
-        <div class="col-md-4" >
-            <h1 class="p-3">Lista de {{ object.name }}s</h1>
-        </div>
-        <div class="col-md-6" >
-            <a href="{% url 'ticker_list' category=category_title %}" class="btn btn-secondary float-end">Volta para lista de {{object.category}}</a>
-        </div>
-    </div>
+{% block title %}
+    {{ object.name }} - Detalhes do Ticker - InvestSIO
+{% endblock %}
 
-    {% include "components/_tickers_metrics.html" %}
-<div class="container mt-4">
-    
-    </div>
-    <div class="card col-md-10">
-        <div class="card-body  rounded-2 ">
-            <img src="{{ticker_icon_url}}" alt=""  width="50" height="50">
-            <div class="row">
-                <h3 class="card-title fs-1">{{ticker_long_name}} - {{object.name}}</h3>
-                <p class="card-text fs-4 col p-3"><strong>Preço Atual: </strong>{{ticker_price}}</p>
-            </div>
-        <div class="row">
-            <p class="card-text fs-4 col p-3"><strong>Categoria: </strong>{{object.category}}</p>
-            <p class="card-text fs-4 col p-3"><strong>Moeda: </strong>{{object.currency}}</p>
-            <p class="card-text fs-4 col p-3"><strong>Setor: </strong>{{object.sector}}</p>
+{% block content %}
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+    <div class="flex items-start gap-4">
+        {% if ticker_icon_url %}
+        <div class="flex-shrink-0">
+            <img src="{{ ticker_icon_url }}"
+                 alt="{{ object.name }}"
+                 class="w-16 h-16 rounded-lg border border-border-default bg-bg-elevated p-2">
         </div>
-            {% if object.description %}
-            <p class="card-text fs-4"><strong>Descrição:</strong>{{object.description}}</p>
+        {% endif %}
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <h1 class="text-3xl font-display font-bold text-text-primary">
+                    {{ object.name }}
+                </h1>
+                {% if object.category.title == "Ações" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="primary" icon="bi-graph-up" %}
+                {% elif object.category.title == "FIIs" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="success" icon="bi-building" %}
+                {% elif object.category.title == "ETFs" %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="warning" icon="bi-collection" %}
+                {% else %}
+                    {% include "components/ui/_badge.html" with text=object.category.title variant="neutral" icon="bi-tag" %}
+                {% endif %}
+            </div>
+            {% if ticker_long_name %}
+            <p class="text-text-secondary text-lg">
+                {{ ticker_long_name }}
+            </p>
             {% endif %}
         </div>
     </div>
-    <div class="table-responsive col-md-10 mt-4">
-        <h4 class="text-center mb-3">Negociações de {{object.name}}</h4>
-        <table class="table table-stripedtable-striped table-bordered border border-black">
-            <thead class="thead-dark">
-                <tr class="text-center">
+    <div class="flex items-center gap-2">
+        <a href="{% url 'ticker_update' object.category.title object.id %}"
+           class="btn btn-primary btn-sm">
+            <i class="bi bi-pencil-square"></i>
+            Editar
+        </a>
+        <a href="{% url 'ticker_list' category_title %}"
+           class="btn btn-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+
+<!-- Ticker Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    {% if ticker_price %}
+    {% include "components/ui/_metric_card.html" with value="R$ "|add:ticker_price label="Cotação Atual" icon="bi-currency-dollar" variant="primary" %}
+    {% endif %}
+
+    {% include "components/ui/_metric_card.html" with value="R$ "|add:ticker_metrics.total_price label="Total Investido" icon="bi-wallet2" variant="success" %}
+
+    {% include "components/ui/_metric_card.html" with value=ticker_metrics.total_quantity label="Quantidade de Cotas" icon="bi-collection" variant="primary" %}
+
+    {% include "components/ui/_metric_card.html" with value="R$ "|add:ticker_metrics.avarange_price label="Preço Médio" icon="bi-graph-up" variant="success" %}
+</div>
+
+<!-- Ticker Information Card -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <div class="lg:col-span-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold text-text-primary">
+                    Informações do Ativo
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <p class="label mb-2">Categoria</p>
+                        <p class="text-text-primary font-medium">
+                            {{ object.category }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="label mb-2">Moeda</p>
+                        <p class="text-text-primary font-medium">
+                            {{ object.currency }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="label mb-2">Setor</p>
+                        <p class="text-text-primary font-medium">
+                            {{ object.sector|default:"—" }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="label mb-2">Código</p>
+                        <p class="text-text-primary font-mono font-medium">
+                            {{ object.name }}
+                        </p>
+                    </div>
+                </div>
+
+                {% if object.description %}
+                <div class="mt-6 pt-6 border-t border-border-default">
+                    <p class="label mb-2">Descrição</p>
+                    <p class="text-text-secondary text-sm leading-relaxed">
+                        {{ object.description }}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Card -->
+    <div class="lg:col-span-1">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold text-text-primary">
+                    Ações Rápidas
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="space-y-3">
+                    <a href="{% url 'inflow_create' %}" class="btn btn-success w-full justify-start">
+                        <i class="bi bi-plus-circle"></i>
+                        Nova Compra
+                    </a>
+                    <a href="{% url 'outflow_create' %}" class="btn btn-danger w-full justify-start">
+                        <i class="bi bi-dash-circle"></i>
+                        Nova Venda
+                    </a>
+                    <a href="{% url 'dividend_create' %}" class="btn btn-primary w-full justify-start">
+                        <i class="bi bi-cash-coin"></i>
+                        Registrar Dividendo
+                    </a>
+                    <div class="border-t border-border-default my-3"></div>
+                    <a href="{% url 'ticker_update' object.category.title object.id %}"
+                       class="btn btn-secondary w-full justify-start">
+                        <i class="bi bi-pencil-square"></i>
+                        Editar Ticker
+                    </a>
+                    <a href="{% url 'ticker_delete' object.category.title object.id %}"
+                       class="btn btn-ghost w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10">
+                        <i class="bi bi-trash3-fill"></i>
+                        Excluir Ticker
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transactions Table -->
+<div class="card">
+    <div class="card-header">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-text-primary">
+                    Histórico de Negociações
+                </h3>
+                <p class="text-sm text-text-secondary mt-1">
+                    Todas as transações de {{ object.name }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-text-muted">
+                    {{ transactions|length }} transações
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% if transactions %}
+    <div class="overflow-x-auto">
+        <table class="table">
+            <thead>
+                <tr>
                     <th>Data</th>
                     <th>Tipo</th>
-                    <th>Quantidade</th>
-                    <th>Valor por cota</th>
-                    <th>Total</th>
+                    <th class="text-right">Quantidade</th>
+                    <th class="text-right">Valor por Cota</th>
+                    <th class="text-right">Total</th>
                     <th>Corretora</th>
-                    <th>Ações</th>
-    
+                    <th class="text-right">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for transaction in transactions %}
                 <tr>
-                    <td>{{ transaction.date }}</td>
-                    {% if transaction.transaction_type == "Compra" or transaction.transaction_type == "Subscrição" %}
-                        <td class="text-success">{{ transaction.transaction_type }}</td>
-                    {% else %}
-                        <td class="text-danger">{{ transaction.transaction_type }}</td>
-                    {% endif %}
-                    <td>{{ transaction.quantity }} un.</td>
-                    <td>R$ {{ transaction.cost_price }}</td>
-                    <td>R$ {{ transaction.total_price }}</td>
-                    <td>{{ transaction.broker }}</td>
-                    <td class="text-center">
-                        
+                    <td class="font-mono text-xs text-text-muted">
+                        {{ transaction.date|date:"d/m/Y" }}
+                    </td>
+                    <td>
                         {% if transaction.transaction_type == "Compra" or transaction.transaction_type == "Subscrição" %}
-                        <a href="{% url 'inflow_details' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        <a href="{% url 'inflow_update' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a href="{% url 'inflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
-
+                            {% include "components/ui/_badge.html" with text=transaction.transaction_type variant="success" icon="bi-arrow-down-circle" %}
                         {% else %}
-                        <a href="{% url 'outflow_details' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        <a href="{% url 'outflow_update' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a href="{% url 'outflow_delete' transaction.id %}" class="btn btn-dark btn-sm">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
+                            {% include "components/ui/_badge.html" with text=transaction.transaction_type variant="danger" icon="bi-arrow-up-circle" %}
                         {% endif %}
+                    </td>
+                    <td class="text-right font-semibold text-text-primary">
+                        {{ transaction.quantity }} un.
+                    </td>
+                    <td class="text-right text-text-secondary">
+                        R$ {{ transaction.cost_price }}
+                    </td>
+                    <td class="text-right font-semibold text-text-primary">
+                        R$ {{ transaction.total_price }}
+                    </td>
+                    <td class="text-text-secondary">
+                        {{ transaction.broker }}
+                    </td>
+                    <td>
+                        <div class="flex items-center justify-end gap-2">
+                            {% if transaction.transaction_type == "Compra" or transaction.transaction_type == "Subscrição" %}
+                                <a href="{% url 'inflow_details' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon"
+                                   title="Ver Detalhes">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'inflow_update' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'inflow_delete' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon text-red-400 hover:text-red-300"
+                                   title="Excluir">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'outflow_details' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon"
+                                   title="Ver Detalhes">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'outflow_update' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon"
+                                   title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'outflow_delete' transaction.id %}"
+                                   class="btn btn-ghost btn-sm btn-icon text-red-400 hover:text-red-300"
+                                   title="Excluir">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    {% else %}
+    <div class="card-body">
+        {% include "components/ui/_empty_state.html" with icon="bi-graph-down" title="Nenhuma transação registrada" description="Comece registrando compras ou vendas deste ativo." %}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

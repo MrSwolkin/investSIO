@@ -1,26 +1,181 @@
 {% extends "base.html" %}
 
+{% block title %}Excluir Compra{% endblock %}
+
 {% block content %}
+<!-- T-023.5: Inflow Delete Confirmation Page -->
+<div class="container mx-auto px-4 py-6 max-w-3xl">
 
-<div class="container mt-4">
-    <h3 class="display-6">Deletando uma Compra</h3>
-    <div class="card">
-        <div class="card-body m-2">
-            <p class="card-text h4">
-                Tem certeza de que deseja excluir a compra de <strong class="h5 text-danger"> {{ object.ticker }}</strong>
-                ?
-            </p>
-            <p><strong>Data: </strong>{{object.date}}</p>
-            <p><strong>Quantidade: </strong>{{object.quantity}}</p>
-            <p><strong>Valor por cota: </strong>R$ {{object.cost_price}}</p>
-            <p><strong>Total: </strong>R$ {{object.total_price}}</p>
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Deletar</button>
-            </form>
-            <a href="{% url 'inflow_list' %}" class="btn btn-primary mt-3"> cancelar e voltar para lista de compras</a>
-        </div>
+  <!-- Page Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-3 mb-2">
+      <a href="{% url 'inflow_list' %}" class="text-text-secondary hover:text-text-primary transition-colors">
+        <i class="bi bi-arrow-left text-xl"></i>
+      </a>
+      <h1 class="text-3xl font-display font-bold text-text-primary">
+        <i class="bi bi-exclamation-triangle text-red-400"></i>
+        Confirmar Exclusão
+      </h1>
     </div>
-</div>
+    <p class="text-sm text-text-secondary ml-11">
+      Revise as informações antes de confirmar a exclusão
+    </p>
+  </div>
 
+  <!-- Warning Alert -->
+  <div class="alert-danger mb-6">
+    <i class="bi bi-exclamation-triangle-fill text-2xl"></i>
+    <div>
+      <p class="font-bold text-lg">Atenção: Esta ação não pode ser desfeita!</p>
+      <p class="text-sm mt-1">
+        Você está prestes a excluir permanentemente esta compra do sistema. Todos os dados relacionados serão removidos.
+      </p>
+    </div>
+  </div>
+
+  <!-- Inflow Details Card -->
+  <div class="card border-red-500/20">
+    <div class="card-header bg-red-500/10">
+      <h3 class="text-lg font-semibold text-text-primary">
+        <i class="bi bi-file-earmark-x"></i>
+        Compra a ser excluída
+      </h3>
+    </div>
+
+    <div class="card-body space-y-6">
+
+      <!-- Main Information -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Ticker -->
+        <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+          <label class="label">Ticker</label>
+          <div class="text-2xl font-bold text-brand-primary mt-2">
+            {{ object.ticker.symbol }}
+          </div>
+          <p class="text-sm text-text-muted mt-1">{{ object.ticker.name|default:"" }}</p>
+        </div>
+
+        <!-- Type -->
+        <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+          <label class="label">Tipo de Operação</label>
+          <div class="mt-2">
+            {% if object.type == "Compra" %}
+              {% include "components/ui/_badge.html" with text="Compra" variant="success" icon="bi-cart-plus" %}
+            {% else %}
+              {% include "components/ui/_badge.html" with text="Subscrição" variant="primary" icon="bi-file-earmark-plus" %}
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+          <label class="label">Data da Compra</label>
+          <div class="flex items-center gap-2 mt-2">
+            <i class="bi bi-calendar3 text-text-muted"></i>
+            <span class="font-medium text-text-primary">{{ object.date|date:"d/m/Y" }}</span>
+          </div>
+        </div>
+
+        <!-- Broker -->
+        <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+          <label class="label">Corretora</label>
+          <div class="flex items-center gap-2 mt-2">
+            <i class="bi bi-building text-text-muted"></i>
+            <span class="font-medium text-text-primary">{{ object.broker.name|default:"N/A" }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Financial Summary -->
+      <div class="bg-gradient-to-br from-red-500/10 to-pink-500/10 rounded-lg p-6 border border-red-500/20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <!-- Quantity -->
+          <div>
+            <label class="label">Quantidade</label>
+            <div class="text-2xl font-bold text-text-primary mt-2">
+              {{ object.quantity }} <span class="text-sm text-text-secondary">cotas</span>
+            </div>
+          </div>
+
+          <!-- Cost Price -->
+          <div>
+            <label class="label">Preço por Cota</label>
+            <div class="text-2xl font-bold text-text-primary mt-2">
+              R$ {{ object.cost_price|floatformat:2 }}
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div>
+            <label class="label">Valor Total</label>
+            <div class="text-2xl font-bold text-red-400 mt-2">
+              R$ {{ object.total_price|floatformat:2 }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Confirmation Form -->
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Info Box -->
+        <div class="bg-bg-elevated rounded-lg p-4 border border-border-default">
+          <div class="flex items-start gap-3">
+            <i class="bi bi-info-circle text-brand-primary text-xl"></i>
+            <div class="text-sm text-text-secondary">
+              <p class="font-medium text-text-primary mb-1">O que acontecerá ao excluir?</p>
+              <ul class="list-disc list-inside space-y-1 mt-2">
+                <li>Esta compra será removida permanentemente</li>
+                <li>Seu portfólio será recalculado automaticamente</li>
+                <li>Os dados não poderão ser recuperados</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-4">
+          <button type="submit" class="btn btn-danger btn-lg w-full sm:w-auto">
+            <i class="bi bi-trash"></i>
+            Confirmar Exclusão
+          </button>
+          <a href="{% url 'inflow_details' object.id %}" class="btn btn-secondary btn-lg w-full sm:w-auto">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+          <a href="{% url 'inflow_list' %}" class="btn btn-ghost btn-lg w-full sm:w-auto">
+            <i class="bi bi-list"></i>
+            Voltar para Lista
+          </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Alternative Actions -->
+  <div class="card mt-6">
+    <div class="card-body">
+      <div class="flex items-start gap-3">
+        <i class="bi bi-lightbulb text-brand-warning text-xl"></i>
+        <div>
+          <h4 class="font-semibold text-text-primary mb-2">Não tem certeza?</h4>
+          <p class="text-sm text-text-secondary mb-3">
+            Se você não tem certeza sobre a exclusão, considere editar as informações ao invés de excluir.
+          </p>
+          <a href="{% url 'inflow_update' object.id %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-pencil"></i>
+            Editar Compra
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

@@ -1,19 +1,87 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}Criar Corretora - InvestSIO{% endblock %}
 
-<div class="container mt-4">
-    <h5 class="display-4"> Cadastrar Corretora</h5>
-    <div class="card">
-        <div class="card-body">
-            <form method="post" class="form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2"> salvar marcar</button>
-            </form>
+{% block content %}
+<!-- Page Header with Breadcrumb -->
+<div class="mb-6">
+  <nav class="flex items-center gap-2 text-sm text-text-secondary mb-3">
+    <a href="{% url 'broker_list' %}" class="hover:text-text-primary transition-colors">Corretoras</a>
+    <i class="bi bi-chevron-right text-xs"></i>
+    <span class="text-text-primary">Nova Corretora</span>
+  </nav>
+
+  <h1 class="text-3xl font-display font-bold text-text-primary mb-2">Criar Nova Corretora</h1>
+  <p class="text-text-secondary">Cadastre uma nova corretora de investimentos</p>
+</div>
+
+<!-- Form Card -->
+<div class="max-w-2xl">
+  <div class="card">
+    <div class="card-header">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
+          <i class="bi bi-building text-emerald-400 text-xl"></i>
         </div>
+        <div>
+          <h3 class="text-lg font-semibold text-text-primary">Informações da Corretora</h3>
+          <p class="text-sm text-text-secondary">Preencha os dados da nova corretora</p>
+        </div>
+      </div>
     </div>
-    <a href="{% url 'broker_list' %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista de corretoras</a>
+
+    <div class="card-body">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Display non-field errors -->
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <div>
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Form Fields using component -->
+        {% for field in form %}
+          {% include "components/forms/_form_field.html" with field=field %}
+        {% endfor %}
+
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border-default">
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle"></i>
+            Salvar Corretora
+          </button>
+
+          <a href="{% url 'broker_list' %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Help Card -->
+  <div class="card mt-6">
+    <div class="card-body">
+      <div class="flex items-start gap-3">
+        <i class="bi bi-info-circle text-brand-primary text-xl flex-shrink-0 mt-0.5"></i>
+        <div>
+          <h4 class="text-sm font-semibold text-text-primary mb-1">Dica</h4>
+          <p class="text-sm text-text-secondary">
+            Certifique-se de preencher corretamente o número da conta e a moeda utilizada.
+            Essas informações são importantes para o rastreamento preciso dos seus investimentos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

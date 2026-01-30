@@ -436,16 +436,16 @@
 > Como usuario, quero gerenciar corretoras com interface moderna.
 
 **Tarefas:**
-- [ ] **T-021.1:** Redesenhar `broker_list.html`
-- [ ] **T-021.2:** Redesenhar `broker_create.html`
-- [ ] **T-021.3:** Redesenhar `broker_update.html`
-- [ ] **T-021.4:** Redesenhar `broker_details.html`
-- [ ] **T-021.5:** Implementar modal de delecao
+- [X] **T-021.1:** Redesenhar `broker_list.html`
+- [X] **T-021.2:** Redesenhar `broker_create.html`
+- [X] **T-021.3:** Redesenhar `broker_update.html`
+- [X] **T-021.4:** Redesenhar `broker_details.html`
+- [X] **T-021.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista com tabela moderna
-- [ ] Formularios estilizados
-- [ ] Modal de confirmacao
+- [X] Lista com tabela moderna
+- [X] Formularios estilizados
+- [X] Modal de confirmacao
 
 ---
 
@@ -454,16 +454,16 @@
 > Como usuario, quero gerenciar ativos com interface moderna.
 
 **Tarefas:**
-- [ ] **T-022.1:** Redesenhar `ticker_list.html`
-- [ ] **T-022.2:** Redesenhar `ticker_create.html`
-- [ ] **T-022.3:** Redesenhar `ticker_update.html`
-- [ ] **T-022.4:** Redesenhar `ticker_details.html`
-- [ ] **T-022.5:** Implementar modal de delecao
+- [X] **T-022.1:** Redesenhar `ticker_list.html`
+- [X] **T-022.2:** Redesenhar `ticker_create.html`
+- [X] **T-022.3:** Redesenhar `ticker_update.html`
+- [X] **T-022.4:** Redesenhar `ticker_details.html`
+- [X] **T-022.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista filtrada por categoria
-- [ ] Detalhes com metricas visuais
-- [ ] Integracao com API de precos
+- [X] Lista filtrada por categoria
+- [X] Detalhes com metricas visuais
+- [X] Integracao com API de precos
 
 ---
 
@@ -472,16 +472,16 @@
 > Como usuario, quero registrar compras com interface moderna.
 
 **Tarefas:**
-- [ ] **T-023.1:** Redesenhar `inflow_list.html`
-- [ ] **T-023.2:** Redesenhar `inflow_create.html`
-- [ ] **T-023.3:** Redesenhar `inflow_update.html`
-- [ ] **T-023.4:** Redesenhar `inflow_details.html`
-- [ ] **T-023.5:** Implementar modal de delecao
+- [X] **T-023.1:** Redesenhar `inflow_list.html`
+- [X] **T-023.2:** Redesenhar `inflow_create.html`
+- [X] **T-023.3:** Redesenhar `inflow_update.html`
+- [X] **T-023.4:** Redesenhar `inflow_details.html`
+- [X] **T-023.5:** Implementar modal de delecao
 
 **Criterios de Aceitacao:**
-- [ ] Lista com filtros
-- [ ] Formulario com selects modernos
-- [ ] Paginacao funcional
+- [X] Lista com filtros
+- [X] Formulario com selects modernos
+- [X] Paginacao funcional
 
 ---
 
@@ -490,15 +490,15 @@
 > Como usuario, quero gerenciar vendas e dividendos.
 
 **Tarefas:**
-- [ ] **T-024.1:** Redesenhar templates de Outflows
-- [ ] **T-024.2:** Redesenhar templates de Dividends
-- [ ] **T-024.3:** Redesenhar `negociations.html`
-- [ ] **T-024.4:** Adicionar filtros avancados
+- [X] **T-024.1:** Redesenhar templates de Outflows
+- [X] **T-024.2:** Redesenhar templates de Dividends
+- [X] **T-024.3:** Redesenhar `negociations.html`
+- [X] **T-024.4:** Adicionar filtros avancados
 - [ ] **T-024.5:** Implementar export (opcional)
 
 **Criterios de Aceitacao:**
-- [ ] Todas as paginas redesenhadas
-- [ ] Consistencia visual
+- [X] Todas as paginas redesenhadas
+- [X] Consistencia visual
 
 ---
 

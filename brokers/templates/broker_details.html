@@ -1,22 +1,254 @@
 {% extends "base.html" %}
 
+{% block title %}{{ object.name }} - InvestSIO{% endblock %}
+
 {% block content %}
+<!-- Page Header with Breadcrumb -->
+<div class="mb-6">
+  <nav class="flex items-center gap-2 text-sm text-text-secondary mb-3">
+    <a href="{% url 'broker_list' %}" class="hover:text-text-primary transition-colors">Corretoras</a>
+    <i class="bi bi-chevron-right text-xs"></i>
+    <span class="text-text-primary">{{ object.name }}</span>
+  </nav>
 
-<div class="container mt-4">
-    <h3 class="display-6">Detalhes da {{ object.name }}</h3>
-    <div class="card col-md-9">
-        <div class="card-body">
-            <h3 class="card-title">{{object.name}}</h3>
-
-            <p class="card-text"><strong>N° da conta: </strong>{{object.account_number}}</p>
-            <p class="card-text"><strong>Pais: </strong>{{object.country}}</p>
-            <p class="card-text"><strong>Moeda Investada: </strong>{{object.currency}}</p>
-            {% if object.description %}
-                <p class="card-text"><strong>Descrição: </strong>{{object.description}}</p>
-            {% endif %}
-        </div>
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4" x-data="{ showDeleteModal: false }">
+    <div>
+      <h1 class="text-3xl font-display font-bold text-text-primary mb-2 flex items-center gap-3">
+        <i class="bi bi-building text-brand-primary"></i>
+        {{ object.name }}
+      </h1>
+      <p class="text-text-secondary">Detalhes da corretora de investimentos</p>
     </div>
-    <a href="{% url 'broker_list' %}" class="btn btn-secondary mt-4">Voltar para lista de marcas</a>
+
+    <div class="flex items-center gap-3">
+      {% include "components/ui/_button.html" with text="Editar" icon="bi-pencil" variant="primary" size="sm" href="/brokers/"|add:object.id|add:"/update/" %}
+
+      <button
+        @click="showDeleteModal = true"
+        class="btn btn-danger btn-sm"
+      >
+        <i class="bi bi-trash"></i>
+        Excluir
+      </button>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <template x-if="showDeleteModal">
+      <div>
+        <!-- Backdrop -->
+        <div
+          class="modal-backdrop"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          @click="showDeleteModal = false"
+        ></div>
+
+        <!-- Modal Dialog -->
+        <div
+          class="modal"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          @click.self="showDeleteModal = false"
+        >
+          <div class="modal-content max-w-md">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20">
+                  <i class="bi bi-exclamation-triangle text-red-400 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-text-primary">Confirmar Exclusão</h3>
+              </div>
+              <button
+                @click="showDeleteModal = false"
+                class="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <i class="bi bi-x-lg text-xl"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <p class="text-text-secondary mb-4">
+                Tem certeza que deseja excluir a corretora <strong class="text-text-primary">{{ object.name }}</strong>?
+              </p>
+              <div class="alert alert-warning">
+                <i class="bi bi-info-circle-fill"></i>
+                <p class="text-sm">Esta ação não pode ser desfeita. Todos os dados relacionados a esta corretora serão removidos.</p>
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button
+                @click="showDeleteModal = false"
+                class="btn btn-secondary"
+              >
+                Cancelar
+              </button>
+              <a
+                href="{% url 'broker_delete' object.id %}"
+                class="btn btn-danger"
+              >
+                <i class="bi bi-trash"></i>
+                Excluir
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Main Information Card -->
+  <div class="lg:col-span-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+            <i class="bi bi-info-circle text-blue-400 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-text-primary">Informações Gerais</h3>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="space-y-6">
+          <!-- Broker Name -->
+          <div>
+            <label class="label">Nome da Corretora</label>
+            <p class="text-text-primary font-medium text-lg">{{ object.name }}</p>
+          </div>
+
+          <!-- Account Number -->
+          <div>
+            <label class="label">N° da Conta</label>
+            <div class="flex items-center gap-2">
+              <p class="text-text-primary font-mono text-lg">{{ object.account_number }}</p>
+              <button
+                @click="navigator.clipboard.writeText('{{ object.account_number }}')"
+                class="btn btn-ghost btn-sm btn-icon"
+                title="Copiar número da conta"
+              >
+                <i class="bi bi-clipboard"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Country -->
+          <div>
+            <label class="label">País</label>
+            <p class="text-text-primary">{{ object.country }}</p>
+          </div>
+
+          <!-- Currency -->
+          <div>
+            <label class="label">Moeda</label>
+            <div>
+              <span class="badge badge-primary text-base px-3 py-1">{{ object.currency }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          {% if object.description %}
+            <div>
+              <label class="label">Descrição</label>
+              <div class="bg-bg-base rounded-lg p-4 border border-border-default">
+                <p class="text-text-secondary whitespace-pre-line">{{ object.description }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="lg:col-span-1 space-y-6">
+    <!-- Quick Stats Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-lg font-semibold text-text-primary">Estatísticas</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-4">
+          <!-- Total Assets Placeholder -->
+          <div class="flex items-center justify-between p-3 bg-bg-base rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20">
+                <i class="bi bi-graph-up text-emerald-400"></i>
+              </div>
+              <div>
+                <p class="text-xs text-text-secondary">Ativos</p>
+                <p class="text-lg font-semibold text-text-primary">-</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Investments Placeholder -->
+          <div class="flex items-center justify-between p-3 bg-bg-base rounded-lg">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-500/20">
+                <i class="bi bi-wallet2 text-blue-400"></i>
+              </div>
+              <div>
+                <p class="text-xs text-text-secondary">Investimentos</p>
+                <p class="text-lg font-semibold text-text-primary">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-lg font-semibold text-text-primary">Ações Rápidas</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-2">
+          <a href="{% url 'broker_update' object.id %}" class="flex items-center gap-3 p-3 rounded-lg bg-bg-base hover:bg-bg-elevated transition-colors group">
+            <i class="bi bi-pencil text-brand-primary group-hover:scale-110 transition-transform"></i>
+            <span class="text-text-secondary group-hover:text-text-primary transition-colors">Editar informações</span>
+          </a>
+
+          <a href="{% url 'broker_list' %}" class="flex items-center gap-3 p-3 rounded-lg bg-bg-base hover:bg-bg-elevated transition-colors group">
+            <i class="bi bi-arrow-left text-brand-primary group-hover:scale-110 transition-transform"></i>
+            <span class="text-text-secondary group-hover:text-text-primary transition-colors">Voltar para lista</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metadata Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-sm font-semibold text-text-secondary uppercase tracking-wider">Metadados</h3>
+      </div>
+      <div class="card-body">
+        <div class="space-y-3">
+          <div>
+            <p class="text-xs text-text-muted">ID</p>
+            <p class="text-sm text-text-primary font-mono">{{ object.id }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

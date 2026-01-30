@@ -1,19 +1,175 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}Editar {{ object.name }} - InvestSIO{% endblock %}
 
-<div class="container mt-4">
-    <h5 class="display-4"> Cadastrar Corretora</h5>
-    <div class="card">
-        <div class="card-body">
-            <form method="post" class="form">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary mt-2"> salvar marcar</button>
-            </form>
+{% block content %}
+<!-- Page Header with Breadcrumb -->
+<div class="mb-6">
+  <nav class="flex items-center gap-2 text-sm text-text-secondary mb-3">
+    <a href="{% url 'broker_list' %}" class="hover:text-text-primary transition-colors">Corretoras</a>
+    <i class="bi bi-chevron-right text-xs"></i>
+    <a href="{% url 'broker_details' object.id %}" class="hover:text-text-primary transition-colors">{{ object.name }}</a>
+    <i class="bi bi-chevron-right text-xs"></i>
+    <span class="text-text-primary">Editar</span>
+  </nav>
+
+  <h1 class="text-3xl font-display font-bold text-text-primary mb-2">Editar Corretora</h1>
+  <p class="text-text-secondary">Atualize as informações da corretora {{ object.name }}</p>
+</div>
+
+<!-- Form Card -->
+<div class="max-w-2xl">
+  <div class="card">
+    <div class="card-header">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+          <i class="bi bi-pencil text-blue-400 text-xl"></i>
         </div>
+        <div>
+          <h3 class="text-lg font-semibold text-text-primary">Informações da Corretora</h3>
+          <p class="text-sm text-text-secondary">Edite os dados da corretora</p>
+        </div>
+      </div>
     </div>
-    <a href="{% url 'broker_list' %}" class="btn btn-secondary mt-3"> cancelar e voltar para lista de corretoras</a>
+
+    <div class="card-body">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Display non-field errors -->
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <div>
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Form Fields using component -->
+        {% for field in form %}
+          {% include "components/forms/_form_field.html" with field=field %}
+        {% endfor %}
+
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border-default">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i>
+            Salvar Alterações
+          </button>
+
+          <a href="{% url 'broker_details' object.id %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Danger Zone Card -->
+  <div class="card mt-6 border-red-500/30" x-data="{ showDeleteModal: false }">
+    <div class="card-header bg-red-500/5">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-red-500/20">
+            <i class="bi bi-exclamation-triangle text-red-400 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-text-primary">Zona de Perigo</h3>
+            <p class="text-sm text-text-secondary">Ações irreversíveis</p>
+          </div>
+        </div>
+
+        <button
+          @click="showDeleteModal = true"
+          class="btn btn-danger btn-sm"
+        >
+          <i class="bi bi-trash"></i>
+          Excluir Corretora
+        </button>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <template x-if="showDeleteModal">
+      <div>
+        <!-- Backdrop -->
+        <div
+          class="modal-backdrop"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          @click="showDeleteModal = false"
+        ></div>
+
+        <!-- Modal Dialog -->
+        <div
+          class="modal"
+          x-show="showDeleteModal"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-150"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          @click.self="showDeleteModal = false"
+        >
+          <div class="modal-content max-w-md">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20">
+                  <i class="bi bi-exclamation-triangle text-red-400 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-text-primary">Confirmar Exclusão</h3>
+              </div>
+              <button
+                @click="showDeleteModal = false"
+                class="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <i class="bi bi-x-lg text-xl"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <p class="text-text-secondary mb-4">
+                Tem certeza que deseja excluir a corretora <strong class="text-text-primary">{{ object.name }}</strong>?
+              </p>
+              <div class="alert alert-warning">
+                <i class="bi bi-info-circle-fill"></i>
+                <p class="text-sm">Esta ação não pode ser desfeita. Todos os dados relacionados a esta corretora serão removidos.</p>
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button
+                @click="showDeleteModal = false"
+                class="btn btn-secondary"
+              >
+                Cancelar
+              </button>
+              <a
+                href="{% url 'broker_delete' object.id %}"
+                class="btn btn-danger"
+              >
+                <i class="bi bi-trash"></i>
+                Excluir
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
 </div>
 
 {% endblock %}

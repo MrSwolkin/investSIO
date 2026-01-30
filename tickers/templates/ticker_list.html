@@ -1,60 +1,153 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{category_title}}s
+    Lista de {{ category_title }}s - InvestSIO
 {% endblock %}
 
 {% block content %}
-<div class="row mb-3 col-md-12">
-    <div class="col-md-4">
-        <h1 class="p-3">Lista de {{ category_title }}s</h1>
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-3xl font-display font-bold text-text-primary mb-2">
+            <i class="bi bi-graph-up text-brand-primary"></i>
+            Lista de {{ category_title }}s
+        </h1>
+        <p class="text-text-secondary text-sm">
+            Gerencie seus ativos de {{ category_title|lower }}
+        </p>
     </div>
-    <div class="col-md-6">
-        <a href="{% url 'ticker_create' category=category_title %}" class="btn btn-success float-end">
-            <i class="bi bi-plus-lg"></i>
-            <span> Adiconar {{ category_title }}</span>
-        </a>
+    <div>
+        {% include "components/ui/_button.html" with text="Adicionar "|add:category_title href="/tickers/"|add:category_title|add:"/create/" variant="success" icon="bi-plus-lg" %}
     </div>
 </div>
-<div class="d-flex justify-content-center">
-    {% include "components/_category_metrics.html" %}
+
+<!-- Category Metrics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    {% include "components/ui/_metric_card.html" with value="R$ "|add:metrics_category.total_invested label="Total Investido em "|add:category_title icon="bi-wallet2" variant="primary" %}
+
+    {% include "components/ui/_metric_card.html" with value=metrics_category.amount_ticker_by_category label="Número de "|add:category_title icon="bi-collection" variant="success" %}
+
+    {% include "components/ui/_metric_card.html" with value="R$ -" label="Preço Médio" icon="bi-graph-up" variant="primary" %}
 </div>
-<div class="table-responsive col-md-10 mt-3 pe-3 d-flex justify-content-center">
-    <table class="table table-striped table-bordered border border-black">
-        <thead class="thead-dark">
-            <tr class="text-center">
-                <th>ID</th>
+
+<!-- Tickers Table -->
+{% if tickers %}
+<div class="overflow-x-auto rounded-xl border border-border-default">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="w-16">ID</th>
                 <th>Nome</th>
-                <th>quantidade</th>
-                <th>setor</th>
-                <th>Ações</th>
+                <th>Categoria</th>
+                <th class="text-center">Quantidade</th>
+                <th>Setor</th>
+                <th class="text-right">Ações</th>
             </tr>
         </thead>
         <tbody>
             {% for ticker in tickers %}
             <tr>
-                <td>{{ ticker.id }}</td>
-                <td><a href="{% url 'ticker_details' ticker.category.title ticker.id %}" class="text-dark">
-                    <strong>{{ ticker.name }}</strong>
+                <td class="text-text-muted font-mono text-xs">
+                    #{{ ticker.id }}
+                </td>
+                <td>
+                    <a href="{% url 'ticker_details' ticker.category.title ticker.id %}"
+                       class="font-semibold text-text-primary hover:text-brand-primary transition-colors">
+                        {{ ticker.name }}
                     </a>
                 </td>
-                <td>{{ ticker.total_quantity }}</td>
-                <td>{{ ticker.sector }}</td>
-                <td class="text-center">
-                    <a href="{% url 'ticker_details' ticker.category.title ticker.id %}" class="btn btn-dark btn-sm">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                    <a href="{% url 'ticker_update' ticker.category.title ticker.id %}" class="btn btn-dark btn-sm">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="{% url 'ticker_delete' ticker.category.title ticker.id %}" class="btn btn-dark btn-sm">
-                        <i class="bi bi-trash3-fill"></i>
-                    </a>
+                <td>
+                    {% if ticker.category.title == "Ações" %}
+                        {% include "components/ui/_badge.html" with text=ticker.category.title variant="primary" icon="bi-graph-up" %}
+                    {% elif ticker.category.title == "FIIs" %}
+                        {% include "components/ui/_badge.html" with text=ticker.category.title variant="success" icon="bi-building" %}
+                    {% elif ticker.category.title == "ETFs" %}
+                        {% include "components/ui/_badge.html" with text=ticker.category.title variant="warning" icon="bi-collection" %}
+                    {% else %}
+                        {% include "components/ui/_badge.html" with text=ticker.category.title variant="neutral" icon="bi-tag" %}
+                    {% endif %}
+                </td>
+                <td class="text-center font-semibold text-text-primary">
+                    {{ ticker.total_quantity }}
+                </td>
+                <td class="text-text-secondary">
+                    {{ ticker.sector|default:"—" }}
+                </td>
+                <td>
+                    <div class="flex items-center justify-end gap-2">
+                        <a href="{% url 'ticker_details' ticker.category.title ticker.id %}"
+                           class="btn btn-ghost btn-sm btn-icon"
+                           title="Ver Detalhes">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="{% url 'ticker_update' ticker.category.title ticker.id %}"
+                           class="btn btn-ghost btn-sm btn-icon"
+                           title="Editar">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'ticker_delete' ticker.category.title ticker.id %}"
+                           class="btn btn-ghost btn-sm btn-icon text-red-400 hover:text-red-300"
+                           title="Excluir">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    {% include "components/_pagination.html" %}
 </div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="flex justify-center mt-6">
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="pagination-item">
+                <i class="bi bi-chevron-double-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="pagination-item">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        {% else %}
+            <span class="pagination-item-disabled">
+                <i class="bi bi-chevron-double-left"></i>
+            </span>
+            <span class="pagination-item-disabled">
+                <i class="bi bi-chevron-left"></i>
+            </span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="pagination-item-active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="pagination-item">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="pagination-item">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-item">
+                <i class="bi bi-chevron-double-right"></i>
+            </a>
+        {% else %}
+            <span class="pagination-item-disabled">
+                <i class="bi bi-chevron-right"></i>
+            </span>
+            <span class="pagination-item-disabled">
+                <i class="bi bi-chevron-double-right"></i>
+            </span>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Empty State -->
+{% include "components/ui/_empty_state.html" with icon="bi-inbox" title="Nenhum "|add:category_title|add:" encontrado" description="Comece adicionando seu primeiro ativo de "|add:category_title|lower|add:"." action_text="Adicionar "|add:category_title action_href="/tickers/"|add:category_title|add:"/create/" action_variant="success" %}
+{% endif %}
+
 {% endblock %}

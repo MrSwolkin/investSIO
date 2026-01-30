@@ -1,64 +1,268 @@
 {% extends "base.html" %}
 
-{% block title%}
-Compras de ativos
-{% endblock %}
+{% block title %}Vendas - InvestSIO{% endblock %}
+
 {% block content %}
-
-
-<div class="row mb-3">
-    <div class="col-md-6">
-        <h1 class="">Lista de Vendas de ativos</h1>
-    </div>
-    <div class="col-md-4">
-        <a href="{% url 'outflow_create' %}" class="btn btn-success float-end ">
-            <i class="bi bi-plus-lg"></i>
-            <span>cadastra nova venda</span>
-        </a>
-    </div>
+<!-- Page Header -->
+<div class="mb-6">
+  <h1 class="text-3xl font-display font-bold text-text-primary mb-2">Vendas de Ativos</h1>
+  <p class="text-text-secondary">Gerencie suas vendas de investimentos</p>
 </div>
-<div class="table-responsive col-md-10">
-    <table class="table table-striped table-bordered rounded-2 border border-black">
-        <thead class="thead-dark">
-            <tr class="text-center">
-                <th>Data</th>
-                <th>Ticker</th>
-                <th>Quantidade</th>
-                <th>Valor por cota</th>
-                <th>Total</th>
-                <th>Corretora</th>
-                <th>Ações</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            {% for outflow in outflows %}
-            <tr>
-                <td>{{ outflow.date }}</td>
-                <td><a href="{% url 'ticker_details' outflow.ticker.category.title outflow.ticker.id %}" class="text-dark">
-                        <strong>{{ outflow.ticker }}</strong>
-                    </a>
-                </td>
-                <td>{{ outflow.quantity }} un.</td>
-                <td>R$ {{ outflow.cost_price }}</td>
-                <td>R$ {{ outflow.total_price }}</td>
-                <td>{{ outflow.broker }}</td>
-                <td class="text-center">
-                    <a href="{% url 'outflow_details' outflow.id %}" class="btn btn-secondary btn-sm">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                    <a href="{% url 'outflow_update' outflow.id %}" class="btn btn-secondary btn-sm">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="{% url 'outflow_delete' outflow.id %}" class="btn btn-secondary btn-sm ">
-                        <i class="bi bi-trash3-fill"></i>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+<!-- Actions Bar: Search + Create Button -->
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+  <!-- Search Form -->
+  <div class="flex-1 max-w-md">
+    <form method="get" action="{% url 'outflow_list' %}" class="relative">
+      <input
+        type="text"
+        name="search"
+        placeholder="Buscar por ticker..."
+        value="{{ request.GET.search }}"
+        class="input pl-10"
+      >
+      <button
+        type="submit"
+        class="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors"
+        aria-label="Buscar"
+      >
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Create Button -->
+  <div>
+    {% include "components/ui/_button.html" with text="Nova Venda" icon="bi-plus-circle" variant="danger" href="/outflows/create/" %}
+  </div>
+</div>
+
+<!-- Outflows List -->
+{% if outflows %}
+  <div class="overflow-x-auto rounded-xl border border-border-default">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Ticker</th>
+          <th>Quantidade</th>
+          <th class="text-right">Valor por Cota</th>
+          <th class="text-right">Total</th>
+          <th>Corretora</th>
+          <th class="text-center w-40">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for outflow in outflows %}
+          <tr x-data="{ showDeleteModal: false }">
+            <td class="font-mono text-text-muted">{{ outflow.date|date:"d/m/Y" }}</td>
+            <td class="font-medium text-text-primary">
+              <a href="{% url 'ticker_details' outflow.ticker.category.title outflow.ticker.id %}" class="hover:text-brand-primary transition-colors flex items-center gap-2">
+                <i class="bi bi-graph-down text-red-400"></i>
+                {{ outflow.ticker }}
+              </a>
+            </td>
+            <td class="text-text-secondary">{{ outflow.quantity }} un.</td>
+            <td class="text-right font-mono text-text-primary">R$ {{ outflow.cost_price|floatformat:2 }}</td>
+            <td class="text-right font-mono text-text-primary font-semibold">R$ {{ outflow.total_price|floatformat:2 }}</td>
+            <td>
+              <span class="badge badge-neutral">{{ outflow.broker }}</span>
+            </td>
+            <td>
+              <div class="flex items-center justify-center gap-2">
+                <!-- View Button -->
+                {% include "components/ui/_button.html" with icon="bi-eye" variant="ghost" size="sm" href="/outflows/"|add:outflow.id|add:"/details/" class="btn-icon" %}
+
+                <!-- Edit Button -->
+                {% include "components/ui/_button.html" with icon="bi-pencil" variant="ghost" size="sm" href="/outflows/"|add:outflow.id|add:"/update/" class="btn-icon" %}
+
+                <!-- Delete Button -->
+                <button
+                  @click="showDeleteModal = true"
+                  class="btn btn-ghost btn-sm btn-icon"
+                  aria-label="Excluir"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+
+              <!-- Delete Confirmation Modal -->
+              <template x-if="showDeleteModal">
+                <div>
+                  <!-- Backdrop -->
+                  <div
+                    class="modal-backdrop"
+                    x-show="showDeleteModal"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    @click="showDeleteModal = false"
+                  ></div>
+
+                  <!-- Modal Dialog -->
+                  <div
+                    class="modal"
+                    x-show="showDeleteModal"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    @click.self="showDeleteModal = false"
+                  >
+                    <div class="modal-content max-w-md">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <div class="flex items-center gap-3">
+                          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20">
+                            <i class="bi bi-exclamation-triangle text-red-400 text-xl"></i>
+                          </div>
+                          <h3 class="text-lg font-semibold text-text-primary">Confirmar Exclusão</h3>
+                        </div>
+                        <button
+                          @click="showDeleteModal = false"
+                          class="text-text-secondary hover:text-text-primary transition-colors"
+                        >
+                          <i class="bi bi-x-lg text-xl"></i>
+                        </button>
+                      </div>
+
+                      <!-- Modal Body -->
+                      <div class="modal-body">
+                        <p class="text-text-secondary mb-4">
+                          Tem certeza que deseja excluir a venda de <strong class="text-text-primary">{{ outflow.ticker }}</strong> realizada em <strong class="text-text-primary">{{ outflow.date|date:"d/m/Y" }}</strong>?
+                        </p>
+                        <div class="alert alert-warning">
+                          <i class="bi bi-info-circle-fill"></i>
+                          <p class="text-sm">Esta ação não pode ser desfeita. O registro de venda será permanentemente removido.</p>
+                        </div>
+                      </div>
+
+                      <!-- Modal Footer -->
+                      <div class="modal-footer">
+                        <button
+                          @click="showDeleteModal = false"
+                          class="btn btn-secondary"
+                        >
+                          Cancelar
+                        </button>
+                        <a
+                          href="{% url 'outflow_delete' outflow.id %}"
+                          class="btn btn-danger"
+                        >
+                          <i class="bi bi-trash"></i>
+                          Excluir
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    {% include "components/_pagination.html" %}
-</div>
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+    <nav aria-label="Navegação de páginas" class="mt-6">
+      <div class="flex items-center justify-between">
+        <!-- Page Info -->
+        <p class="text-sm text-text-secondary">
+          Mostrando <span class="font-medium text-text-primary">{{ page_obj.start_index }}</span> -
+          <span class="font-medium text-text-primary">{{ page_obj.end_index }}</span> de
+          <span class="font-medium text-text-primary">{{ page_obj.paginator.count }}</span> vendas
+        </p>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+          <!-- First Page -->
+          {% if page_obj.has_previous %}
+            <a
+              href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+              class="pagination-item"
+              aria-label="Primeira página"
+            >
+              <i class="bi bi-chevron-double-left"></i>
+            </a>
+          {% else %}
+            <span class="pagination-item-disabled">
+              <i class="bi bi-chevron-double-left"></i>
+            </span>
+          {% endif %}
+
+          <!-- Previous Page -->
+          {% if page_obj.has_previous %}
+            <a
+              href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+              class="pagination-item"
+              aria-label="Página anterior"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          {% else %}
+            <span class="pagination-item-disabled">
+              <i class="bi bi-chevron-left"></i>
+            </span>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="pagination-item-active" aria-current="page">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a
+                href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                class="pagination-item"
+              >
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Next Page -->
+          {% if page_obj.has_next %}
+            <a
+              href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+              class="pagination-item"
+              aria-label="Próxima página"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          {% else %}
+            <span class="pagination-item-disabled">
+              <i class="bi bi-chevron-right"></i>
+            </span>
+          {% endif %}
+
+          <!-- Last Page -->
+          {% if page_obj.has_next %}
+            <a
+              href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+              class="pagination-item"
+              aria-label="Última página"
+            >
+              <i class="bi bi-chevron-double-right"></i>
+            </a>
+          {% else %}
+            <span class="pagination-item-disabled">
+              <i class="bi bi-chevron-double-right"></i>
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  {% endif %}
+
+{% else %}
+  <!-- Empty State -->
+  {% include "components/ui/_empty_state.html" with icon="bi-graph-down" title="Nenhuma venda cadastrada" description="Comece registrando sua primeira venda de ativos." action_text="Registrar Primeira Venda" action_href="/outflows/create/" action_variant="danger" %}
+{% endif %}
 
 {% endblock %}
