@@ -18,6 +18,7 @@ class DividendListView(LoginRequiredMixin, ListView):
     model = models.Dividend
     template_name = "dividend_list.html"
     context_object_name = "dividends"
+    paginate_by = 25
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related(

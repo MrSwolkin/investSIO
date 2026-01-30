@@ -106,6 +106,24 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
+# Cache Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': env('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'KEY_PREFIX': 'investsio',
+        'TIMEOUT': 300,  # 5 minutos
+    }
+}
+
+# Cache time settings (em segundos)
+CACHE_TTL_SHORT = 60  # 1 minuto
+CACHE_TTL_MEDIUM = 300  # 5 minutos
+CACHE_TTL_LONG = 3600  # 1 hora
+
 # Logging Configuration
 LOGGING = {
     'version': 1,

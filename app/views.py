@@ -1,17 +1,27 @@
 import json
 import logging
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from inflows.models import Inflow
 from outflows.models import Outflow
 from services.fees_br import GetFeeBr
 from itertools import chain
 from . import metrics
 
+# Cache timeout para a pagina home (5 minutos)
+CACHE_TTL = getattr(settings, 'CACHE_TTL_MEDIUM', 300)
+
 logger = logging.getLogger('app')
 get_fee = GetFeeBr()
 
 
+# Nota: O caching da pagina home e feito a nivel de funcoes em metrics.py
+# para permitir invalidacao granular quando dados sao alterados.
+# Se preferir cachear a pagina inteira, descomente o decorator abaixo:
+# @cache_page(CACHE_TTL)
 @login_required
 def home(request):
     logger.info(f"Usuario {request.user.username} acessando dashboard")
@@ -63,8 +73,9 @@ def negociations(request):
     logger.info(f"Usuario {request.user.username} acessando negociacoes")
 
     try:
-        inflow = Inflow.objects.all()
-        outflow = Outflow.objects.all()
+        # Otimizar queries com select_related
+        inflow = Inflow.objects.select_related('ticker', 'broker').all()
+        outflow = Outflow.objects.select_related('ticker', 'broker').all()
 
         transactions = sorted(
             chain(inflow, outflow),
@@ -72,11 +83,17 @@ def negociations(request):
             reverse=True
         )
 
+        # Paginacao
+        paginator = Paginator(transactions, 25)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {
-            "transactions": transactions,
+            "transactions": page_obj,
+            "page_obj": page_obj,
         }
 
-        logger.debug(f"Negociacoes carregadas: {len(transactions)} transacoes")
+        logger.debug(f"Negociacoes carregadas: {paginator.count} transacoes, pagina {page_obj.number}")
         return render(request, "negociations.html", context)
 
     except Exception as e:

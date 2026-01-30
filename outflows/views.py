@@ -10,6 +10,7 @@ class OutflowListView(LoginRequiredMixin, ListView):
     model = Outflow
     template_name = "outflow_list.html"
     context_object_name = "outflows"
+    paginate_by = 25
 
     def get_queryset(self):
         return super().get_queryset().select_related(

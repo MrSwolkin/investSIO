@@ -188,14 +188,14 @@
 > Como usuario, quero paginacao para carregar dados mais rapido.
 
 **Tarefas:**
-- [ ] **T-009.1:** Adicionar `paginate_by = 25` em todas as ListViews
-- [ ] **T-009.2:** Criar componente `_pagination.html`
-- [ ] **T-009.3:** Adicionar paginacao nos templates de lista
-- [ ] **T-009.4:** Otimizar `negociations()` view
+- [X] **T-009.1:** Adicionar `paginate_by = 25` em todas as ListViews
+- [X] **T-009.2:** Criar componente `_pagination.html`
+- [X] **T-009.3:** Adicionar paginacao nos templates de lista
+- [X] **T-009.4:** Otimizar `negociations()` view
 
 **Criterios de Aceitacao:**
-- [ ] Listas paginadas com 25 itens
-- [ ] Navegacao entre paginas funcional
+- [X] Listas paginadas com 25 itens
+- [X] Navegacao entre paginas funcional
 
 ---
 
@@ -206,15 +206,15 @@
 > Como desenvolvedor, quero cache para reduzir carga no banco.
 
 **Tarefas:**
-- [ ] **T-010.1:** Instalar django-redis e redis
-- [ ] **T-010.2:** Configurar CACHES em settings
-- [ ] **T-010.3:** Adicionar cache em `app/metrics.py`
-- [ ] **T-010.4:** Adicionar `@cache_page` em `home()` view
-- [ ] **T-010.5:** Documentar invalidacao de cache
+- [X] **T-010.1:** Instalar django-redis e redis
+- [X] **T-010.2:** Configurar CACHES em settings
+- [X] **T-010.3:** Adicionar cache em `app/metrics.py`
+- [X] **T-010.4:** Adicionar `@cache_page` em `home()` view
+- [X] **T-010.5:** Documentar invalidacao de cache
 
 **Criterios de Aceitacao:**
-- [ ] Dashboard carrega em < 500ms (cached)
-- [ ] Cache invalida ao criar/atualizar dados
+- [X] Dashboard carrega em < 500ms (cached)
+- [X] Cache invalida ao criar/atualizar dados
 
 ---
 

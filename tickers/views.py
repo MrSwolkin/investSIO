@@ -20,6 +20,7 @@ class TickerListView(LoginRequiredMixin, ListView):
     model = Ticker
     template_name = "ticker_list.html"
     context_object_name = "tickers"
+    paginate_by = 25
 
     def get_queryset(self):
         # Validate category parameter and get object or 404

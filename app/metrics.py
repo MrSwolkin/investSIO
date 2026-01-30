@@ -1,3 +1,5 @@
+from django.core.cache import cache
+from django.conf import settings
 from django.utils import timezone
 from django.utils.formats import number_format
 from dateutil.relativedelta import relativedelta
@@ -10,6 +12,9 @@ from outflows.models import Outflow
 from dividends.models import Dividend
 from brokers.models import Broker, Currency
 from tickers.models import Ticker
+
+# Cache timeout settings
+CACHE_TTL = getattr(settings, 'CACHE_TTL_MEDIUM', 300)  # 5 minutos por padrao
 
 
 def get_ticker_metrics(ticker, target_date=None):
@@ -57,6 +62,11 @@ def get_total_category_invested(category):
     usando a function get_ticker_metrics() para auxiliar no calculo,
     nos retorna o total investido atualmente.
     """
+    cache_key = f'category_invested_{category}'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     category_obj = Category.objects.get(title=category)
     tickers = Ticker.objects.filter(category=category_obj).only('id', 'name')
 
@@ -65,10 +75,12 @@ def get_total_category_invested(category):
         get_ticker_metrics(ticker)["total_price"] for ticker in tickers
     )
 
-    return dict(
+    result = dict(
         total_invested=number_format(total_invested, decimal_pos=2, force_grouping=True),
         amount_ticker_by_category=amount_ticker_by_category
     )
+    cache.set(cache_key, result, CACHE_TTL)
+    return result
 
 
 def chart_total_category_invested():
@@ -77,6 +89,11 @@ def chart_total_category_invested():
     a categoria do ativos e o total investido.
     Tendo como principal objetivo alimentar graficos chartjs.
     """
+    cache_key = 'chart_category_invested'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     categories = Category.objects.all().only('id', 'title')
     data = {
         category.title: get_total_category_invested(category.title)["total_invested"]
@@ -86,6 +103,7 @@ def chart_total_category_invested():
         key: float(value.replace(".", "").replace(",", "."))
         for key, value in data.items()
     }
+    cache.set(cache_key, json_data, CACHE_TTL)
     return json_data
 
 
@@ -93,17 +111,29 @@ def get_total_invested():
     """
     Nos retorna o total investido.
     """
+    cache_key = 'total_invested'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     total_inflow = Inflow.objects.aggregate(
         total=Sum("total_price")
     )["total"] or 0
 
-    return round(float(total_inflow), 2)
+    result = round(float(total_inflow), 2)
+    cache.set(cache_key, result, CACHE_TTL)
+    return result
 
 
 def get_total_applied_by_currency():
     """
     Retorna o total aplicado em cada moeda. Principal objetivo alimentar o grafico chartjs.
     """
+    cache_key = 'total_applied_by_currency'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     # Single query with annotation instead of N queries
     currency_totals = Inflow.objects.values(
         'ticker__currency__code'
@@ -117,6 +147,7 @@ def get_total_applied_by_currency():
         if item['ticker__currency__code']
     }
 
+    cache.set(cache_key, chart_currency_data, CACHE_TTL)
     return chart_currency_data
 
 
@@ -125,6 +156,11 @@ def get_applied_value(currency_code):
     Nos retona o volume mensal aplicado em cada moeda. Necessitando de um argumento que no caso e o codigo
     da moeda ja cadastrada pelo usuario.
     """
+    cache_key = f'applied_value_{currency_code}'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     months = ["0", "Jan", "Fev", "Mar", "Abr", "Maio",
               "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 
@@ -144,10 +180,12 @@ def get_applied_value(currency_code):
         labels.append(f"{month} {year}")
         values.append(float(item["total_price"] or 0))
 
-    return dict(
+    result = dict(
         labels=labels,
         values=values
     )
+    cache.set(cache_key, result, CACHE_TTL)
+    return result
 
 
 def get_last_six_month():
@@ -164,6 +202,11 @@ def get_total_dividends_category(category):
     """
     Retorna o total de dividendos por categoria nos ultimos 6 meses.
     """
+    cache_key = f'dividends_category_{category}'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     today = timezone.now().date()
     dates = [(today.replace(day=1) - relativedelta(months=i)) for i in range(6, -1, -1)]
     months = {d.strftime("%m-%Y"): 0 for d in dates}
@@ -186,7 +229,9 @@ def get_total_dividends_category(category):
 
     values = [months[d.strftime("%m-%Y")] for d in dates]
 
-    return dict(values=values)
+    result = dict(values=values)
+    cache.set(cache_key, result, CACHE_TTL)
+    return result
 
 
 def get_currency(currency):
@@ -214,6 +259,11 @@ def get_total_applied_by_broker():
     """
     Retorna o total aplicado por corretora.
     """
+    cache_key = 'total_applied_by_broker'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+
     # Single query with annotation instead of N queries
     broker_totals = (
         Inflow.objects
@@ -227,4 +277,31 @@ def get_total_applied_by_broker():
         if item['broker__name']
     }
 
+    cache.set(cache_key, total_in_broker, CACHE_TTL)
     return total_in_broker
+
+
+def invalidate_metrics_cache():
+    """
+    Invalida todos os caches de metricas.
+    Deve ser chamada apos criar/atualizar/deletar Inflows, Outflows ou Dividends.
+    """
+    cache_keys = [
+        'total_invested',
+        'total_applied_by_currency',
+        'total_applied_by_broker',
+        'chart_category_invested',
+    ]
+
+    # Invalida caches baseados em categoria
+    categories = Category.objects.values_list('title', flat=True)
+    for category in categories:
+        cache_keys.append(f'category_invested_{category}')
+        cache_keys.append(f'dividends_category_{category}')
+
+    # Invalida caches baseados em moeda
+    currencies = ['BRL', 'USD', 'EUR']
+    for currency in currencies:
+        cache_keys.append(f'applied_value_{currency}')
+
+    cache.delete_many(cache_keys)
