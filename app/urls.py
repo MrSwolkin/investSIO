@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
@@ -24,3 +25,13 @@ urlpatterns = [
 # Custom error handlers
 handler404 = 'app.views.handler404'
 handler500 = 'app.views.handler500'
+
+# Django Debug Toolbar (development only)
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        pass

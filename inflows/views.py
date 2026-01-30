@@ -10,18 +10,33 @@ class InflowListView(LoginRequiredMixin, ListView):
     model = Inflow
     template_name = "inflow_list.html"
     context_object_name = "inflows"
-    
+    paginate_by = 25
+
     def get_queryset(self):
-        queryset =  super().get_queryset()
+        queryset = super().get_queryset().select_related(
+            'ticker',
+            'ticker__category',
+            'ticker__currency',
+            'broker',
+            'broker__currency'
+        )
         ticker = self.request.GET.get("ticker")
-        #if ticker:
-        #   queryset = queryset.filter(ticker__name__icontains=ticker)
+        if ticker:
+            queryset = queryset.filter(ticker__name__icontains=ticker)
 
         return queryset
+
 
 class InflowDetailsView(LoginRequiredMixin, DetailView):
     model = Inflow
     template_name = "inflow_details.html"
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'ticker',
+            'ticker__category',
+            'broker'
+        )
 
 
 class InflowCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -41,6 +56,9 @@ class InflowUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = forms.InflowForms
     success_message = "Atualização ralizada com sucesso."
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker', 'ticker__category', 'broker')
+
     def get_success_url(self):
         ticker = self.object.ticker
         return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
@@ -50,6 +68,9 @@ class InflowDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Inflow
     template_name = "inflow_delete.html"
     success_message = "Item deletado com sucesso."
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker', 'ticker__category', 'broker')
 
     def get_success_url(self):
         ticker = self.object.ticker

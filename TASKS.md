@@ -151,17 +151,17 @@
 > Como desenvolvedor, quero indices para queries mais rapidas.
 
 **Tarefas:**
-- [ ] **T-007.1:** Adicionar `db_index=True` em `Inflow.ticker`
-- [ ] **T-007.2:** Adicionar `db_index=True` em `Inflow.broker`
-- [ ] **T-007.3:** Adicionar `db_index=True` em `Inflow.date`
-- [ ] **T-007.4:** Adicionar `db_index=True` em `Outflow.ticker`, `broker`, `date`
-- [ ] **T-007.5:** Adicionar `db_index=True` em `Dividend.ticker`, `date`
-- [ ] **T-007.6:** Adicionar `Meta.indexes` compostos
-- [ ] **T-007.7:** Criar e aplicar migrations
+- [X] **T-007.1:** Adicionar `db_index=True` em `Inflow.ticker`
+- [X] **T-007.2:** Adicionar `db_index=True` em `Inflow.broker`
+- [X] **T-007.3:** Adicionar `db_index=True` em `Inflow.date`
+- [X] **T-007.4:** Adicionar `db_index=True` em `Outflow.ticker`, `broker`, `date`
+- [X] **T-007.5:** Adicionar `db_index=True` em `Dividend.ticker`, `date`
+- [X] **T-007.6:** Adicionar `Meta.indexes` compostos
+- [X] **T-007.7:** Criar e aplicar migrations
 
 **Criterios de Aceitacao:**
-- [ ] Migrations criadas sem erro
-- [ ] Indices aplicados no banco
+- [X] Migrations criadas sem erro
+- [X] Indices aplicados no banco
 
 ---
 
@@ -170,16 +170,16 @@
 > Como desenvolvedor, quero eliminar N+1 queries.
 
 **Tarefas:**
-- [ ] **T-008.1:** Adicionar `select_related()` em `InflowListView`
-- [ ] **T-008.2:** Adicionar `select_related()` em `OutflowListView`
-- [ ] **T-008.3:** Adicionar `select_related()` em `DividendListView`
-- [ ] **T-008.4:** Adicionar `select_related()` em `TickerDetailsView`
-- [ ] **T-008.5:** Otimizar `app/metrics.py`
-- [ ] **T-008.6:** Instalar django-debug-toolbar para verificar
+- [X] **T-008.1:** Adicionar `select_related()` em `InflowListView`
+- [X] **T-008.2:** Adicionar `select_related()` em `OutflowListView`
+- [X] **T-008.3:** Adicionar `select_related()` em `DividendListView`
+- [X] **T-008.4:** Adicionar `select_related()` em `TickerDetailsView`
+- [X] **T-008.5:** Otimizar `app/metrics.py`
+- [X] **T-008.6:** Instalar django-debug-toolbar para verificar
 
 **Criterios de Aceitacao:**
-- [ ] ListViews com no maximo 3 queries
-- [ ] Debug toolbar mostrando queries otimizadas
+- [X] ListViews com no maximo 3 queries
+- [X] Debug toolbar mostrando queries otimizadas
 
 ---
 
@@ -188,14 +188,14 @@
 > Como usuario, quero paginacao para carregar dados mais rapido.
 
 **Tarefas:**
-- [ ] **T-009.1:** Adicionar `paginate_by = 25` em todas as ListViews
-- [ ] **T-009.2:** Criar componente `_pagination.html`
-- [ ] **T-009.3:** Adicionar paginacao nos templates de lista
-- [ ] **T-009.4:** Otimizar `negociations()` view
+- [X] **T-009.1:** Adicionar `paginate_by = 25` em todas as ListViews
+- [X] **T-009.2:** Criar componente `_pagination.html`
+- [X] **T-009.3:** Adicionar paginacao nos templates de lista
+- [X] **T-009.4:** Otimizar `negociations()` view
 
 **Criterios de Aceitacao:**
-- [ ] Listas paginadas com 25 itens
-- [ ] Navegacao entre paginas funcional
+- [X] Listas paginadas com 25 itens
+- [X] Navegacao entre paginas funcional
 
 ---
 
@@ -206,15 +206,15 @@
 > Como desenvolvedor, quero cache para reduzir carga no banco.
 
 **Tarefas:**
-- [ ] **T-010.1:** Instalar django-redis e redis
-- [ ] **T-010.2:** Configurar CACHES em settings
-- [ ] **T-010.3:** Adicionar cache em `app/metrics.py`
-- [ ] **T-010.4:** Adicionar `@cache_page` em `home()` view
-- [ ] **T-010.5:** Documentar invalidacao de cache
+- [X] **T-010.1:** Instalar django-redis e redis
+- [X] **T-010.2:** Configurar CACHES em settings
+- [X] **T-010.3:** Adicionar cache em `app/metrics.py`
+- [X] **T-010.4:** Adicionar `@cache_page` em `home()` view
+- [X] **T-010.5:** Documentar invalidacao de cache
 
 **Criterios de Aceitacao:**
-- [ ] Dashboard carrega em < 500ms (cached)
-- [ ] Cache invalida ao criar/atualizar dados
+- [X] Dashboard carrega em < 500ms (cached)
+- [X] Cache invalida ao criar/atualizar dados
 
 ---
 
