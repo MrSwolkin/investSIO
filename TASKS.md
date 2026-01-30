@@ -389,14 +389,14 @@
 > Como desenvolvedor, quero formularios estilizados.
 
 **Tarefas:**
-- [ ] **T-019.1:** Criar `components/forms/_form_field.html`
-- [ ] **T-019.2:** Criar widgets Tailwind em `app/widgets.py`
-- [ ] **T-019.3:** Atualizar forms existentes
+- [X] **T-019.1:** Criar `components/forms/_form_field.html`
+- [X] **T-019.2:** Criar widgets Tailwind em `app/widgets.py`
+- [X] **T-019.3:** Atualizar forms existentes
 
 **Criterios de Aceitacao:**
-- [ ] Inputs estilizados
-- [ ] Validacao visual
-- [ ] Labels e erros exibidos
+- [X] Inputs estilizados
+- [X] Validacao visual
+- [X] Labels e erros exibidos
 
 ---
 
