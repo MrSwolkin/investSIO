@@ -327,16 +327,16 @@
 > Como usuario, quero uma interface moderna e consistente.
 
 **Tarefas:**
-- [ ] **T-016.1:** Remover Bootstrap do `base.html`
-- [ ] **T-016.2:** Adicionar `{% tailwind_css %}`
-- [ ] **T-016.3:** Criar estrutura responsiva
-- [ ] **T-016.4:** Implementar sistema de mensagens moderno
-- [ ] **T-016.5:** Testar em mobile e desktop
+- [X] **T-016.1:** Remover Bootstrap do `base.html`
+- [X] **T-016.2:** Adicionar `{% tailwind_css %}`
+- [X] **T-016.3:** Criar estrutura responsiva
+- [X] **T-016.4:** Implementar sistema de mensagens moderno
+- [X] **T-016.5:** Testar em mobile e desktop
 
 **Criterios de Aceitacao:**
-- [ ] Pagina carrega sem Bootstrap
-- [ ] Layout responsivo
-- [ ] Dark mode aplicado
+- [X] Pagina carrega sem Bootstrap
+- [X] Layout responsivo
+- [X] Dark mode aplicado
 
 ---
 
