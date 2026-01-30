@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -5,7 +6,7 @@ from .models import Inflow
 from . import forms
 
 
-class InflowListView(ListView):
+class InflowListView(LoginRequiredMixin, ListView):
     model = Inflow
     template_name = "inflow_list.html"
     context_object_name = "inflows"
@@ -18,12 +19,12 @@ class InflowListView(ListView):
 
         return queryset
 
-class InflowDetailsView(DetailView):
+class InflowDetailsView(LoginRequiredMixin, DetailView):
     model = Inflow
     template_name = "inflow_details.html"
 
 
-class InflowCreateView(SuccessMessageMixin, CreateView):
+class InflowCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Inflow
     template_name = "inflow_create.html"
     form_class = forms.InflowForms
@@ -34,7 +35,7 @@ class InflowCreateView(SuccessMessageMixin, CreateView):
         return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
 
 
-class InflowUpdateView(SuccessMessageMixin, UpdateView):
+class InflowUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Inflow
     template_name = "inflow_update.html"
     form_class = forms.InflowForms
@@ -45,7 +46,7 @@ class InflowUpdateView(SuccessMessageMixin, UpdateView):
         return reverse_lazy("ticker_details", kwargs={"category": ticker.category.title, "pk": ticker.id})
 
 
-class InflowDeleteView(SuccessMessageMixin, DeleteView):
+class InflowDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Inflow
     template_name = "inflow_delete.html"
     success_message = "Item deletado com sucesso."

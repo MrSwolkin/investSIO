@@ -63,19 +63,19 @@
 > Como usuario, quero que minhas informacoes sejam protegidas por login.
 
 **Tarefas:**
-- [ ] **T-003.1:** Adicionar `LoginRequiredMixin` em `brokers/views.py`
-- [ ] **T-003.2:** Adicionar `LoginRequiredMixin` em `tickers/views.py`
-- [ ] **T-003.3:** Adicionar `LoginRequiredMixin` em `inflows/views.py`
-- [ ] **T-003.4:** Adicionar `LoginRequiredMixin` em `outflows/views.py`
-- [ ] **T-003.5:** Adicionar `LoginRequiredMixin` em `dividends/views.py`
-- [ ] **T-003.6:** Adicionar `@login_required` em `app/views.py` (home, negociations)
-- [ ] **T-003.7:** Configurar `LOGIN_URL` em settings
-- [ ] **T-003.8:** Criar template `registration/login.html`
+- [X] **T-003.1:** Adicionar `LoginRequiredMixin` em `brokers/views.py`
+- [X] **T-003.2:** Adicionar `LoginRequiredMixin` em `tickers/views.py`
+- [X] **T-003.3:** Adicionar `LoginRequiredMixin` em `inflows/views.py`
+- [X] **T-003.4:** Adicionar `LoginRequiredMixin` em `outflows/views.py`
+- [X] **T-003.5:** Adicionar `LoginRequiredMixin` em `dividends/views.py`
+- [X] **T-003.6:** Adicionar `@login_required` em `app/views.py` (home, negociations)
+- [X] **T-003.7:** Configurar `LOGIN_URL` em settings
+- [X] **T-003.8:** Criar template `registration/login.html`
 
 **Criterios de Aceitacao:**
-- [ ] Todas as views requerem login
-- [ ] Usuarios nao autenticados sao redirecionados
-- [ ] Pagina de login funcional
+- [X] Todas as views requerem login
+- [X] Usuarios nao autenticados sao redirecionados
+- [X] Pagina de login funcional
 
 ---
 
@@ -84,16 +84,16 @@
 > Como desenvolvedor, quero validar inputs para prevenir ataques.
 
 **Tarefas:**
-- [ ] **T-004.1:** Validar parametro `ticker` em `dividends/views.py`
-- [ ] **T-004.2:** Validar parametro `name` em `brokers/views.py`
-- [ ] **T-004.3:** Validar parametro `category` em `tickers/views.py`
-- [ ] **T-004.4:** Criar helper `app/utils/validators.py`
-- [ ] **T-004.5:** Adicionar testes de validacao
+- [X] **T-004.1:** Validar parametro `ticker` em `dividends/views.py`
+- [X] **T-004.2:** Validar parametro `name` em `brokers/views.py`
+- [X] **T-004.3:** Validar parametro `category` em `tickers/views.py`
+- [X] **T-004.4:** Criar helper `app/utils/validators.py`
+- [X] **T-004.5:** Adicionar testes de validacao
 
 **Criterios de Aceitacao:**
-- [ ] Parametros invalidos retornam 404
-- [ ] Sem SQL injection possivel
-- [ ] Testes passando
+- [X] Parametros invalidos retornam 404
+- [X] Sem SQL injection possivel
+- [X] Testes passando
 
 ---
 
@@ -104,17 +104,17 @@
 > Como desenvolvedor, quero logs estruturados para debugar problemas.
 
 **Tarefas:**
-- [ ] **T-005.1:** Criar pasta `logs/` na raiz
-- [ ] **T-005.2:** Adicionar `logs/` ao `.gitignore`
-- [ ] **T-005.3:** Configurar LOGGING em `settings/base.py`
-- [ ] **T-005.4:** Adicionar logs em `services/get_ticker_details.py`
-- [ ] **T-005.5:** Adicionar logs em `services/fees_br.py`
-- [ ] **T-005.6:** Adicionar logs em views criticas
+- [X] **T-005.1:** Criar pasta `logs/` na raiz
+- [X] **T-005.2:** Adicionar `logs/` ao `.gitignore`
+- [X] **T-005.3:** Configurar LOGGING em `settings/base.py`
+- [X] **T-005.4:** Adicionar logs em `services/get_ticker_details.py`
+- [X] **T-005.5:** Adicionar logs em `services/fees_br.py`
+- [X] **T-005.6:** Adicionar logs em views criticas
 
 **Criterios de Aceitacao:**
-- [ ] Logs gravados em arquivo
-- [ ] Logs de erro em API externa
-- [ ] Formato consistente
+- [X] Logs gravados em arquivo
+- [X] Logs de erro em API externa
+- [X] Formato consistente
 
 ---
 
@@ -123,16 +123,16 @@
 > Como usuario, quero ver mensagens de erro amigaveis quando algo falha.
 
 **Tarefas:**
-- [ ] **T-006.1:** Adicionar try/catch em `services/get_ticker_details.py`
-- [ ] **T-006.2:** Adicionar try/catch em `services/fees_br.py`
-- [ ] **T-006.3:** Criar template `templates/errors/500.html`
-- [ ] **T-006.4:** Criar template `templates/errors/404.html`
-- [ ] **T-006.5:** Configurar handlers em `urls.py`
+- [X] **T-006.1:** Adicionar try/catch em `services/get_ticker_details.py`
+- [X] **T-006.2:** Adicionar try/catch em `services/fees_br.py`
+- [X] **T-006.3:** Criar template `templates/errors/500.html`
+- [X] **T-006.4:** Criar template `templates/errors/404.html`
+- [X] **T-006.5:** Configurar handlers em `urls.py`
 
 **Criterios de Aceitacao:**
-- [ ] APIs falhando nao quebram a pagina
-- [ ] Mensagens de erro amigaveis
-- [ ] Erros logados
+- [X] APIs falhando nao quebram a pagina
+- [X] Mensagens de erro amigaveis
+- [X] Erros logados
 
 ---
 
