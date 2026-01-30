@@ -20,7 +20,11 @@ class DividendListView(LoginRequiredMixin, ListView):
     context_object_name = "dividends"
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related(
+            'ticker',
+            'ticker__category',
+            'ticker__currency'
+        )
 
         # Validate and sanitize input parameters
         ticker = validate_ticker_name(self.request.GET.get("ticker"))
@@ -73,9 +77,14 @@ class DividendUpdateView(LoginRequiredMixin, UpdateView):
     form_class = forms.DividendForm
     success_url = reverse_lazy("dividend_list")
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker')
+
 
 class DividendDeleteView(LoginRequiredMixin, DeleteView):
     model = models.Dividend
     template_name = "dividend_delete.html"
     success_url = reverse_lazy("dividend_list")
-    
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker')

@@ -6,15 +6,31 @@ from .models import Outflow
 from . import forms
 
 
-class OuflowListView(LoginRequiredMixin, ListView):
+class OutflowListView(LoginRequiredMixin, ListView):
     model = Outflow
     template_name = "outflow_list.html"
     context_object_name = "outflows"
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'ticker',
+            'ticker__category',
+            'ticker__currency',
+            'broker',
+            'broker__currency'
+        )
 
 
 class OutflowDetailsView(LoginRequiredMixin, DetailView):
     model = Outflow
     template_name = "outflow_details.html"
+
+    def get_queryset(self):
+        return super().get_queryset().select_related(
+            'ticker',
+            'ticker__category',
+            'broker'
+        )
 
 
 class OutflowCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -32,9 +48,15 @@ class OutflowUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("outflow_list")
     success_message = "Atualização efetuada com sucesso."
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker', 'broker')
+
 
 class OutflowDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Outflow
     template_name = "outflow_delete.html"
     success_url = reverse_lazy("outflow_list")
     success_message = "Item deletado com sucesso."
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('ticker', 'broker')

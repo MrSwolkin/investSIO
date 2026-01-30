@@ -151,17 +151,17 @@
 > Como desenvolvedor, quero indices para queries mais rapidas.
 
 **Tarefas:**
-- [ ] **T-007.1:** Adicionar `db_index=True` em `Inflow.ticker`
-- [ ] **T-007.2:** Adicionar `db_index=True` em `Inflow.broker`
-- [ ] **T-007.3:** Adicionar `db_index=True` em `Inflow.date`
-- [ ] **T-007.4:** Adicionar `db_index=True` em `Outflow.ticker`, `broker`, `date`
-- [ ] **T-007.5:** Adicionar `db_index=True` em `Dividend.ticker`, `date`
-- [ ] **T-007.6:** Adicionar `Meta.indexes` compostos
-- [ ] **T-007.7:** Criar e aplicar migrations
+- [X] **T-007.1:** Adicionar `db_index=True` em `Inflow.ticker`
+- [X] **T-007.2:** Adicionar `db_index=True` em `Inflow.broker`
+- [X] **T-007.3:** Adicionar `db_index=True` em `Inflow.date`
+- [X] **T-007.4:** Adicionar `db_index=True` em `Outflow.ticker`, `broker`, `date`
+- [X] **T-007.5:** Adicionar `db_index=True` em `Dividend.ticker`, `date`
+- [X] **T-007.6:** Adicionar `Meta.indexes` compostos
+- [X] **T-007.7:** Criar e aplicar migrations
 
 **Criterios de Aceitacao:**
-- [ ] Migrations criadas sem erro
-- [ ] Indices aplicados no banco
+- [X] Migrations criadas sem erro
+- [X] Indices aplicados no banco
 
 ---
 
@@ -170,16 +170,16 @@
 > Como desenvolvedor, quero eliminar N+1 queries.
 
 **Tarefas:**
-- [ ] **T-008.1:** Adicionar `select_related()` em `InflowListView`
-- [ ] **T-008.2:** Adicionar `select_related()` em `OutflowListView`
-- [ ] **T-008.3:** Adicionar `select_related()` em `DividendListView`
-- [ ] **T-008.4:** Adicionar `select_related()` em `TickerDetailsView`
-- [ ] **T-008.5:** Otimizar `app/metrics.py`
-- [ ] **T-008.6:** Instalar django-debug-toolbar para verificar
+- [X] **T-008.1:** Adicionar `select_related()` em `InflowListView`
+- [X] **T-008.2:** Adicionar `select_related()` em `OutflowListView`
+- [X] **T-008.3:** Adicionar `select_related()` em `DividendListView`
+- [X] **T-008.4:** Adicionar `select_related()` em `TickerDetailsView`
+- [X] **T-008.5:** Otimizar `app/metrics.py`
+- [X] **T-008.6:** Instalar django-debug-toolbar para verificar
 
 **Criterios de Aceitacao:**
-- [ ] ListViews com no maximo 3 queries
-- [ ] Debug toolbar mostrando queries otimizadas
+- [X] ListViews com no maximo 3 queries
+- [X] Debug toolbar mostrando queries otimizadas
 
 ---
 

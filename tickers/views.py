@@ -25,7 +25,7 @@ class TickerListView(LoginRequiredMixin, ListView):
         # Validate category parameter and get object or 404
         category_title = validate_category_title(self.kwargs.get("category"))
         category = get_object_or_404(Category, title=category_title)
-        return Ticker.objects.filter(category=category)
+        return Ticker.objects.filter(category=category).select_related('category', 'currency')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,15 +59,19 @@ class TickerDetailsView(LoginRequiredMixin, DetailView):
     model = Ticker
     template_name = "ticker_details.html"
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('category', 'currency')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         # Validate category parameter
         category_title = validate_category_title(self.kwargs.get("category"))
 
-        inflows = Inflow.objects.filter(ticker=self.object)
-        outflows = Outflow.objects.filter(ticker=self.object)
-        ticker_details_api = get_ticker_details.get_ticker(code_ticekr=self.object)
+        # Optimized queries with select_related
+        inflows = Inflow.objects.filter(ticker=self.object).select_related('broker')
+        outflows = Outflow.objects.filter(ticker=self.object).select_related('broker')
+        ticker_details_api = get_ticker_details.get_ticker(code_ticker=self.object)
 
         transactions = sorted(
             chain(inflows, outflows),
@@ -80,9 +84,17 @@ class TickerDetailsView(LoginRequiredMixin, DetailView):
         context["outflows"] = outflows
         context["transactions"] = transactions
         context["ticker_metrics"] = metrics.get_ticker_metrics(self.object)
-        context["ticker_price"] = ticker_details_api["regularMarketPrice"]
-        context["ticker_icon_url"] = ticker_details_api["logourl"]
-        context["ticker_long_name"] = ticker_details_api["longName"]
+
+        # Handle API errors gracefully
+        if ticker_details_api:
+            context["ticker_price"] = ticker_details_api.get("regularMarketPrice")
+            context["ticker_icon_url"] = ticker_details_api.get("logourl")
+            context["ticker_long_name"] = ticker_details_api.get("longName")
+        else:
+            context["ticker_price"] = None
+            context["ticker_icon_url"] = None
+            context["ticker_long_name"] = None
+
         return context
 
 
@@ -90,7 +102,10 @@ class TickerUpdateView(LoginRequiredMixin, UpdateView):
     model = Ticker
     template_name = "ticker_update.html"
     form_class = forms.TickerForms
-    
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('category', 'currency')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = self.object.category.title
@@ -100,10 +115,14 @@ class TickerUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("ticker_details", kwargs={"category": self.object.category.title, "pk": self.object.id})
 
+
 class TickerDeleteView(LoginRequiredMixin, DeleteView):
     model = Ticker
     template_name = "ticker_delete.html"
-    
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('category', 'currency')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = self.object.category.title
