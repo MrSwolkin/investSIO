@@ -93,7 +93,7 @@ Representa um ativo financeiro.
 - `currency` → Currency
 - `inflows` → Inflow (reverse)
 - `outflows` → Outflow (reverse)
-- `dividens` → Dividend (reverse)
+- `dividends` → Dividend (reverse)
 
 **Propriedades:**
 - `total_quantity` → Calcula quantidade atual via metrics

@@ -24,6 +24,18 @@ get_fee = GetFeeBr()
 # @cache_page(CACHE_TTL)
 @login_required
 def home(request):
+    """
+    View do dashboard principal.
+
+    Exibe metricas de investimento, graficos de diversificacao,
+    dividendos por categoria e indicadores economicos (SELIC, CDI, IPCA).
+
+    Args:
+        request: HttpRequest do usuario autenticado
+
+    Returns:
+        HttpResponse com o template home.html renderizado
+    """
     logger.info(f"Usuario {request.user.username} acessando dashboard")
 
     try:
@@ -70,6 +82,18 @@ def home(request):
 
 @login_required
 def negociations(request):
+    """
+    View da lista de negociacoes (compras e vendas).
+
+    Exibe todas as transacoes (inflows e outflows) ordenadas por data,
+    com paginacao de 25 itens por pagina.
+
+    Args:
+        request: HttpRequest do usuario autenticado
+
+    Returns:
+        HttpResponse com o template negociations.html renderizado
+    """
     logger.info(f"Usuario {request.user.username} acessando negociacoes")
 
     try:

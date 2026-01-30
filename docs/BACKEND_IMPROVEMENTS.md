@@ -325,21 +325,18 @@ def calculate_quantity_quote(sender, instance, **kwargs):
 
 ---
 
-### 3.4 Typos em Related Names (ALTO)
+### 3.4 Typos em Related Names (ALTO) - CORRIGIDO
 
 **Arquivo:** `dividends/models.py`
 
-**Problema:** `related_name="dividens"` (falta 'd').
+**Status:** ✅ Corrigido
 
 ```python
-# ATUAL
-ticker = models.ForeignKey(Ticker, related_name="dividens")
-
-# CORRETO
+# CORRIGIDO
 ticker = models.ForeignKey(Ticker, related_name="dividends")
 ```
 
-**Nota:** Requer migration e atualizacao de todas as referencias.
+**Nota:** Migration criada em `dividends/migrations/0009_fix_related_name_typo.py`.
 
 ---
 
@@ -491,11 +488,8 @@ transactions = inflows.union(outflows).order_by('-date')[:50]
 **Arquivo:** `outflows/views.py`
 
 ```python
-# ATUAL
-class OuflowListView(ListView):  # Falta 't'
-
-# CORRETO
-class OutflowListView(ListView):
+# CORRIGIDO
+class OutflowListView(ListView):  # Typo corrigido
 ```
 
 ---
