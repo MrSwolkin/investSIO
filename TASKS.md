@@ -225,16 +225,16 @@
 > Como desenvolvedor, quero validacoes para garantir integridade.
 
 **Tarefas:**
-- [ ] **T-011.1:** Adicionar `MinValueValidator` em `Inflow.quantity`
-- [ ] **T-011.2:** Adicionar `MinValueValidator` em `Inflow.cost_price`
-- [ ] **T-011.3:** Adicionar metodo `clean()` em `Inflow`
-- [ ] **T-011.4:** Repetir para `Outflow` e `Dividend`
-- [ ] **T-011.5:** Criar testes de validacao
+- [X] **T-011.1:** Adicionar `MinValueValidator` em `Inflow.quantity`
+- [X] **T-011.2:** Adicionar `MinValueValidator` em `Inflow.cost_price`
+- [X] **T-011.3:** Adicionar metodo `clean()` em `Inflow`
+- [X] **T-011.4:** Repetir para `Outflow` e `Dividend`
+- [X] **T-011.5:** Criar testes de validacao
 
 **Criterios de Aceitacao:**
-- [ ] Nao permite quantidade <= 0
-- [ ] Nao permite data futura
-- [ ] Testes passando
+- [X] Nao permite quantidade <= 0
+- [X] Nao permite data futura
+- [X] Testes passando
 
 ---
 
@@ -245,14 +245,14 @@
 > Como desenvolvedor, quero infraestrutura de testes.
 
 **Tarefas:**
-- [ ] **T-012.1:** Instalar pytest, pytest-django, pytest-cov
-- [ ] **T-012.2:** Criar `pytest.ini`
-- [ ] **T-012.3:** Criar `conftest.py` com fixtures
-- [ ] **T-012.4:** Criar pasta `tests/` em cada app
+- [X] **T-012.1:** Instalar pytest, pytest-django, pytest-cov
+- [X] **T-012.2:** Criar `pytest.ini`
+- [X] **T-012.3:** Criar `conftest.py` com fixtures
+- [X] **T-012.4:** Criar pasta `tests/` em cada app
 
 **Criterios de Aceitacao:**
-- [ ] `pytest` executa sem erro
-- [ ] Estrutura de testes criada
+- [X] `pytest` executa sem erro
+- [X] Estrutura de testes criada
 
 ---
 
@@ -261,15 +261,15 @@
 > Como desenvolvedor, quero testes unitarios de models.
 
 **Tarefas:**
-- [ ] **T-013.1:** Criar testes para `Broker`
-- [ ] **T-013.2:** Criar testes para `Ticker`
-- [ ] **T-013.3:** Criar testes para `Inflow`
-- [ ] **T-013.4:** Criar testes para `Outflow`
-- [ ] **T-013.5:** Criar testes para `Dividend`
+- [X] **T-013.1:** Criar testes para `Broker`
+- [X] **T-013.2:** Criar testes para `Ticker`
+- [X] **T-013.3:** Criar testes para `Inflow`
+- [X] **T-013.4:** Criar testes para `Outflow`
+- [X] **T-013.5:** Criar testes para `Dividend`
 
 **Criterios de Aceitacao:**
-- [ ] Cobertura de models >= 80%
-- [ ] Testes de validacao incluidos
+- [X] Cobertura de models >= 80%
+- [X] Testes de validacao incluidos
 
 ---
 
@@ -288,17 +288,17 @@
 > Como desenvolvedor, quero TailwindCSS integrado ao Django.
 
 **Tarefas:**
-- [ ] **T-014.1:** Instalar django-tailwind e django-browser-reload
-- [ ] **T-014.2:** Executar `python manage.py tailwind init`
-- [ ] **T-014.3:** Executar `python manage.py tailwind install`
-- [ ] **T-014.4:** Atualizar `INSTALLED_APPS`
-- [ ] **T-014.5:** Atualizar `MIDDLEWARE`
-- [ ] **T-014.6:** Atualizar `urls.py` com browser-reload
-- [ ] **T-014.7:** Testar `python manage.py tailwind start`
+- [X] **T-014.1:** Instalar django-tailwind e django-browser-reload
+- [X] **T-014.2:** Executar `python manage.py tailwind init`
+- [X] **T-014.3:** Executar `python manage.py tailwind install`
+- [X] **T-014.4:** Atualizar `INSTALLED_APPS`
+- [X] **T-014.5:** Atualizar `MIDDLEWARE`
+- [X] **T-014.6:** Atualizar `urls.py` com browser-reload
+- [X] **T-014.7:** Testar `python manage.py tailwind start`
 
 **Criterios de Aceitacao:**
-- [ ] Tailwind compila sem erros
-- [ ] Hot reload funcionando
+- [X] Tailwind compila sem erros
+- [X] Hot reload funcionando
 
 ---
 
@@ -307,16 +307,16 @@
 > Como desenvolvedor, quero um design system consistente.
 
 **Tarefas:**
-- [ ] **T-015.1:** Configurar `tailwind.config.js` com cores customizadas
-- [ ] **T-015.2:** Configurar fontes (Inter, Poppins)
-- [ ] **T-015.3:** Configurar animacoes customizadas
-- [ ] **T-015.4:** Criar `input.css` com componentes base
-- [ ] **T-015.5:** Definir classes utilitarias (.btn, .card, .input, etc)
+- [X] **T-015.1:** Configurar `tailwind.config.js` com cores customizadas
+- [X] **T-015.2:** Configurar fontes (Inter, Poppins)
+- [X] **T-015.3:** Configurar animacoes customizadas
+- [X] **T-015.4:** Criar `input.css` com componentes base
+- [X] **T-015.5:** Definir classes utilitarias (.btn, .card, .input, etc)
 
 **Criterios de Aceitacao:**
-- [ ] Design tokens definidos
-- [ ] Componentes CSS criados
-- [ ] Dark mode habilitado
+- [X] Design tokens definidos
+- [X] Componentes CSS criados
+- [X] Dark mode habilitado
 
 ---
 

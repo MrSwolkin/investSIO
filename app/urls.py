@@ -26,7 +26,7 @@ urlpatterns = [
 handler404 = 'app.views.handler404'
 handler500 = 'app.views.handler500'
 
-# Django Debug Toolbar (development only)
+# Django Debug Toolbar and Browser Reload (development only)
 if settings.DEBUG:
     try:
         import debug_toolbar
@@ -35,3 +35,8 @@ if settings.DEBUG:
         ] + urlpatterns
     except ImportError:
         pass
+
+    # Django Browser Reload for hot reloading
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]

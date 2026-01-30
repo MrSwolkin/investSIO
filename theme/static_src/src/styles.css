@@ -1,0 +1,652 @@
+@import "tailwindcss";
+
+/**
+  * A catch-all path to Django template files, JavaScript, and Python files
+  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
+  *
+  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
+  * the scope of this path.
+  */
+@source "../../../**/*.{html,py,js}";
+
+/* ==========================================================================
+   InvestSIO Design System - Tailwind v4 Configuration
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   T-015.1: Custom Colors (Dark Theme)
+   T-015.2: Custom Fonts (Inter, Poppins)
+   T-015.3: Custom Animations
+   -------------------------------------------------------------------------- */
+
+@theme {
+  /* Background Colors */
+  --color-bg-base: #0f172a;      /* slate-900 - Background principal */
+  --color-bg-surface: #1e293b;   /* slate-800 - Cards, modais */
+  --color-bg-elevated: #334155;  /* slate-700 - Hover states */
+
+  /* Text Colors */
+  --color-text-primary: #f1f5f9;   /* slate-100 - Titulos */
+  --color-text-secondary: #cbd5e1; /* slate-300 - Labels */
+  --color-text-muted: #94a3b8;     /* slate-400 - Placeholders */
+
+  /* Brand Colors */
+  --color-brand-primary: #3b82f6;   /* blue-500 */
+  --color-brand-secondary: #06b6d4; /* cyan-500 */
+  --color-brand-success: #10b981;   /* emerald-500 */
+  --color-brand-danger: #ef4444;    /* red-500 */
+  --color-brand-warning: #f59e0b;   /* amber-500 */
+
+  /* Border Colors */
+  --color-border-default: #334155;  /* slate-700 */
+  --color-border-focus: #3b82f6;    /* blue-500 */
+
+  /* Font Families */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'Consolas', monospace;
+
+  /* Custom Animations */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-fade-out: fade-out 0.3s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+  --animate-slide-down: slide-down 0.3s ease-out;
+  --animate-scale-in: scale-in 0.2s ease-out;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.5s infinite;
+
+  /* Animation Keyframes */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* ==========================================================================
+   T-015.4 & T-015.5: Base Components and Utility Classes
+   ========================================================================== */
+
+@layer base {
+  /* Dark mode by default */
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg-base text-text-primary font-sans antialiased;
+  }
+
+  /* Headings use display font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold text-text-primary;
+  }
+
+  /* Links */
+  a {
+    @apply text-brand-primary hover:text-brand-secondary transition-colors;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-primary;
+  }
+}
+
+@layer components {
+  /* --------------------------------------------------------------------------
+     Button Components
+     Usage: class="btn btn-primary" or class="btn btn-success btn-lg"
+     -------------------------------------------------------------------------- */
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           font-medium text-sm rounded-lg transition-all duration-200
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           focus-visible:ring-offset-bg-base disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-500 text-white
+           hover:from-blue-600 hover:to-cyan-600
+           focus-visible:ring-blue-500 shadow-lg shadow-blue-500/25;
+  }
+
+  .btn-success {
+    @apply bg-gradient-to-r from-emerald-500 to-teal-500 text-white
+           hover:from-emerald-600 hover:to-teal-600
+           focus-visible:ring-emerald-500 shadow-lg shadow-emerald-500/25;
+  }
+
+  .btn-danger {
+    @apply bg-gradient-to-r from-red-500 to-pink-500 text-white
+           hover:from-red-600 hover:to-pink-600
+           focus-visible:ring-red-500 shadow-lg shadow-red-500/25;
+  }
+
+  .btn-secondary {
+    @apply bg-bg-elevated text-text-primary border border-border-default
+           hover:bg-slate-600 focus-visible:ring-slate-500;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary
+           hover:bg-bg-elevated hover:text-text-primary;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-icon {
+    @apply p-2 aspect-square;
+  }
+
+  /* --------------------------------------------------------------------------
+     Card Components
+     -------------------------------------------------------------------------- */
+
+  .card {
+    @apply bg-bg-surface rounded-xl border border-border-default
+           shadow-lg shadow-black/20;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-border-default;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .card-footer {
+    @apply px-6 py-4 border-t border-border-default;
+  }
+
+  .card-hover {
+    @apply bg-bg-surface rounded-xl border border-border-default
+           shadow-lg shadow-black/20 transition-all duration-200
+           hover:border-brand-primary/50 hover:shadow-xl hover:shadow-brand-primary/10;
+  }
+
+  /* --------------------------------------------------------------------------
+     Metric Card (Dashboard)
+     -------------------------------------------------------------------------- */
+
+  .metric-card {
+    @apply bg-bg-surface rounded-xl border border-border-default
+           shadow-lg shadow-black/20 p-6 relative overflow-hidden;
+  }
+
+  .metric-card-gradient-primary {
+    @apply bg-bg-surface rounded-xl border border-blue-500/20
+           shadow-lg shadow-black/20 p-6 relative overflow-hidden
+           bg-gradient-to-br from-blue-500/10 to-cyan-500/10;
+  }
+
+  .metric-card-gradient-success {
+    @apply bg-bg-surface rounded-xl border border-emerald-500/20
+           shadow-lg shadow-black/20 p-6 relative overflow-hidden
+           bg-gradient-to-br from-emerald-500/10 to-teal-500/10;
+  }
+
+  .metric-card-gradient-danger {
+    @apply bg-bg-surface rounded-xl border border-red-500/20
+           shadow-lg shadow-black/20 p-6 relative overflow-hidden
+           bg-gradient-to-br from-red-500/10 to-pink-500/10;
+  }
+
+  .metric-value {
+    @apply text-3xl font-display font-bold text-text-primary;
+  }
+
+  .metric-label {
+    @apply text-sm text-text-secondary uppercase tracking-wider;
+  }
+
+  /* --------------------------------------------------------------------------
+     Form Inputs
+     -------------------------------------------------------------------------- */
+
+  .input {
+    @apply w-full px-4 py-2.5 bg-bg-base border border-border-default rounded-lg
+           text-text-primary placeholder:text-text-muted
+           focus:outline-none focus:border-border-focus focus:ring-2 focus:ring-brand-primary/20
+           transition-all duration-200;
+  }
+
+  .input-error {
+    @apply w-full px-4 py-2.5 bg-bg-base rounded-lg text-text-primary
+           placeholder:text-text-muted transition-all duration-200
+           border border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20;
+  }
+
+  .input-success {
+    @apply w-full px-4 py-2.5 bg-bg-base rounded-lg text-text-primary
+           placeholder:text-text-muted transition-all duration-200
+           border border-emerald-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-text-secondary mb-1.5;
+  }
+
+  .select {
+    @apply w-full px-4 py-2.5 bg-bg-base border border-border-default rounded-lg
+           text-text-primary placeholder:text-text-muted
+           focus:outline-none focus:border-border-focus focus:ring-2 focus:ring-brand-primary/20
+           transition-all duration-200 appearance-none cursor-pointer
+           bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%239ca3af%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')]
+           bg-[length:1.25rem_1.25rem] bg-[right_0.5rem_center] bg-no-repeat pr-10;
+  }
+
+  .textarea {
+    @apply w-full px-4 py-2.5 bg-bg-base border border-border-default rounded-lg
+           text-text-primary placeholder:text-text-muted
+           focus:outline-none focus:border-border-focus focus:ring-2 focus:ring-brand-primary/20
+           transition-all duration-200 min-h-[100px] resize-y;
+  }
+
+  .checkbox {
+    @apply h-4 w-4 rounded border-border-default bg-bg-base text-brand-primary
+           focus:ring-2 focus:ring-brand-primary/20 focus:ring-offset-0;
+  }
+
+  /* --------------------------------------------------------------------------
+     Badge Components
+     -------------------------------------------------------------------------- */
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-blue-500/20 text-blue-400;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-emerald-500/20 text-emerald-400;
+  }
+
+  .badge-danger {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-red-500/20 text-red-400;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-amber-500/20 text-amber-400;
+  }
+
+  .badge-neutral {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-slate-500/20 text-slate-400;
+  }
+
+  /* --------------------------------------------------------------------------
+     Table Components
+     -------------------------------------------------------------------------- */
+
+  .table {
+    @apply w-full text-sm text-left;
+  }
+
+  .table thead {
+    @apply text-xs text-text-secondary uppercase bg-bg-elevated;
+  }
+
+  .table th {
+    @apply px-6 py-3 font-medium;
+  }
+
+  .table td {
+    @apply px-6 py-4 border-b border-border-default;
+  }
+
+  .table tbody tr {
+    @apply hover:bg-bg-elevated/50 transition-colors;
+  }
+
+  /* --------------------------------------------------------------------------
+     Alert Components
+     -------------------------------------------------------------------------- */
+
+  .alert {
+    @apply flex items-start gap-3 p-4 rounded-lg border;
+  }
+
+  .alert-info {
+    @apply flex items-start gap-3 p-4 rounded-lg
+           bg-blue-500/10 border border-blue-500/20 text-blue-400;
+  }
+
+  .alert-success {
+    @apply flex items-start gap-3 p-4 rounded-lg
+           bg-emerald-500/10 border border-emerald-500/20 text-emerald-400;
+  }
+
+  .alert-warning {
+    @apply flex items-start gap-3 p-4 rounded-lg
+           bg-amber-500/10 border border-amber-500/20 text-amber-400;
+  }
+
+  .alert-danger {
+    @apply flex items-start gap-3 p-4 rounded-lg
+           bg-red-500/10 border border-red-500/20 text-red-400;
+  }
+
+  /* --------------------------------------------------------------------------
+     Modal Components
+     -------------------------------------------------------------------------- */
+
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-40;
+  }
+
+  .modal {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+  }
+
+  .modal-content {
+    @apply bg-bg-surface rounded-xl border border-border-default
+           shadow-lg shadow-black/20 w-full max-w-lg max-h-[90vh] overflow-auto animate-scale-in;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between px-6 py-4 border-b border-border-default;
+  }
+
+  .modal-body {
+    @apply px-6 py-4;
+  }
+
+  .modal-footer {
+    @apply flex items-center justify-end gap-3 px-6 py-4 border-t border-border-default;
+  }
+
+  /* --------------------------------------------------------------------------
+     Empty State
+     -------------------------------------------------------------------------- */
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-12 text-center;
+  }
+
+  .empty-state-icon {
+    @apply w-16 h-16 text-text-muted mb-4;
+  }
+
+  .empty-state-title {
+    @apply text-lg font-medium text-text-primary mb-2;
+  }
+
+  .empty-state-description {
+    @apply text-sm text-text-secondary max-w-sm;
+  }
+
+  /* --------------------------------------------------------------------------
+     Loading Skeleton
+     -------------------------------------------------------------------------- */
+
+  .skeleton {
+    @apply bg-gradient-to-r from-bg-elevated via-bg-surface to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer rounded;
+  }
+
+  .skeleton-text {
+    @apply bg-gradient-to-r from-bg-elevated via-bg-surface to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer rounded h-4 w-full;
+  }
+
+  .skeleton-title {
+    @apply bg-gradient-to-r from-bg-elevated via-bg-surface to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer rounded h-6 w-3/4;
+  }
+
+  .skeleton-avatar {
+    @apply bg-gradient-to-r from-bg-elevated via-bg-surface to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer h-10 w-10 rounded-full;
+  }
+
+  .skeleton-card {
+    @apply bg-gradient-to-r from-bg-elevated via-bg-surface to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer h-32 w-full rounded-xl;
+  }
+
+  /* --------------------------------------------------------------------------
+     Dropdown Menu
+     -------------------------------------------------------------------------- */
+
+  .dropdown-menu {
+    @apply absolute right-0 mt-2 w-48 bg-bg-surface rounded-lg border border-border-default
+           shadow-xl shadow-black/30 py-1 z-50 animate-slide-down;
+  }
+
+  .dropdown-item {
+    @apply block px-4 py-2 text-sm text-text-secondary
+           hover:bg-bg-elevated hover:text-text-primary transition-colors;
+  }
+
+  .dropdown-divider {
+    @apply my-1 border-t border-border-default;
+  }
+
+  /* --------------------------------------------------------------------------
+     Pagination
+     -------------------------------------------------------------------------- */
+
+  .pagination {
+    @apply flex items-center gap-1;
+  }
+
+  .pagination-item {
+    @apply px-3 py-2 text-sm text-text-secondary rounded-lg
+           hover:bg-bg-elevated hover:text-text-primary transition-colors;
+  }
+
+  .pagination-item-active {
+    @apply px-3 py-2 text-sm rounded-lg transition-colors
+           bg-brand-primary text-white hover:bg-brand-primary hover:text-white;
+  }
+
+  .pagination-item-disabled {
+    @apply px-3 py-2 text-sm text-text-secondary rounded-lg
+           opacity-50 cursor-not-allowed hover:bg-transparent hover:text-text-secondary;
+  }
+
+  /* --------------------------------------------------------------------------
+     Sidebar & Navigation
+     -------------------------------------------------------------------------- */
+
+  .sidebar {
+    @apply fixed left-0 top-0 h-screen w-64 bg-bg-surface border-r border-border-default z-30;
+  }
+
+  .sidebar-nav {
+    @apply flex flex-col gap-1 p-4;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary rounded-lg
+           hover:bg-bg-elevated hover:text-text-primary transition-colors;
+  }
+
+  .sidebar-link-active {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm rounded-lg transition-colors
+           bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20;
+  }
+
+  .sidebar-section-title {
+    @apply px-4 py-2 text-xs font-medium text-text-muted uppercase tracking-wider;
+  }
+
+  /* --------------------------------------------------------------------------
+     Header
+     -------------------------------------------------------------------------- */
+
+  .header {
+    @apply sticky top-0 h-16 bg-bg-surface/80 backdrop-blur-lg border-b border-border-default z-20;
+  }
+
+  .header-content {
+    @apply flex items-center justify-between h-full px-6;
+  }
+
+  /* --------------------------------------------------------------------------
+     Tooltip
+     -------------------------------------------------------------------------- */
+
+  .tooltip {
+    @apply absolute z-50 px-2 py-1 text-xs text-white bg-slate-700 rounded
+           shadow-lg animate-fade-in pointer-events-none;
+  }
+
+  /* --------------------------------------------------------------------------
+     Progress Bar
+     -------------------------------------------------------------------------- */
+
+  .progress {
+    @apply h-2 w-full bg-bg-elevated rounded-full overflow-hidden;
+  }
+
+  .progress-bar {
+    @apply h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full
+           transition-all duration-500;
+  }
+
+  .progress-bar-success {
+    @apply h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full
+           transition-all duration-500;
+  }
+
+  .progress-bar-danger {
+    @apply h-full bg-gradient-to-r from-red-500 to-pink-500 rounded-full
+           transition-all duration-500;
+  }
+}
+
+@layer utilities {
+  /* --------------------------------------------------------------------------
+     Custom Utility Classes
+     -------------------------------------------------------------------------- */
+
+  /* Gradient Text */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-success {
+    @apply bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-danger {
+    @apply bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent;
+  }
+
+  /* Hide scrollbar but allow scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 3px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background-color: #475569;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-bg-surface/80 backdrop-blur-lg;
+  }
+
+  /* Truncate multiple lines */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

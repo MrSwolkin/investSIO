@@ -160,7 +160,7 @@ def validate_month(month):
     Raises:
         Http404: If month is invalid
     """
-    if not month:
+    if month is None or month == "":
         return None
 
     try:

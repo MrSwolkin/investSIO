@@ -34,6 +34,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # Third-party
+    "tailwind",
+    "theme",
+    "django_browser_reload",
+
+    # Local apps
     "categories",
     "brokers",
     "tickers",
@@ -43,6 +49,9 @@ INSTALLED_APPS = [
     "dividends",
 ]
 
+# Tailwind Configuration
+TAILWIND_APP_NAME = 'theme'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -51,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "app.urls"
