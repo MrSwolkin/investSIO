@@ -307,16 +307,16 @@
 > Como desenvolvedor, quero um design system consistente.
 
 **Tarefas:**
-- [ ] **T-015.1:** Configurar `tailwind.config.js` com cores customizadas
-- [ ] **T-015.2:** Configurar fontes (Inter, Poppins)
-- [ ] **T-015.3:** Configurar animacoes customizadas
-- [ ] **T-015.4:** Criar `input.css` com componentes base
-- [ ] **T-015.5:** Definir classes utilitarias (.btn, .card, .input, etc)
+- [X] **T-015.1:** Configurar `tailwind.config.js` com cores customizadas
+- [X] **T-015.2:** Configurar fontes (Inter, Poppins)
+- [X] **T-015.3:** Configurar animacoes customizadas
+- [X] **T-015.4:** Criar `input.css` com componentes base
+- [X] **T-015.5:** Definir classes utilitarias (.btn, .card, .input, etc)
 
 **Criterios de Aceitacao:**
-- [ ] Design tokens definidos
-- [ ] Componentes CSS criados
-- [ ] Dark mode habilitado
+- [X] Design tokens definidos
+- [X] Componentes CSS criados
+- [X] Dark mode habilitado
 
 ---
 
