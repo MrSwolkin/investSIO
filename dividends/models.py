@@ -20,7 +20,7 @@ class Dividend(models.Model):
     ticker = models.ForeignKey(
         Ticker,
         on_delete=models.PROTECT,
-        related_name="dividens",
+        related_name="dividends",
         db_index=True
     )
     value = models.DecimalField(
@@ -70,7 +70,7 @@ class DeclaredDividend(models.Model):
     ticker = models.ForeignKey(
         Ticker,
         on_delete=models.PROTECT,
-        related_name="declared_dividens",
+        related_name="declared_dividends",
         db_index=True
     )
     value_per_share = models.DecimalField(max_digits=10, decimal_places=2)

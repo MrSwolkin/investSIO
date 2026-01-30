@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "tickers",
     "inflows",
     "outflows",
-    "portifolio",
     "dividends",
 ]
 

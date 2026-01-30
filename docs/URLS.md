@@ -66,7 +66,7 @@ Documentacao dos endpoints e views do projeto.
 
 | Metodo | URL | View | Name |
 |--------|-----|------|------|
-| GET | `/outflow/list/` | `OuflowListView` | `outflow_list` |
+| GET | `/outflow/list/` | `OutflowListView` | `outflow_list` |
 | GET/POST | `/outflow/create/` | `OutflowCreateView` | `outflow_create` |
 | GET | `/outflow/<id>/details/` | `OutflowDetailsView` | `outflow_details` |
 | GET/POST | `/outflow/<id>/update/` | `OutflowUpdateView` | `outflow_update` |

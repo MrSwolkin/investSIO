@@ -12,7 +12,6 @@ class DividendForm(forms.ModelForm):
             "ticker": TailwindSelect(),
             "value": TailwindNumberInput(),
             "date": TailwindDateInput(),
-            #"quantity_quote": TailwindNumberInput(attrs={"placeholder": "Cálculo automático"}),
             "income_type": TailwindSelect(),
             "currency": TailwindSelect(),
         }
@@ -22,6 +21,5 @@ class DividendForm(forms.ModelForm):
             "income_type": "Tipo de rendimento",
             "value": "Valor pago por conta",
             "date": "Data de Pagamento",
-            #"quantity_quote": "quantidade de contas"
             "currency": "Moeda",
         }

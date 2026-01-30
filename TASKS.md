@@ -517,16 +517,16 @@
 > Como desenvolvedor, quero codigo limpo e organizado.
 
 **Tarefas:**
-- [ ] **T-025.1:** Corrigir typo `OuflowListView` -> `OutflowListView`
-- [ ] **T-025.2:** Corrigir typo `dividens` -> `dividends`
-- [ ] **T-025.3:** Remover codigo comentado
-- [ ] **T-025.4:** Remover app `portifolio/`
-- [ ] **T-025.5:** Adicionar docstrings em funcoes principais
+- [X] **T-025.1:** Corrigir typo `OuflowListView` -> `OutflowListView`
+- [X] **T-025.2:** Corrigir typo `dividens` -> `dividends`
+- [X] **T-025.3:** Remover codigo comentado
+- [X] **T-025.4:** Remover app `portifolio/`
+- [X] **T-025.5:** Adicionar docstrings em funcoes principais
 
 **Criterios de Aceitacao:**
-- [ ] Zero typos
-- [ ] Codigo comentado removido
-- [ ] Docstrings em funcoes publicas
+- [X] Zero typos
+- [X] Codigo comentado removido
+- [X] Docstrings em funcoes publicas
 
 ---
 
