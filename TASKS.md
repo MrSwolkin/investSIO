@@ -415,17 +415,17 @@
 > Como usuario, quero um dashboard informativo e bonito.
 
 **Tarefas:**
-- [ ] **T-020.1:** Redesenhar `home.html` com grid responsivo
-- [ ] **T-020.2:** Implementar cards de metricas com gradientes
-- [ ] **T-020.3:** Configurar Chart.js para tema escuro
-- [ ] **T-020.4:** Redesenhar graficos de diversificacao
-- [ ] **T-020.5:** Adicionar loading skeletons
-- [ ] **T-020.6:** Otimizar para mobile
+- [X] **T-020.1:** Redesenhar `home.html` com grid responsivo
+- [X] **T-020.2:** Implementar cards de metricas com gradientes
+- [X] **T-020.3:** Configurar Chart.js para tema escuro
+- [X] **T-020.4:** Redesenhar graficos de diversificacao
+- [X] **T-020.5:** Adicionar loading skeletons
+- [X] **T-020.6:** Otimizar para mobile
 
 **Criterios de Aceitacao:**
-- [ ] Metricas exibidas com gradientes
-- [ ] Graficos em tema escuro
-- [ ] Responsivo em todas as telas
+- [X] Metricas exibidas com gradientes
+- [X] Graficos em tema escuro
+- [X] Responsivo em todas as telas
 
 ---
 

@@ -1,261 +1,520 @@
 {% extends "base.html" %}
 
 {% block title %}
-InvestSIO - HOME - Dashboard
+InvestSIO - Dashboard
 {% endblock %}
 
 {% block content %}
-<div>
-    <div class="row col-md-12 mt-4 justify-content-center">
-        <div class="card col-md-3  border border-black shadow-lg bg-body-black rounded">
-            <div class="card-body">
-                <h5 class="card-title">Total investido em BRL</h5>
-                
-                <h3>R$ {{ total_applied.BRL|floatformat:2 }}</h3>
-            </div>
-        </div>
-        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
-            <div class="card-body">
-                <h5 class="card-title">Total investido em USD</h5>
-                
-                <h3>USD {{ total_applied.USD|floatformat:2 }}</h3>
-            </div>
-        </div>
-        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
-            <div class="card-body">
-                <h5 class="card-title">Total Investido em EURO</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                <h3>EUR {{ total_applied.EUR|floatformat:2 }}</h3>
-            </div>
-        </div>
-    </div>
-</div>
-<div>
-    <div class="row col-md-12 mt-4 justify-content-center">
-        <div class="card col-md-3  border border-black shadow-lg bg-body-black rounded">
-            <div class="card-body">
-                <h5 class="card-title">Taxa IPCA</h5>
-                <h3>{{ ipca }}%</h3>
-            </div>
-        </div>
-        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
-            <div class="card-body">
-                <h5 class="card-title">Taxa SELIC</h5>
-                <h3>{{ selic }}%</h3>
-            </div>
-        </div>
-        <div class="card col-md-3 ms-5 border border-black shadow-lg bg-body-tertiary rounded">
-            <div class="card-body">
-                <h5 class="card-title">Taxa CDI</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
-                <h3>{{ cdi }}%</h3>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div class="row mt-5 justify-content-center">
-    <div class="col-md-5">
-        <div class="text-center mb-3">
-            <h3>Valor mensal Investido</h3>
-            <canvas id="myPurchaseChart"></canvas>
-        </div>
-    </div>
-    <div class="col-md-5 ms-5">
-        <div class="text-center">
-            <h3>Dividendos</h3>
-            <canvas id="myDividendsChart"></canvas>
-        </div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var purchaseDates = JSON.parse('{{ inflows_datas|safe }}');
+<!-- Alpine.js data for loading states -->
+<div x-data="{
+  loading: true,
+  chartsLoaded: false
+}"
+x-init="setTimeout(() => { loading = false; }, 500)"
+>
 
-            var lastSixMonths = JSON.parse('{{ last_six_months|safe }}')
-            var dividendsFiis = JSON.parse('{{ total_fiis|safe }}')
-            var dividendsAcoes = JSON.parse('{{ total_acoes|safe }}')
-            var dividendsStocks = JSON.parse('{{ total_stocks|safe }}')
-            var dividendsEtfs = JSON.parse('{{ total_etfs|safe }}')
+  <!-- Page Header -->
+  <div class="mb-8 animate-slide-down">
+    <h1 class="text-3xl md:text-4xl font-display font-bold text-text-primary mb-2">
+      Dashboard
+    </h1>
+    <p class="text-text-secondary">
+      Visão geral dos seus investimentos e indicadores econômicos
+    </p>
+  </div>
 
-            var ctxpurchaseDates = document.getElementById('myPurchaseChart');
-            var myPurchaseChart = new Chart(ctxpurchaseDates, {
-                type: 'bar',
-                data: {
-                    labels: purchaseDates.labels,
-                    datasets: [{
-                        label: 'Valor investido em Reais',
-                        data: purchaseDates.values,
-                        borderWidth: 2,
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+  <!-- T-020.2: Metric Cards - Investment Totals (3 columns on desktop, 2 on tablet, 1 on mobile) -->
+  <section class="mb-8" aria-label="Total investido por moeda">
+    <h2 class="text-xl font-display font-semibold text-text-primary mb-4">
+      Total Investido
+    </h2>
 
-            var ctxDividends = document.getElementById('myDividendsChart');
-            var myDividendsChart = new Chart(ctxDividends, {
-                type: 'bar',
-                data: {
-                    labels: lastSixMonths.labels,
-                    datasets: [
-                        {
-                            label: 'Fiis',
-                            data: dividendsFiis.values,
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Ações',
-                            data: dividendsAcoes.values,
-                            backgroundColor: 'rgba(41, 82, 246, 0.5)',
-                            borderColor: 'rgba(41, 82, 246, 0.5)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Stocks',
-                            data: dividendsStocks.values,
-                            backgroundColor: 'rgba(48, 119, 17, 0.5)',
-                            borderColor: 'rgba(48, 119, 17, 0.5)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'ETFs',
-                            data: dividendsEtfs.values,
-                            backgroundColor: 'rgba(20, 63, 105, 0.5)',
-                            borderColor: 'rgba(48, 119, 17, 0.5)',
-                            borderWidth: 1
-                        },
-                    ]
-                },
-                options: {
-                    indexAxis: 'y',
-                    elements: {
-                        bar: {
-                            borderWidth: 3,
-                        }
-                    },
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Dividendos mensais'
-                        }
-                    }
-                },
-            });
-        });
-    </script>
-</div>
-<div class="row mt-5">
-    <h3 class="text-center mb-4">Diversificação dos investimentos</h3>
-    <div class="col-md-4">
-        <div class="text-center p-4 mb-3">
-            <h5>Diversificação em ativos</h5>
-            <canvas id="myDiversificationByCategory"></canvas>
-        </div>
+    <!-- Loading Skeletons -->
+    <div x-show="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
-    <div class="col-md-4">
-        <div class="text-center p-4 mb-3">
-            <h5>Diversificação em moedas</h5>
-            <canvas id="myDiversificationByCurrency"></canvas>
-        </div>
+
+    <!-- Actual Cards -->
+    <div x-show="!loading"
+         x-transition:enter="animate-fade-in"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+
+      <!-- BRL Card -->
+      {% include "components/ui/_metric_card.html" with
+        value="R$ "|add:total_applied.BRL|floatformat:2
+        label="Real Brasileiro (BRL)"
+        icon="bi-currency-dollar"
+        variant="primary"
+      %}
+
+      <!-- USD Card -->
+      {% include "components/ui/_metric_card.html" with
+        value="USD "|add:total_applied.USD|floatformat:2
+        label="Dólar Americano (USD)"
+        icon="bi-cash-coin"
+        variant="success"
+      %}
+
+      <!-- EUR Card -->
+      {% include "components/ui/_metric_card.html" with
+        value="EUR "|add:total_applied.EUR|floatformat:2
+        label="Euro (EUR)"
+        icon="bi-currency-exchange"
+        variant="primary"
+      %}
     </div>
-    <div class="col-md-4">
-        <div class="text-center p-4 mb-3">
-            <h5>Diversificação em Corretoras</h5>
-            <canvas id="myDiversificationByBroker"></canvas>
-        </div>
+  </section>
+
+  <!-- T-020.2: Metric Cards - Economic Indicators (3 columns) -->
+  <section class="mb-8" aria-label="Indicadores econômicos">
+    <h2 class="text-xl font-display font-semibold text-text-primary mb-4">
+      Indicadores Econômicos
+    </h2>
+
+    <!-- Loading Skeletons -->
+    <div x-show="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var totalDiversity = JSON.parse('{{ chart_diversity|safe }}')
-            var totalCurrency = JSON.parse('{{ chart_total_applied|safe }}')
-            var totalBroker = JSON.parse('{{ chart_broker|safe }}')
 
-            var ctxDiversification = document.getElementById('myDiversificationByCategory');
-            var myDiversificationByCategory = new Chart(ctxDiversification, {
-                type: "doughnut",
-                data: {
-                    labels: Object.keys(totalDiversity),
-                    datasets: [{
-                        data: Object.values(totalDiversity),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Total investido em cada tipo de ativos'
-                        }
-                    }
-                },
-            });
+    <!-- Actual Cards -->
+    <div x-show="!loading"
+         x-transition:enter="animate-fade-in"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 
-            var ctxDiversificationCurrency = document.getElementById('myDiversificationByCurrency');
-            var myDiversificationByCurrency = new Chart(ctxDiversificationCurrency, {
-                type: "doughnut",
-                data: {
-                    labels: Object.keys(totalCurrency),
-                    datasets: [{
-                        data: Object.values(totalCurrency),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Total investido em tipos de moeda'
-                        }
-                    }
-                },
-            });
-            var ctxDiversificationbroker = document.getElementById('myDiversificationByBroker');
-            var myDiversificationBybroker = new Chart(ctxDiversificationbroker, {
-                type: "doughnut",
-                data: {
-                    labels: Object.keys(totalBroker),
-                    datasets: [{
-                        data: Object.values(totalBroker),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Total investido em cada corretora'
-                        }
-                    }
-                },
-            });
-        });
+      <!-- IPCA Card -->
+      {% include "components/ui/_metric_card.html" with
+        value=ipca|add:"%"
+        label="Taxa IPCA"
+        icon="bi-graph-up"
+        variant="success"
+      %}
 
-    </script>
+      <!-- SELIC Card -->
+      {% include "components/ui/_metric_card.html" with
+        value=selic|add:"%"
+        label="Taxa SELIC"
+        icon="bi-bar-chart-line"
+        variant="primary"
+      %}
+
+      <!-- CDI Card -->
+      {% include "components/ui/_metric_card.html" with
+        value=cdi|add:"%"
+        label="Taxa CDI"
+        icon="bi-graph-up-arrow"
+        variant="success"
+      %}
+    </div>
+  </section>
+
+  <!-- T-020.3 & T-020.6: Charts Section (2 columns on desktop, 1 on mobile) -->
+  <section class="mb-8" aria-label="Gráficos de investimento e dividendos">
+    <h2 class="text-xl font-display font-semibold text-text-primary mb-4">
+      Análise Temporal
+    </h2>
+
+    <!-- Loading Skeletons -->
+    <div x-show="loading" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <!-- Actual Charts -->
+    <div x-show="!loading"
+         x-transition:enter="animate-fade-in"
+         class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Monthly Investments Chart -->
+      <div class="card p-6">
+        <h3 class="text-lg font-display font-semibold text-text-primary mb-4">
+          <i class="bi bi-bar-chart-fill text-blue-400 mr-2"></i>
+          Valor Mensal Investido
+        </h3>
+        <div class="relative h-64 md:h-80">
+          <canvas id="myPurchaseChart" aria-label="Gráfico de investimentos mensais"></canvas>
+        </div>
+      </div>
+
+      <!-- Dividends Chart -->
+      <div class="card p-6">
+        <h3 class="text-lg font-display font-semibold text-text-primary mb-4">
+          <i class="bi bi-graph-up text-emerald-400 mr-2"></i>
+          Dividendos Recebidos
+        </h3>
+        <div class="relative h-64 md:h-80">
+          <canvas id="myDividendsChart" aria-label="Gráfico de dividendos por categoria"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- T-020.4: Diversification Charts (3 doughnut charts) -->
+  <section class="mb-8" aria-label="Diversificação dos investimentos">
+    <h2 class="text-xl font-display font-semibold text-text-primary mb-4">
+      Diversificação dos Investimentos
+    </h2>
+
+    <!-- Loading Skeletons -->
+    <div x-show="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <!-- Actual Charts -->
+    <div x-show="!loading"
+         x-transition:enter="animate-fade-in"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Diversification by Category -->
+      <div class="card p-6">
+        <h3 class="text-base font-display font-semibold text-text-primary mb-4 text-center">
+          <i class="bi bi-pie-chart-fill text-cyan-400 mr-2"></i>
+          Por Tipo de Ativo
+        </h3>
+        <div class="relative h-64">
+          <canvas id="myDiversificationByCategory" aria-label="Diversificação por categoria de ativo"></canvas>
+        </div>
+      </div>
+
+      <!-- Diversification by Currency -->
+      <div class="card p-6">
+        <h3 class="text-base font-display font-semibold text-text-primary mb-4 text-center">
+          <i class="bi bi-currency-exchange text-blue-400 mr-2"></i>
+          Por Moeda
+        </h3>
+        <div class="relative h-64">
+          <canvas id="myDiversificationByCurrency" aria-label="Diversificação por moeda"></canvas>
+        </div>
+      </div>
+
+      <!-- Diversification by Broker -->
+      <div class="card p-6">
+        <h3 class="text-base font-display font-semibold text-text-primary mb-4 text-center">
+          <i class="bi bi-building text-emerald-400 mr-2"></i>
+          Por Corretora
+        </h3>
+        <div class="relative h-64">
+          <canvas id="myDiversificationByBroker" aria-label="Diversificação por corretora"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
+<!-- T-020.3: Chart.js Configuration with Dark Theme -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Parse Django context variables
+  const purchaseDates = JSON.parse('{{ inflows_datas|safe }}');
+  const lastSixMonths = JSON.parse('{{ last_six_months|safe }}');
+  const dividendsFiis = JSON.parse('{{ total_fiis|safe }}');
+  const dividendsAcoes = JSON.parse('{{ total_acoes|safe }}');
+  const dividendsStocks = JSON.parse('{{ total_stocks|safe }}');
+  const dividendsEtfs = JSON.parse('{{ total_etfs|safe }}');
+  const totalDiversity = JSON.parse('{{ chart_diversity|safe }}');
+  const totalCurrency = JSON.parse('{{ chart_total_applied|safe }}');
+  const totalBroker = JSON.parse('{{ chart_broker|safe }}');
 
+  // Dark theme color palette
+  const chartColors = {
+    primary: '#3b82f6',
+    cyan: '#06b6d4',
+    emerald: '#10b981',
+    teal: '#14b8a6',
+    pink: '#ec4899',
+    amber: '#f59e0b',
+    purple: '#a855f7',
+    red: '#ef4444'
+  };
+
+  // Common dark theme options for all charts
+  const darkThemeOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#cbd5e1', // text-secondary
+          font: {
+            family: 'Inter, sans-serif',
+            size: 12
+          },
+          padding: 12,
+          usePointStyle: true
+        }
+      },
+      tooltip: {
+        backgroundColor: '#1e293b', // bg-surface
+        titleColor: '#f1f5f9', // text-primary
+        bodyColor: '#cbd5e1', // text-secondary
+        borderColor: '#334155', // border-default
+        borderWidth: 1,
+        padding: 12,
+        displayColors: true,
+        callbacks: {
+          label: function(context) {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.y !== null) {
+              label += new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(context.parsed.y);
+            } else if (context.parsed !== null) {
+              label += new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(context.parsed);
+            }
+            return label;
+          }
+        }
+      }
+    }
+  };
+
+  // 1. Monthly Investments Chart (Bar Chart)
+  const ctxPurchaseDates = document.getElementById('myPurchaseChart');
+  const myPurchaseChart = new Chart(ctxPurchaseDates, {
+    type: 'bar',
+    data: {
+      labels: purchaseDates.labels,
+      datasets: [{
+        label: 'Valor Investido (R$)',
+        data: purchaseDates.values,
+        backgroundColor: 'rgba(59, 130, 246, 0.7)', // blue-500 with opacity
+        borderColor: chartColors.primary,
+        borderWidth: 2,
+        borderRadius: 6,
+        hoverBackgroundColor: 'rgba(59, 130, 246, 0.9)'
+      }]
+    },
+    options: {
+      ...darkThemeOptions,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)',
+            drawBorder: false
+          },
+          ticks: {
+            color: '#cbd5e1',
+            font: {
+              family: 'Inter, sans-serif',
+              size: 11
+            },
+            callback: function(value) {
+              return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 0
+              }).format(value);
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#cbd5e1',
+            font: {
+              family: 'Inter, sans-serif',
+              size: 11
+            }
+          }
+        }
+      },
+      plugins: {
+        ...darkThemeOptions.plugins,
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+
+  // 2. Dividends Chart (Horizontal Stacked Bar Chart)
+  const ctxDividends = document.getElementById('myDividendsChart');
+  const myDividendsChart = new Chart(ctxDividends, {
+    type: 'bar',
+    data: {
+      labels: lastSixMonths.labels,
+      datasets: [
+        {
+          label: 'FIIs',
+          data: dividendsFiis.values,
+          backgroundColor: 'rgba(16, 185, 129, 0.7)', // emerald-500
+          borderColor: chartColors.emerald,
+          borderWidth: 1
+        },
+        {
+          label: 'Ações',
+          data: dividendsAcoes.values,
+          backgroundColor: 'rgba(59, 130, 246, 0.7)', // blue-500
+          borderColor: chartColors.primary,
+          borderWidth: 1
+        },
+        {
+          label: 'Stocks',
+          data: dividendsStocks.values,
+          backgroundColor: 'rgba(20, 184, 166, 0.7)', // teal-500
+          borderColor: chartColors.teal,
+          borderWidth: 1
+        },
+        {
+          label: 'ETFs',
+          data: dividendsEtfs.values,
+          backgroundColor: 'rgba(168, 85, 247, 0.7)', // purple-500
+          borderColor: chartColors.purple,
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      ...darkThemeOptions,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          stacked: false,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)',
+            drawBorder: false
+          },
+          ticks: {
+            color: '#cbd5e1',
+            font: {
+              family: 'Inter, sans-serif',
+              size: 11
+            }
+          }
+        },
+        y: {
+          stacked: false,
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#cbd5e1',
+            font: {
+              family: 'Inter, sans-serif',
+              size: 11
+            }
+          }
+        }
+      },
+      plugins: {
+        ...darkThemeOptions.plugins,
+        legend: {
+          ...darkThemeOptions.plugins.legend,
+          position: 'bottom'
+        }
+      }
+    }
+  });
+
+  // Doughnut chart color palette
+  const doughnutColors = [
+    'rgba(59, 130, 246, 0.8)',   // blue
+    'rgba(16, 185, 129, 0.8)',   // emerald
+    'rgba(6, 182, 212, 0.8)',    // cyan
+    'rgba(236, 72, 153, 0.8)',   // pink
+    'rgba(168, 85, 247, 0.8)',   // purple
+    'rgba(245, 158, 11, 0.8)',   // amber
+    'rgba(239, 68, 68, 0.8)',    // red
+    'rgba(20, 184, 166, 0.8)'    // teal
+  ];
+
+  const doughnutBorderColors = [
+    chartColors.primary,
+    chartColors.emerald,
+    chartColors.cyan,
+    chartColors.pink,
+    chartColors.purple,
+    chartColors.amber,
+    chartColors.red,
+    chartColors.teal
+  ];
+
+  // Common doughnut options
+  const doughnutOptions = {
+    ...darkThemeOptions,
+    cutout: '65%',
+    plugins: {
+      ...darkThemeOptions.plugins,
+      legend: {
+        ...darkThemeOptions.plugins.legend,
+        position: 'bottom',
+        labels: {
+          ...darkThemeOptions.plugins.legend.labels,
+          padding: 16,
+          boxWidth: 12,
+          boxHeight: 12
+        }
+      }
+    }
+  };
+
+  // 3. Diversification by Category (Doughnut Chart)
+  const ctxDiversification = document.getElementById('myDiversificationByCategory');
+  const myDiversificationByCategory = new Chart(ctxDiversification, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(totalDiversity),
+      datasets: [{
+        data: Object.values(totalDiversity),
+        backgroundColor: doughnutColors,
+        borderColor: doughnutBorderColors,
+        borderWidth: 2,
+        hoverOffset: 8
+      }]
+    },
+    options: doughnutOptions
+  });
+
+  // 4. Diversification by Currency (Doughnut Chart)
+  const ctxDiversificationCurrency = document.getElementById('myDiversificationByCurrency');
+  const myDiversificationByCurrency = new Chart(ctxDiversificationCurrency, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(totalCurrency),
+      datasets: [{
+        data: Object.values(totalCurrency),
+        backgroundColor: doughnutColors,
+        borderColor: doughnutBorderColors,
+        borderWidth: 2,
+        hoverOffset: 8
+      }]
+    },
+    options: doughnutOptions
+  });
+
+  // 5. Diversification by Broker (Doughnut Chart)
+  const ctxDiversificationBroker = document.getElementById('myDiversificationByBroker');
+  const myDiversificationByBroker = new Chart(ctxDiversificationBroker, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(totalBroker),
+      datasets: [{
+        data: Object.values(totalBroker),
+        backgroundColor: doughnutColors,
+        borderColor: doughnutBorderColors,
+        borderWidth: 2,
+        hoverOffset: 8
+      }]
+    },
+    options: doughnutOptions
+  });
+});
+</script>
 
 {% endblock %}
