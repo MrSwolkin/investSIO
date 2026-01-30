@@ -104,17 +104,17 @@
 > Como desenvolvedor, quero logs estruturados para debugar problemas.
 
 **Tarefas:**
-- [ ] **T-005.1:** Criar pasta `logs/` na raiz
-- [ ] **T-005.2:** Adicionar `logs/` ao `.gitignore`
-- [ ] **T-005.3:** Configurar LOGGING em `settings/base.py`
-- [ ] **T-005.4:** Adicionar logs em `services/get_ticker_details.py`
-- [ ] **T-005.5:** Adicionar logs em `services/fees_br.py`
-- [ ] **T-005.6:** Adicionar logs em views criticas
+- [X] **T-005.1:** Criar pasta `logs/` na raiz
+- [X] **T-005.2:** Adicionar `logs/` ao `.gitignore`
+- [X] **T-005.3:** Configurar LOGGING em `settings/base.py`
+- [X] **T-005.4:** Adicionar logs em `services/get_ticker_details.py`
+- [X] **T-005.5:** Adicionar logs em `services/fees_br.py`
+- [X] **T-005.6:** Adicionar logs em views criticas
 
 **Criterios de Aceitacao:**
-- [ ] Logs gravados em arquivo
-- [ ] Logs de erro em API externa
-- [ ] Formato consistente
+- [X] Logs gravados em arquivo
+- [X] Logs de erro em API externa
+- [X] Formato consistente
 
 ---
 
@@ -123,16 +123,16 @@
 > Como usuario, quero ver mensagens de erro amigaveis quando algo falha.
 
 **Tarefas:**
-- [ ] **T-006.1:** Adicionar try/catch em `services/get_ticker_details.py`
-- [ ] **T-006.2:** Adicionar try/catch em `services/fees_br.py`
-- [ ] **T-006.3:** Criar template `templates/errors/500.html`
-- [ ] **T-006.4:** Criar template `templates/errors/404.html`
-- [ ] **T-006.5:** Configurar handlers em `urls.py`
+- [X] **T-006.1:** Adicionar try/catch em `services/get_ticker_details.py`
+- [X] **T-006.2:** Adicionar try/catch em `services/fees_br.py`
+- [X] **T-006.3:** Criar template `templates/errors/500.html`
+- [X] **T-006.4:** Criar template `templates/errors/404.html`
+- [X] **T-006.5:** Configurar handlers em `urls.py`
 
 **Criterios de Aceitacao:**
-- [ ] APIs falhando nao quebram a pagina
-- [ ] Mensagens de erro amigaveis
-- [ ] Erros logados
+- [X] APIs falhando nao quebram a pagina
+- [X] Mensagens de erro amigaveis
+- [X] Erros logados
 
 ---
 

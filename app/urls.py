@@ -20,3 +20,7 @@ urlpatterns = [
     path("", include("outflows.urls")),
     path("", include("dividends.urls")),
 ]
+
+# Custom error handlers
+handler404 = 'app.views.handler404'
+handler500 = 'app.views.handler500'
