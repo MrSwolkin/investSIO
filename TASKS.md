@@ -225,16 +225,16 @@
 > Como desenvolvedor, quero validacoes para garantir integridade.
 
 **Tarefas:**
-- [ ] **T-011.1:** Adicionar `MinValueValidator` em `Inflow.quantity`
-- [ ] **T-011.2:** Adicionar `MinValueValidator` em `Inflow.cost_price`
-- [ ] **T-011.3:** Adicionar metodo `clean()` em `Inflow`
-- [ ] **T-011.4:** Repetir para `Outflow` e `Dividend`
-- [ ] **T-011.5:** Criar testes de validacao
+- [X] **T-011.1:** Adicionar `MinValueValidator` em `Inflow.quantity`
+- [X] **T-011.2:** Adicionar `MinValueValidator` em `Inflow.cost_price`
+- [X] **T-011.3:** Adicionar metodo `clean()` em `Inflow`
+- [X] **T-011.4:** Repetir para `Outflow` e `Dividend`
+- [X] **T-011.5:** Criar testes de validacao
 
 **Criterios de Aceitacao:**
-- [ ] Nao permite quantidade <= 0
-- [ ] Nao permite data futura
-- [ ] Testes passando
+- [X] Nao permite quantidade <= 0
+- [X] Nao permite data futura
+- [X] Testes passando
 
 ---
 
@@ -245,14 +245,14 @@
 > Como desenvolvedor, quero infraestrutura de testes.
 
 **Tarefas:**
-- [ ] **T-012.1:** Instalar pytest, pytest-django, pytest-cov
-- [ ] **T-012.2:** Criar `pytest.ini`
-- [ ] **T-012.3:** Criar `conftest.py` com fixtures
-- [ ] **T-012.4:** Criar pasta `tests/` em cada app
+- [X] **T-012.1:** Instalar pytest, pytest-django, pytest-cov
+- [X] **T-012.2:** Criar `pytest.ini`
+- [X] **T-012.3:** Criar `conftest.py` com fixtures
+- [X] **T-012.4:** Criar pasta `tests/` em cada app
 
 **Criterios de Aceitacao:**
-- [ ] `pytest` executa sem erro
-- [ ] Estrutura de testes criada
+- [X] `pytest` executa sem erro
+- [X] Estrutura de testes criada
 
 ---
 
@@ -261,15 +261,15 @@
 > Como desenvolvedor, quero testes unitarios de models.
 
 **Tarefas:**
-- [ ] **T-013.1:** Criar testes para `Broker`
-- [ ] **T-013.2:** Criar testes para `Ticker`
-- [ ] **T-013.3:** Criar testes para `Inflow`
-- [ ] **T-013.4:** Criar testes para `Outflow`
-- [ ] **T-013.5:** Criar testes para `Dividend`
+- [X] **T-013.1:** Criar testes para `Broker`
+- [X] **T-013.2:** Criar testes para `Ticker`
+- [X] **T-013.3:** Criar testes para `Inflow`
+- [X] **T-013.4:** Criar testes para `Outflow`
+- [X] **T-013.5:** Criar testes para `Dividend`
 
 **Criterios de Aceitacao:**
-- [ ] Cobertura de models >= 80%
-- [ ] Testes de validacao incluidos
+- [X] Cobertura de models >= 80%
+- [X] Testes de validacao incluidos
 
 ---
 

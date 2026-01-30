@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from tickers.models import Ticker
 from inflows.models import Inflow
 
@@ -20,12 +23,27 @@ class Dividend(models.Model):
         related_name="dividens",
         db_index=True
     )
-    value = models.DecimalField(max_digits=12, decimal_places=10)
+    value = models.DecimalField(
+        max_digits=12,
+        decimal_places=10,
+        validators=[MinValueValidator(0, message="O valor nao pode ser negativo.")]
+    )
     date = models.DateField(db_index=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default="BRL")
-    quantity_quote = models.IntegerField(default=0)
+    quantity_quote = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0, message="A quantidade nao pode ser negativa.")]
+    )
     total_value = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     income_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="D")
+
+    def clean(self):
+        """Valida os dados antes de salvar."""
+        super().clean()
+        if self.date and self.date > timezone.now().date():
+            raise ValidationError({
+                'date': 'A data nao pode ser no futuro.'
+            })
 
     def save(self, *args, **kwargs):
         if not self.quantity_quote:
