@@ -288,17 +288,17 @@
 > Como desenvolvedor, quero TailwindCSS integrado ao Django.
 
 **Tarefas:**
-- [ ] **T-014.1:** Instalar django-tailwind e django-browser-reload
-- [ ] **T-014.2:** Executar `python manage.py tailwind init`
-- [ ] **T-014.3:** Executar `python manage.py tailwind install`
-- [ ] **T-014.4:** Atualizar `INSTALLED_APPS`
-- [ ] **T-014.5:** Atualizar `MIDDLEWARE`
-- [ ] **T-014.6:** Atualizar `urls.py` com browser-reload
-- [ ] **T-014.7:** Testar `python manage.py tailwind start`
+- [X] **T-014.1:** Instalar django-tailwind e django-browser-reload
+- [X] **T-014.2:** Executar `python manage.py tailwind init`
+- [X] **T-014.3:** Executar `python manage.py tailwind install`
+- [X] **T-014.4:** Atualizar `INSTALLED_APPS`
+- [X] **T-014.5:** Atualizar `MIDDLEWARE`
+- [X] **T-014.6:** Atualizar `urls.py` com browser-reload
+- [X] **T-014.7:** Testar `python manage.py tailwind start`
 
 **Criterios de Aceitacao:**
-- [ ] Tailwind compila sem erros
-- [ ] Hot reload funcionando
+- [X] Tailwind compila sem erros
+- [X] Hot reload funcionando
 
 ---
 
