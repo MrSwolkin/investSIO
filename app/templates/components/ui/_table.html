@@ -1,0 +1,77 @@
+<!--
+  Table Component - T-018.5
+
+  Responsive table wrapper with consistent styling.
+
+  Parameters:
+    - headers: List of table header labels (optional, can be passed via context or block)
+    - class: Additional CSS classes for table wrapper (optional)
+
+  Blocks:
+    - table_header: Custom header row (use {% block table_header %})
+    - table_body: Table body content with rows (use {% block table_body %})
+
+  Usage Examples:
+
+    Simple table with headers list:
+    {% include "components/ui/_table.html" with headers=headers_list %}
+      {% block table_body %}
+        <tr>
+          <td>Valor 1</td>
+          <td>Valor 2</td>
+        </tr>
+      {% endblock %}
+
+    Table with custom header and body:
+    <div class="overflow-x-auto rounded-xl border border-border-default">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Quantidade</th>
+            <th>Preço</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td>{{ item.ticker }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    Inline usage in template:
+    <div class="overflow-x-auto rounded-xl border border-border-default">
+      <table class="table">
+        {% include "components/ui/_table.html" %}
+      </table>
+    </div>
+-->
+
+<div class="overflow-x-auto rounded-xl border border-border-default {{ class }}">
+  <table class="table">
+    {% comment %} Table Header {% endcomment %}
+    <thead>
+      {% block table_header %}
+        {% if headers %}
+          <tr>
+            {% for header in headers %}
+              <th>{{ header }}</th>
+            {% endfor %}
+          </tr>
+        {% endif %}
+      {% endblock %}
+    </thead>
+
+    {% comment %} Table Body {% endcomment %}
+    <tbody>
+      {% block table_body %}
+        {% comment %} Table rows go here {% endcomment %}
+      {% endblock %}
+    </tbody>
+  </table>
+</div>

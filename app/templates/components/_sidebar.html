@@ -1,123 +1,181 @@
-<div class="row flex-nowrap">
-  <div class="col-auto col-md-0 col-xl-0 px-0  ">
-      <div class="d-flex flex-column align-items-start px-3 pt-2 text-white">
-        <button class="btn btn-dark d-block d-sm-none mb-3" type="button" data-bs-toggle="collapse"
-          data-bs-target="#menuCollapse" aria-expanded="false" aria-controls="menuCollapse">
-          <i class="bi bi-list fs-4"></i>
-        </button>
-
-        <div class="collapse d-sm-block" id="menuCollapse">
-          <ul class="nav flex-column align-items-start" id="menu">
-            <li class="nav-item ms-3">
-              <a href="{% url 'home' %}" class="nav-link px-0 align-middle text-white">
-                <i class="bi bi-bank fs-3 text-dark"></i>
-                <span class="ms-3 text-dark fw-bold">Home</span>
-              </a>
-            </li>
-            <li class="nav-item ms-3">
-              <a href="{% url 'broker_list' %}" class="nav-link px-0 align-middle text-white">
-                <i class="bi bi-safe2 fs-3 text-dark"></i>
-                <span class="ms-3 text-dark fw-bold">Corretoras</span>
-              </a>
-            </li>
-            <li class="nav-item dropdown ">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-currency-exchange fs-3 text-dark"></i>
-                <span class="ms-3 text-dark fw-bold">Ativos</span>
-              </a>
-              <ul class="dropdown-menu border border-black">
-                <li>
-                  <a href="{% url 'ticker_list' category='FII' %}" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-building-up  text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">FIIs</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a href="{% url 'ticker_list' category='Ação' %}" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-cash-coin  text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">Ações BR</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a href="{% url 'ticker_list' category='Stock' %}" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-currency-dollar  text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">Ações USA</span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a href="{% url 'ticker_list' category='ETF' %}" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-graph-up-arrow  text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">ETFs</span>
-                  </a>
-                </li>
-              </ul>
-            </li> 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-arrow-left-right fs-3 text-dark"></i>
-                <span class="ms-3 text-dark fw-bold">Negociações</span>
-              </a>
-              <ul class="dropdown-menu border border-black">
-                <li>
-                  <a class="dropdown-item" href="{% url 'inflow_list' %}">
-                    Compras
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{% url 'outflow_list' %}">
-                    Vendas
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'negociations' %}">Consolidado</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-cash text-dark fs-3"></i>
-                <span class="ms-3 text-dark fw-bold">Dividendos</span>
-              </a>
-              <ul class="dropdown-menu border border-black">
-                <li>
-                  <a href="{% url 'dividend_list' %}" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-cash text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">Lista</span>
-                  </a>
-                </li>
-                  <hr class="dropdown-divider">
-                <li>
-                  <a href="#" class="nav-link px-0 align-middle text-white ms-3">
-                    <i class="bi bi-cash text-dark"></i>
-                    <span class="ms-3 text-dark fw-bold">Alerta</span>
-                  </a>
-                  </a>
-                </li>
-                <li>
-              </ul>
-            </li>
-            <li>
-            <div class="row mt-3">
-              <div class="col-md-0">
-                <p class="text-center text-dark"><strong>Cadastrar</strong></p>
-                <a class="ms-3 btn btn-success border-black" href="{% url 'inflow_create' %}">Compra</a>
-                <a class="ms-3 btn btn-danger border-black" href="{% url 'outflow_create' %}">Venda</a>
-              </div>
-            </div>
-            </li>
-            <li>
-            </li>
-          </ul>
-        </div>
-      </div>
+<!-- Sidebar Component - InvestSIO Design System -->
+<!-- This is the desktop sidebar (hidden on mobile, shown md+) -->
+<nav class="sidebar">
+  <!-- Sidebar Header -->
+  <div class="flex items-center gap-3 px-4 py-6 border-b border-border-default">
+    <i class="bi bi-graph-up-arrow text-2xl text-gradient-primary"></i>
+    <span class="font-display font-bold text-xl text-gradient-primary">InvestSIO</span>
   </div>
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar-nav mt-2">
+    <!-- Dashboard -->
+    <a href="{% url 'home' %}"
+       class="{% if request.resolver_match.url_name == 'home' %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+      <i class="bi bi-house-door"></i>
+      <span>Dashboard</span>
+    </a>
+
+    <!-- Corretoras -->
+    <a href="{% url 'broker_list' %}"
+       class="{% if 'broker' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+      <i class="bi bi-safe2"></i>
+      <span>Corretoras</span>
+    </a>
+
+    <!-- Section Divider: Ativos -->
+    <div class="sidebar-section-title mt-6">Ativos</div>
+
+    <!-- Ativos Dropdown -->
+    <div x-data="{ ativosOpen: {% if 'ticker' in request.path %}true{% else %}false{% endif %} }">
+      <button
+        @click="ativosOpen = !ativosOpen"
+        class="sidebar-link w-full justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <i class="bi bi-currency-exchange"></i>
+          <span>Todos os Ativos</span>
+        </div>
+        <i class="bi bi-chevron-down text-xs transition-transform duration-200"
+           :class="{ 'rotate-180': ativosOpen }"></i>
+      </button>
+
+      <!-- Submenu Items -->
+      <div
+        x-show="ativosOpen"
+        x-collapse
+        class="ml-4 mt-1 space-y-1"
+      >
+        <a href="{% url 'ticker_list' category='FII' %}"
+           class="{% if 'FII' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-building-up"></i>
+          <span>FIIs</span>
+          <span class="ml-auto text-xs text-text-muted">Fundos Imobiliários</span>
+        </a>
+
+        <a href="{% url 'ticker_list' category='Ação' %}"
+           class="{% if 'Ação' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-cash-coin"></i>
+          <span>Ações BR</span>
+          <span class="ml-auto text-xs text-text-muted">Ações Brasileiras</span>
+        </a>
+
+        <a href="{% url 'ticker_list' category='Stock' %}"
+           class="{% if 'Stock' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-currency-dollar"></i>
+          <span>Ações USA</span>
+          <span class="ml-auto text-xs text-text-muted">Stocks</span>
+        </a>
+
+        <a href="{% url 'ticker_list' category='ETF' %}"
+           class="{% if 'ETF' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-graph-up-arrow"></i>
+          <span>ETFs</span>
+          <span class="ml-auto text-xs text-text-muted">Fundos de Índice</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section Divider: Negociações -->
+    <div class="sidebar-section-title mt-6">Negociações</div>
+
+    <!-- Negociações Dropdown -->
+    <div x-data="{ negociacoesOpen: {% if 'inflow' in request.path or 'outflow' in request.path or 'negociations' in request.path %}true{% else %}false{% endif %} }">
+      <button
+        @click="negociacoesOpen = !negociacoesOpen"
+        class="sidebar-link w-full justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <i class="bi bi-arrow-left-right"></i>
+          <span>Transações</span>
+        </div>
+        <i class="bi bi-chevron-down text-xs transition-transform duration-200"
+           :class="{ 'rotate-180': negociacoesOpen }"></i>
+      </button>
+
+      <!-- Submenu Items -->
+      <div
+        x-show="negociacoesOpen"
+        x-collapse
+        class="ml-4 mt-1 space-y-1"
+      >
+        <a href="{% url 'inflow_list' %}"
+           class="{% if 'inflow' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-arrow-down-circle text-emerald-400"></i>
+          <span>Compras</span>
+        </a>
+
+        <a href="{% url 'outflow_list' %}"
+           class="{% if 'outflow' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-arrow-up-circle text-red-400"></i>
+          <span>Vendas</span>
+        </a>
+
+        <a href="{% url 'negociations' %}"
+           class="{% if 'negociations' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-bar-chart"></i>
+          <span>Consolidado</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section Divider: Dividendos -->
+    <div class="sidebar-section-title mt-6">Dividendos</div>
+
+    <!-- Dividendos Dropdown -->
+    <div x-data="{ dividendosOpen: {% if 'dividend' in request.path %}true{% else %}false{% endif %} }">
+      <button
+        @click="dividendosOpen = !dividendosOpen"
+        class="sidebar-link w-full justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <i class="bi bi-cash"></i>
+          <span>Proventos</span>
+        </div>
+        <i class="bi bi-chevron-down text-xs transition-transform duration-200"
+           :class="{ 'rotate-180': dividendosOpen }"></i>
+      </button>
+
+      <!-- Submenu Items -->
+      <div
+        x-show="dividendosOpen"
+        x-collapse
+        class="ml-4 mt-1 space-y-1"
+      >
+        <a href="{% url 'dividend_list' %}"
+           class="{% if 'dividend_list' in request.path %}sidebar-link-active{% else %}sidebar-link{% endif %}">
+          <i class="bi bi-list-ul"></i>
+          <span>Lista</span>
+        </a>
+
+        <a href="#" class="sidebar-link opacity-50 cursor-not-allowed" title="Em breve">
+          <i class="bi bi-bell"></i>
+          <span>Alertas</span>
+          <span class="ml-auto badge badge-warning text-xs">Em breve</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Footer: Quick Actions -->
+  <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-border-default bg-bg-surface">
+    <div class="space-y-2">
+      <a href="{% url 'inflow_create' %}" class="btn btn-success w-full justify-center">
+        <i class="bi bi-plus-circle"></i>
+        <span>Nova Compra</span>
+      </a>
+
+      <a href="{% url 'outflow_create' %}" class="btn btn-danger w-full justify-center">
+        <i class="bi bi-dash-circle"></i>
+        <span>Nova Venda</span>
+      </a>
+    </div>
+
+    <!-- Version Info (optional) -->
+    <div class="mt-4 pt-4 border-t border-border-default">
+      <p class="text-xs text-text-muted text-center">
+        InvestSIO v1.0.0
+      </p>
+    </div>
+  </div>
+</nav>

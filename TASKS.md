@@ -345,19 +345,19 @@
 > Como usuario, quero navegacao intuitiva e moderna.
 
 **Tarefas:**
-- [ ] **T-017.1:** Redesenhar `_header.html`
-- [ ] **T-017.2:** Adicionar logo e branding
-- [ ] **T-017.3:** Adicionar busca global
-- [ ] **T-017.4:** Adicionar menu de usuario
-- [ ] **T-017.5:** Redesenhar `_sidebar.html`
-- [ ] **T-017.6:** Implementar dropdowns com Alpine.js
-- [ ] **T-017.7:** Implementar sidebar colapsavel em mobile
-- [ ] **T-017.8:** Adicionar botoes de acao rapida
+- [X] **T-017.1:** Redesenhar `_header.html`
+- [X] **T-017.2:** Adicionar logo e branding
+- [X] **T-017.3:** Adicionar busca global
+- [X] **T-017.4:** Adicionar menu de usuario
+- [X] **T-017.5:** Redesenhar `_sidebar.html`
+- [X] **T-017.6:** Implementar dropdowns com Alpine.js
+- [X] **T-017.7:** Implementar sidebar colapsavel em mobile
+- [X] **T-017.8:** Adicionar botoes de acao rapida
 
 **Criterios de Aceitacao:**
-- [ ] Header fixo funcional
-- [ ] Sidebar responsiva
-- [ ] Dropdowns animados
+- [X] Header fixo funcional
+- [X] Sidebar responsiva
+- [X] Dropdowns animados
 
 ---
 
@@ -368,19 +368,19 @@
 > Como desenvolvedor, quero componentes reutilizaveis.
 
 **Tarefas:**
-- [ ] **T-018.1:** Criar `components/ui/_button.html`
-- [ ] **T-018.2:** Criar `components/ui/_card.html`
-- [ ] **T-018.3:** Criar `components/ui/_metric_card.html`
-- [ ] **T-018.4:** Criar `components/ui/_badge.html`
-- [ ] **T-018.5:** Criar `components/ui/_table.html`
-- [ ] **T-018.6:** Criar `components/ui/_modal.html`
-- [ ] **T-018.7:** Criar `components/ui/_alert.html`
-- [ ] **T-018.8:** Criar `components/ui/_empty_state.html`
+- [X] **T-018.1:** Criar `components/ui/_button.html`
+- [X] **T-018.2:** Criar `components/ui/_card.html`
+- [X] **T-018.3:** Criar `components/ui/_metric_card.html`
+- [X] **T-018.4:** Criar `components/ui/_badge.html`
+- [X] **T-018.5:** Criar `components/ui/_table.html`
+- [X] **T-018.6:** Criar `components/ui/_modal.html`
+- [X] **T-018.7:** Criar `components/ui/_alert.html`
+- [X] **T-018.8:** Criar `components/ui/_empty_state.html`
 
 **Criterios de Aceitacao:**
-- [ ] Componentes documentados
-- [ ] Variantes implementadas
-- [ ] Usados via `{% include %}`
+- [X] Componentes documentados
+- [X] Variantes implementadas
+- [X] Usados via `{% include %}`
 
 ---
 

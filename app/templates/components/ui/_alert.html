@@ -1,0 +1,89 @@
+<!--
+  Alert Component - T-018.7
+
+  Alert/notification component with auto-dismiss functionality.
+
+  Parameters:
+    - message: Alert message text (required)
+    - variant: info|success|warning|danger (default: info)
+    - dismissible: Boolean to show close button (default: false)
+    - icon: Optional Bootstrap Icon class (auto-selected based on variant if not provided)
+    - auto_dismiss: Boolean to auto-dismiss after 5 seconds (default: false)
+    - class: Additional CSS classes (optional)
+
+  Usage Examples:
+
+    Info alert:
+    {% include "components/ui/_alert.html" with message="Informação importante sobre o sistema." variant="info" %}
+
+    Success alert with dismissible:
+    {% include "components/ui/_alert.html" with message="Operação realizada com sucesso!" variant="success" dismissible=True %}
+
+    Warning alert with custom icon:
+    {% include "components/ui/_alert.html" with message="Atenção: verifique os dados antes de continuar." variant="warning" icon="bi-exclamation-triangle-fill" dismissible=True %}
+
+    Danger alert with auto-dismiss:
+    {% include "components/ui/_alert.html" with message="Erro ao processar a requisição." variant="danger" dismissible=True auto_dismiss=True %}
+
+    Simple info alert without icon:
+    {% include "components/ui/_alert.html" with message="Sistema em manutenção." %}
+-->
+
+{% comment %} Set default values {% endcomment %}
+{% if not variant %}{% with variant="info" %}{% endwith %}{% endif %}
+
+{% comment %} Auto-select icon based on variant if not provided {% endcomment %}
+{% if not icon %}
+  {% if variant == "success" %}
+    {% with icon="bi-check-circle-fill" %}
+  {% elif variant == "warning" %}
+    {% with icon="bi-exclamation-triangle-fill" %}
+  {% elif variant == "danger" %}
+    {% with icon="bi-exclamation-circle-fill" %}
+  {% else %}
+    {% with icon="bi-info-circle-fill" %}
+  {% endif %}
+{% endif %}
+
+{% comment %} Determine alert class based on variant {% endcomment %}
+{% if variant == "success" %}
+  {% with alert_class="alert-success" %}
+{% elif variant == "warning" %}
+  {% with alert_class="alert-warning" %}
+{% elif variant == "danger" %}
+  {% with alert_class="alert-danger" %}
+{% else %}
+  {% with alert_class="alert-info" %}
+{% endif %}
+
+<div class="{{ alert_class }} {{ class }}"
+     x-data="{ show: true }"
+     x-show="show"
+     x-transition:enter="animate-slide-down"
+     x-transition:leave="animate-fade-out"
+     {% if auto_dismiss %}x-init="setTimeout(() => show = false, 5000)"{% endif %}
+     role="alert">
+
+  {% comment %} Icon {% endcomment %}
+  {% if icon %}
+    <div class="flex-shrink-0">
+      <i class="{{ icon }} text-lg"></i>
+    </div>
+  {% endif %}
+
+  {% comment %} Message {% endcomment %}
+  <div class="flex-1">
+    {{ message }}
+  </div>
+
+  {% comment %} Dismiss Button {% endcomment %}
+  {% if dismissible %}
+    <button @click="show = false"
+            class="flex-shrink-0 text-current hover:opacity-70 transition-opacity"
+            aria-label="Fechar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  {% endif %}
+</div>
+
+{% endwith %}

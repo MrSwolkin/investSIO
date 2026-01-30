@@ -1,0 +1,82 @@
+<!--
+  Card Component - T-018.2
+
+  Reusable card component with optional header and footer.
+
+  Parameters:
+    - title: Card header title (optional)
+    - subtitle: Card subtitle in header (optional)
+    - footer: Show footer section (optional boolean)
+    - hover: Add hover effect (optional boolean)
+    - class: Additional CSS classes (optional)
+
+  Blocks:
+    - body: Main card content (use {% block card_body %} in parent template)
+    - footer_content: Footer content (use {% block card_footer %} in parent template)
+
+  Usage Examples:
+
+    Simple card with title and content:
+    {% include "components/ui/_card.html" with title="Resumo do Portfolio" %}
+      <p>Conteúdo do card aqui...</p>
+
+    Card with title and subtitle:
+    {% include "components/ui/_card.html" with title="Ticker PETR4" subtitle="Petrobras PN" %}
+      <p>Informações do ticker...</p>
+
+    Card with hover effect:
+    {% include "components/ui/_card.html" with title="Dashboard" hover=True %}
+      <p>Card com efeito hover...</p>
+
+    Card with footer:
+    <div class="card">
+      <div class="card-header">
+        <h3>Título</h3>
+      </div>
+      <div class="card-body">
+        Conteúdo
+      </div>
+      <div class="card-footer">
+        Rodapé
+      </div>
+    </div>
+-->
+
+{% comment %} Determine card class based on hover parameter {% endcomment %}
+{% if hover %}
+  {% with card_class="card-hover" %}
+{% else %}
+  {% with card_class="card" %}
+{% endif %}
+
+<div class="{{ card_class }} {{ class }}">
+  {% comment %} Header Section {% endcomment %}
+  {% if title or subtitle %}
+    <div class="card-header">
+      {% if title %}
+        <h3 class="text-lg font-semibold text-text-primary">{{ title }}</h3>
+      {% endif %}
+      {% if subtitle %}
+        <p class="text-sm text-text-secondary mt-1">{{ subtitle }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% comment %} Body Section {% endcomment %}
+  <div class="card-body">
+    {% block card_body %}
+      {{ body|default:"" }}
+    {% endblock %}
+  </div>
+
+  {% comment %} Footer Section {% endcomment %}
+  {% if footer %}
+    <div class="card-footer">
+      {% block card_footer %}
+        {{ footer_content|default:"" }}
+      {% endblock %}
+    </div>
+  {% endif %}
+</div>
+
+{% endwith %}

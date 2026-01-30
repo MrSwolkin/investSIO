@@ -1,0 +1,80 @@
+<!--
+  Button Component - T-018.1
+
+  Reusable button component with variants and sizes.
+
+  Parameters:
+    - text: Button text (required)
+    - href: Optional link URL (makes it an <a> tag)
+    - variant: primary|success|danger|secondary|ghost (default: primary)
+    - size: sm|md|lg (default: md)
+    - icon: Optional Bootstrap Icon class (e.g., "bi-plus-circle")
+    - type: Button type for forms (default: button)
+    - disabled: Boolean to disable button
+    - class: Additional CSS classes (optional)
+
+  Usage Examples:
+
+    Primary button:
+    {% include "components/ui/_button.html" with text="Salvar" variant="primary" %}
+
+    Success button with icon:
+    {% include "components/ui/_button.html" with text="Criar Novo" variant="success" icon="bi-plus-circle" %}
+
+    Link button:
+    {% include "components/ui/_button.html" with text="Ver Detalhes" href="/tickers/1/details/" %}
+
+    Small danger button:
+    {% include "components/ui/_button.html" with text="Excluir" variant="danger" size="sm" icon="bi-trash" %}
+
+    Submit button for forms:
+    {% include "components/ui/_button.html" with text="Enviar" variant="primary" type="submit" %}
+
+    Disabled button:
+    {% include "components/ui/_button.html" with text="Indisponível" disabled=True %}
+
+    Ghost button with icon only:
+    {% include "components/ui/_button.html" with icon="bi-pencil" variant="ghost" size="sm" class="btn-icon" %}
+-->
+
+{% comment %} Set default values {% endcomment %}
+{% if not variant %}{% with variant="primary" %}{% endwith %}{% endif %}
+{% if not size %}{% with size="md" %}{% endwith %}{% endif %}
+{% if not type %}{% with type="button" %}{% endwith %}{% endif %}
+
+{% comment %} Build CSS classes {% endcomment %}
+{% with base_class="btn" %}
+{% with variant_class="btn-"|add:variant|default:"btn-primary" %}
+{% with size_class=size|default:"md" %}
+{% with size_modifier="" %}
+
+{% if size == "sm" %}
+  {% with size_modifier="btn-sm" %}
+{% elif size == "lg" %}
+  {% with size_modifier="btn-lg" %}
+{% endif %}
+
+{% with final_class=base_class|add:" "|add:variant_class|add:" "|add:size_modifier|add:" "|add:class|default:"" %}
+
+{% comment %} Render as link or button {% endcomment %}
+{% if href %}
+  <a href="{{ href }}"
+     class="{{ final_class }}"
+     {% if disabled %}aria-disabled="true" style="pointer-events: none; opacity: 0.5;"{% endif %}>
+    {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+    {% if text %}{{ text }}{% endif %}
+  </a>
+{% else %}
+  <button type="{{ type|default:'button' }}"
+          class="{{ final_class }}"
+          {% if disabled %}disabled{% endif %}>
+    {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+    {% if text %}{{ text }}{% endif %}
+  </button>
+{% endif %}
+
+{% endwith %}
+{% endwith %}
+{% endwith %}
+{% endwith %}
+{% endwith %}
