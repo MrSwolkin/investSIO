@@ -47,7 +47,7 @@ class InflowListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Add tickers and brokers for filter dropdowns
-        context['tickers'] = Ticker.objects.all().order_by('symbol')
+        context['tickers'] = Ticker.objects.all().order_by('name')
         context['brokers'] = Broker.objects.all().order_by('name')
         return context
 
