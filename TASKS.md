@@ -535,15 +535,15 @@
 > Como desenvolvedor, quero garantir que tudo funciona.
 
 **Tarefas:**
-- [ ] **T-026.1:** Criar testes de views
-- [ ] **T-026.2:** Testar fluxo de login
-- [ ] **T-026.3:** Testar CRUD de brokers
-- [ ] **T-026.4:** Testar CRUD de inflows
-- [ ] **T-026.5:** Verificar cobertura >= 70%
+- [X] **T-026.1:** Criar testes de views
+- [X] **T-026.2:** Testar fluxo de login
+- [X] **T-026.3:** Testar CRUD de brokers
+- [X] **T-026.4:** Testar CRUD de inflows
+- [X] **T-026.5:** Verificar cobertura >= 70%
 
 **Criterios de Aceitacao:**
-- [ ] Testes passando
-- [ ] Cobertura >= 70%
+- [X] Testes passando
+- [X] Cobertura >= 70%
 
 ---
 
