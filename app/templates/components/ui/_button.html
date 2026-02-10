@@ -9,6 +9,8 @@
     - variant: primary|success|danger|secondary|ghost (default: primary)
     - size: sm|md|lg (default: md)
     - icon: Optional Bootstrap Icon class
+    - icon_only: Boolean to indicate if button has only icon (no text)
+    - aria_label: Accessible label for icon-only buttons (required when icon_only is true)
     - type: Button type for forms (default: button)
     - disabled: Boolean to disable button
     - class: Additional CSS classes (optional)
@@ -22,15 +24,17 @@
 {% if href %}
   <a href="{{ href }}"
      class="btn btn-{{ variant_class }} {% if size_class == 'sm' %}btn-sm{% elif size_class == 'lg' %}btn-lg{% endif %} {{ class }}"
-     {% if disabled %}aria-disabled="true" style="pointer-events: none; opacity: 0.5;"{% endif %}>
-    {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+     {% if disabled %}aria-disabled="true" style="pointer-events: none; opacity: 0.5;"{% endif %}
+     {% if icon_only and aria_label %}aria-label="{{ aria_label }}"{% endif %}>
+    {% if icon %}<i class="{{ icon }}" {% if icon_only or text %}aria-hidden="true"{% endif %}></i>{% endif %}
     {% if text %}{{ text }}{% endif %}
   </a>
 {% else %}
   <button type="{{ type|default:'button' }}"
           class="btn btn-{{ variant_class }} {% if size_class == 'sm' %}btn-sm{% elif size_class == 'lg' %}btn-lg{% endif %} {{ class }}"
-          {% if disabled %}disabled{% endif %}>
-    {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+          {% if disabled %}disabled{% endif %}
+          {% if icon_only and aria_label %}aria-label="{{ aria_label }}"{% endif %}>
+    {% if icon %}<i class="{{ icon }}" {% if icon_only or text %}aria-hidden="true"{% endif %}></i>{% endif %}
     {% if text %}{{ text }}{% endif %}
   </button>
 {% endif %}

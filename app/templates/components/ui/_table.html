@@ -5,6 +5,7 @@
 
   Parameters:
     - headers: List of table header labels (optional)
+    - caption: Table caption for accessibility (optional)
     - class: Additional CSS classes for table wrapper (optional)
 
   Blocks:
@@ -14,13 +15,16 @@
 
 <div class="overflow-x-auto rounded-xl border border-border-default {{ class }}">
   <table class="table">
+    {% if caption %}
+      <caption class="sr-only">{{ caption }}</caption>
+    {% endif %}
     {% comment %} Table Header {% endcomment %}
     <thead>
       {% block table_header %}
         {% if headers %}
           <tr>
             {% for header in headers %}
-              <th>{{ header }}</th>
+              <th scope="col">{{ header }}</th>
             {% endfor %}
           </tr>
         {% endif %}

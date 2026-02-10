@@ -5,6 +5,7 @@ Guia para configurar e rodar o projeto InvestSIO.
 ## Pre-requisitos
 
 - Python 3.13+
+- Node.js 18+ (para TailwindCSS)
 - pip
 - Git
 
@@ -29,13 +30,19 @@ source venv/bin/activate  # Linux/macOS
 .\venv\Scripts\activate   # Windows
 ```
 
-### 3. Instalar dependencias
+### 3. Instalar dependencias Python
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configurar variaveis de ambiente
+### 4. Instalar dependencias Node.js (TailwindCSS)
+
+```bash
+python3 manage.py tailwind install
+```
+
+### 5. Configurar variaveis de ambiente
 
 Copie o arquivo `.env.example` para `.env` e configure as variaveis:
 
@@ -52,20 +59,28 @@ ALLOWED_HOSTS=localhost,127.0.0.1
 BRAPI_TOKEN=seu-token-brapi-aqui
 ```
 
-### 5. Aplicar migracoes
+### 6. Aplicar migracoes
 
 ```bash
 python3 manage.py migrate
 ```
 
-### 6. Criar superusuario (opcional)
+### 7. Criar superusuario (opcional)
 
 ```bash
 python3 manage.py createsuperuser
 ```
 
-### 7. Rodar o servidor
+### 8. Rodar o servidor de desenvolvimento
 
+Em dois terminais separados:
+
+**Terminal 1 - TailwindCSS:**
+```bash
+python3 manage.py tailwind start
+```
+
+**Terminal 2 - Django:**
 ```bash
 python3 manage.py runserver
 ```
@@ -81,7 +96,8 @@ app/settings/
 ├── __init__.py
 ├── base.py      # Configuracoes comuns
 ├── dev.py       # Desenvolvimento (DEBUG=True, SQLite)
-└── prod.py      # Producao (DEBUG=False, PostgreSQL)
+├── prod.py      # Producao (DEBUG=False, PostgreSQL)
+└── test.py      # Testes (banco em memoria)
 ```
 
 ### Desenvolvimento (padrao)
@@ -123,6 +139,9 @@ DB_PASSWORD=senha-segura
 DB_HOST=localhost
 DB_PORT=5432
 
+# Redis (para cache)
+REDIS_URL=redis://localhost:6379/1
+
 # HTTPS
 SECURE_SSL_REDIRECT=True
 ```
@@ -133,6 +152,7 @@ SECURE_SSL_REDIRECT=True
 |-----|-----------|
 | `/` | Dashboard principal |
 | `/admin/` | Admin Django |
+| `/login/` | Pagina de login |
 | `/brokers/list/` | Lista de corretoras |
 | `/tickers/<categoria>/` | Lista de ativos por categoria |
 | `/inflows/list/` | Lista de compras |
@@ -140,16 +160,55 @@ SECURE_SSL_REDIRECT=True
 | `/dividends/list/` | Lista de dividendos |
 | `/negociations/` | Todas as transacoes |
 
-## Dependencias
+## Executar Testes
+
+```bash
+# Rodar todos os testes
+pytest
+
+# Com cobertura de codigo
+pytest --cov=. --cov-report=html
+
+# Arquivo de cobertura gerado em htmlcov/index.html
+```
+
+## Build para Producao
+
+```bash
+# Compilar CSS para producao (minificado)
+python3 manage.py tailwind build
+
+# Coletar arquivos estaticos
+python3 manage.py collectstatic
+```
+
+## Dependencias Principais
 
 ```txt
+# Core
 Django==6.0.1
 requests==2.32.5
 python-dateutil==2.9.0.post0
+
+# Configuracao
 django-environ==0.11.2
+
+# Frontend
+django-tailwind[reload]==4.0.0
+django-browser-reload==1.12.1
+
+# Performance
+django-redis==5.4.0
+redis==5.0.1
+
+# Testes
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-cov==4.1.0
 ```
 
 ## Banco de Dados
 
 - **Desenvolvimento:** SQLite (`db.sqlite3` na raiz)
+- **Testes:** SQLite em memoria (`:memory:`)
 - **Producao:** PostgreSQL (configurar via `.env`)

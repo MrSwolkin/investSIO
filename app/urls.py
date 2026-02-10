@@ -28,13 +28,14 @@ handler500 = 'app.views.handler500'
 
 # Django Debug Toolbar and Browser Reload (development only)
 if settings.DEBUG:
-    try:
-        import debug_toolbar
-        urlpatterns = [
-            path('__debug__/', include(debug_toolbar.urls)),
-        ] + urlpatterns
-    except ImportError:
-        pass
+    # Debug Toolbar - desativado (descomentar para usar)
+    # try:
+    #     import debug_toolbar
+    #     urlpatterns = [
+    #         path('__debug__/', include(debug_toolbar.urls)),
+    #     ] + urlpatterns
+    # except ImportError:
+    #     pass
 
     # Django Browser Reload for hot reloading
     urlpatterns += [
