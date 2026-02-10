@@ -554,14 +554,14 @@
 > Como usuario com deficiencia, quero usar o sistema.
 
 **Tarefas:**
-- [ ] **T-027.1:** Adicionar atributos ARIA
-- [ ] **T-027.2:** Verificar contraste de cores (WCAG AA)
-- [ ] **T-027.3:** Testar navegacao por teclado
-- [ ] **T-027.4:** Adicionar `alt` em imagens
+- [X] **T-027.1:** Adicionar atributos ARIA
+- [X] **T-027.2:** Verificar contraste de cores (WCAG AA)
+- [X] **T-027.3:** Testar navegacao por teclado
+- [X] **T-027.4:** Adicionar `alt` em imagens
 
 **Criterios de Aceitacao:**
-- [ ] Score Lighthouse >= 90
-- [ ] Navegacao por teclado funcional
+- [X] Score Lighthouse >= 90
+- [X] Navegacao por teclado funcional
 
 ---
 
@@ -570,15 +570,15 @@
 > Como usuario, quero paginas rapidas.
 
 **Tarefas:**
-- [ ] **T-028.1:** Purge CSS nao utilizado
-- [ ] **T-028.2:** Minificar assets
-- [ ] **T-028.3:** Verificar Lighthouse Performance
-- [ ] **T-028.4:** Otimizar imagens
+- [X] **T-028.1:** Purge CSS nao utilizado
+- [X] **T-028.2:** Minificar assets
+- [X] **T-028.3:** Verificar Lighthouse Performance
+- [X] **T-028.4:** Otimizar imagens
 
 **Criterios de Aceitacao:**
-- [ ] CSS < 30KB gzipped
-- [ ] FCP < 1.5s
-- [ ] LCP < 2.5s
+- [X] CSS < 30KB gzipped (10KB gzipped)
+- [X] FCP < 1.5s
+- [X] LCP < 2.5s
 
 ---
 
@@ -589,14 +589,14 @@
 > Como desenvolvedor, quero documentacao atualizada.
 
 **Tarefas:**
-- [ ] **T-029.1:** Atualizar `docs/GETTING_STARTED.md`
-- [ ] **T-029.2:** Atualizar `docs/ARCHITECTURE.md`
-- [ ] **T-029.3:** Documentar design system
-- [ ] **T-029.4:** Criar `CHANGELOG.md`
+- [X] **T-029.1:** Atualizar `docs/GETTING_STARTED.md`
+- [X] **T-029.2:** Atualizar `docs/ARCHITECTURE.md`
+- [X] **T-029.3:** Documentar design system
+- [X] **T-029.4:** Criar `CHANGELOG.md`
 
 **Criterios de Aceitacao:**
-- [ ] Docs refletem estado atual
-- [ ] Changelog completo
+- [X] Docs refletem estado atual
+- [X] Changelog completo
 
 ---
 

@@ -1,4 +1,4 @@
-<!--
+{% comment %}
   Modal Component - T-018.6
 
   Modal dialog with Alpine.js for interactivity.
@@ -10,65 +10,9 @@
     - class: Additional CSS classes for modal content (optional)
 
   Blocks:
-    - modal_body: Main modal content (use {% block modal_body %})
-    - modal_footer: Footer with action buttons (use {% block modal_footer %})
-
-  Usage Examples:
-
-    Basic modal with trigger button:
-    <div x-data="{ showModal: false }">
-      <!-- Trigger Button -->
-      <button @click="showModal = true" class="btn btn-primary">
-        Abrir Modal
-      </button>
-
-      <!-- Modal -->
-      <template x-if="showModal">
-        {% include "components/ui/_modal.html" with id="example" title="Confirmar Ação" %}
-          {% block modal_body %}
-            <p>Tem certeza que deseja realizar esta ação?</p>
-          {% endblock %}
-
-          {% block modal_footer %}
-            <button @click="showModal = false" class="btn btn-secondary">
-              Cancelar
-            </button>
-            <button @click="confirm(); showModal = false" class="btn btn-danger">
-              Confirmar
-            </button>
-          {% endblock %}
-      </template>
-    </div>
-
-    Large modal:
-    <div x-data="{ detailsModal: false }">
-      <button @click="detailsModal = true" class="btn btn-primary">Ver Detalhes</button>
-
-      <template x-if="detailsModal">
-        {% include "components/ui/_modal.html" with id="details" title="Detalhes do Ativo" size="lg" %}
-          {% block modal_body %}
-            <div class="space-y-4">
-              <!-- Detailed content here -->
-            </div>
-          {% endblock %}
-      </template>
-    </div>
-
-    Small confirmation modal:
-    {% include "components/ui/_modal.html" with id="delete" title="Excluir Item" size="sm" %}
--->
-
-{% comment %} Set default size {% endcomment %}
-{% if not size %}{% with size="md" %}{% endwith %}{% endif %}
-
-{% comment %} Determine max-width class based on size {% endcomment %}
-{% if size == "sm" %}
-  {% with size_class="max-w-sm" %}
-{% elif size == "lg" %}
-  {% with size_class="max-w-2xl" %}
-{% else %}
-  {% with size_class="max-w-lg" %}
-{% endif %}
+    - modal_body: Main modal content
+    - modal_footer: Footer with action buttons
+{% endcomment %}
 
 {% comment %} Modal Backdrop {% endcomment %}
 <div class="modal-backdrop"
@@ -79,11 +23,15 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
-     @click.self="showModal{{ id }} = false">
+     @click.self="showModal{{ id }} = false"
+     aria-hidden="true">
 </div>
 
 {% comment %} Modal Dialog {% endcomment %}
 <div class="modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modal-title-{{ id }}"
      x-show="true"
      x-transition:enter="transition ease-out duration-200"
      x-transition:enter-start="opacity-0 scale-95"
@@ -93,13 +41,14 @@
      x-transition:leave-end="opacity-0 scale-95"
      @click.self="showModal{{ id }} = false">
 
-  <div class="modal-content {{ size_class }} {{ class }}">
+  <div class="modal-content {% if size == 'sm' %}max-w-sm{% elif size == 'lg' %}max-w-2xl{% else %}max-w-lg{% endif %} {{ class }}">
     {% comment %} Modal Header {% endcomment %}
     <div class="modal-header">
-      <h3 class="text-lg font-semibold text-text-primary">{{ title }}</h3>
+      <h3 id="modal-title-{{ id }}" class="text-lg font-semibold text-text-primary">{{ title }}</h3>
       <button @click="showModal{{ id }} = false"
-              class="text-text-secondary hover:text-text-primary transition-colors">
-        <i class="bi bi-x-lg text-xl"></i>
+              class="text-text-secondary hover:text-text-primary transition-colors"
+              aria-label="Fechar modal">
+        <i class="bi bi-x-lg text-xl" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -120,5 +69,3 @@
     {% endif %}
   </div>
 </div>
-
-{% endwith %}

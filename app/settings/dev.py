@@ -22,14 +22,14 @@ DATABASES = {
 # Email backend for development (prints to console)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Django Debug Toolbar
-INSTALLED_APPS += [
-    'debug_toolbar',
-]
+# Django Debug Toolbar - DESATIVADO (descomentar para usar)
+# INSTALLED_APPS += [
+#     'debug_toolbar',
+# ]
 
-MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-] + MIDDLEWARE
+# MIDDLEWARE = [
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# ] + MIDDLEWARE
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -38,8 +38,14 @@ INTERNAL_IPS = [
 
 # Debug Toolbar settings
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: False,  # Desativado
 }
+
+# CSRF Trusted Origins (necessário para Django 4.0+)
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
 
 # Cache Configuration for development (uses local memory cache as fallback)
 # To use Redis in development, ensure Redis is running and set REDIS_URL in .env

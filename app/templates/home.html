@@ -42,28 +42,13 @@ x-init="setTimeout(() => { loading = false; }, 500)"
          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 
       <!-- BRL Card -->
-      {% include "components/ui/_metric_card.html" with
-        value="R$ "|add:total_applied.BRL|floatformat:2
-        label="Real Brasileiro (BRL)"
-        icon="bi-currency-dollar"
-        variant="primary"
-      %}
+      {% include "components/ui/_metric_card.html" with value=total_applied.BRL|floatformat:2|default:"0,00" prefix="R$ " label="Real Brasileiro (BRL)" icon="bi-currency-dollar" variant="primary" %}
 
       <!-- USD Card -->
-      {% include "components/ui/_metric_card.html" with
-        value="USD "|add:total_applied.USD|floatformat:2
-        label="Dólar Americano (USD)"
-        icon="bi-cash-coin"
-        variant="success"
-      %}
+      {% include "components/ui/_metric_card.html" with value=total_applied.USD|floatformat:2|default:"0,00" prefix="USD " label="Dólar Americano (USD)" icon="bi-cash-coin" variant="success" %}
 
       <!-- EUR Card -->
-      {% include "components/ui/_metric_card.html" with
-        value="EUR "|add:total_applied.EUR|floatformat:2
-        label="Euro (EUR)"
-        icon="bi-currency-exchange"
-        variant="primary"
-      %}
+      {% include "components/ui/_metric_card.html" with value=total_applied.EUR|floatformat:2|default:"0,00" prefix="EUR " label="Euro (EUR)" icon="bi-currency-exchange" variant="primary" %}
     </div>
   </section>
 
@@ -86,28 +71,13 @@ x-init="setTimeout(() => { loading = false; }, 500)"
          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 
       <!-- IPCA Card -->
-      {% include "components/ui/_metric_card.html" with
-        value=ipca|add:"%"
-        label="Taxa IPCA"
-        icon="bi-graph-up"
-        variant="success"
-      %}
+      {% include "components/ui/_metric_card.html" with value=ipca suffix="%" label="Taxa IPCA" icon="bi-graph-up" variant="success" %}
 
       <!-- SELIC Card -->
-      {% include "components/ui/_metric_card.html" with
-        value=selic|add:"%"
-        label="Taxa SELIC"
-        icon="bi-bar-chart-line"
-        variant="primary"
-      %}
+      {% include "components/ui/_metric_card.html" with value=selic suffix="%" label="Taxa SELIC" icon="bi-bar-chart-line" variant="primary" %}
 
       <!-- CDI Card -->
-      {% include "components/ui/_metric_card.html" with
-        value=cdi|add:"%"
-        label="Taxa CDI"
-        icon="bi-graph-up-arrow"
-        variant="success"
-      %}
+      {% include "components/ui/_metric_card.html" with value=cdi suffix="%" label="Taxa CDI" icon="bi-graph-up-arrow" variant="success" %}
     </div>
   </section>
 

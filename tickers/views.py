@@ -51,6 +51,14 @@ class TickerCreateView(LoginRequiredMixin, CreateView):
 
         return context
 
+    def get_initial(self):
+        initial = super().get_initial()
+        # Pre-select category based on URL parameter
+        category_title = validate_category_title(self.kwargs.get("category"))
+        category = get_object_or_404(Category, title=category_title)
+        initial['category'] = category
+        return initial
+
     def get_success_url(self):
         category = validate_category_title(self.kwargs.get("category"))
         return reverse_lazy("ticker_list", kwargs={"category": category})

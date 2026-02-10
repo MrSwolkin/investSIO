@@ -2,7 +2,7 @@
 <header class="header" x-data="{
   mobileMenuOpen: false,
   userMenuOpen: false
-}">
+}" role="banner">
   <div class="header-content">
     <!-- Left Section: Mobile Menu Button + Logo -->
     <div class="flex items-center gap-4">
@@ -10,15 +10,17 @@
       <button
         @click="mobileMenuOpen = !mobileMenuOpen"
         class="md:hidden btn btn-icon btn-ghost"
-        aria-label="Toggle menu"
+        :aria-label="mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'"
+        :aria-expanded="mobileMenuOpen"
+        aria-controls="mobile-sidebar"
       >
-        <i class="bi bi-list text-xl" x-show="!mobileMenuOpen"></i>
-        <i class="bi bi-x-lg text-xl" x-show="mobileMenuOpen"></i>
+        <i class="bi bi-list text-xl" x-show="!mobileMenuOpen" aria-hidden="true"></i>
+        <i class="bi bi-x-lg text-xl" x-show="mobileMenuOpen" aria-hidden="true"></i>
       </button>
 
       <!-- Logo and Brand -->
       <a href="{% url 'home' %}" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-        <i class="bi bi-graph-up-arrow text-2xl text-gradient-primary"></i>
+        <i class="bi bi-graph-up-arrow text-2xl text-gradient-primary" aria-hidden="true"></i>
         <span class="font-display font-bold text-xl text-gradient-primary hidden sm:block">
           InvestSIO
         </span>
@@ -27,12 +29,13 @@
 
     <!-- Center Section: Global Search (hidden on mobile) -->
     <div class="hidden md:flex flex-1 max-w-md mx-6">
-      <div class="relative w-full">
-        <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
+      <div class="relative w-full" role="search">
+        <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" aria-hidden="true"></i>
         <input
           type="search"
           placeholder="Buscar ativos, corretoras..."
           class="input pl-10 pr-4"
+          aria-label="Buscar ativos, corretoras"
         />
       </div>
     </div>
@@ -42,11 +45,11 @@
       <!-- Quick Action Buttons (hidden on mobile) -->
       <div class="hidden lg:flex items-center gap-2">
         <a href="{% url 'inflow_create' %}" class="btn btn-success btn-sm">
-          <i class="bi bi-plus-circle"></i>
+          <i class="bi bi-plus-circle" aria-hidden="true"></i>
           <span>Nova Compra</span>
         </a>
         <a href="{% url 'outflow_create' %}" class="btn btn-danger btn-sm">
-          <i class="bi bi-dash-circle"></i>
+          <i class="bi bi-dash-circle" aria-hidden="true"></i>
           <span>Nova Venda</span>
         </a>
       </div>
@@ -56,11 +59,13 @@
         <button
           @click="userMenuOpen = !userMenuOpen"
           class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-bg-elevated transition-colors"
-          aria-label="User menu"
+          :aria-label="'Menu do usuário' + (userMenuOpen ? ' (aberto)' : '')"
+          :aria-expanded="userMenuOpen"
+          aria-controls="user-dropdown-menu"
         >
           <!-- User Avatar Placeholder -->
           <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
-            <i class="bi bi-person-fill text-white text-sm"></i>
+            <i class="bi bi-person-fill text-white text-sm" aria-hidden="true"></i>
           </div>
 
           <!-- Username (hidden on mobile) -->
@@ -72,15 +77,18 @@
 
           <!-- Dropdown Arrow -->
           <i class="bi bi-chevron-down text-xs text-text-secondary transition-transform"
-             :class="{ 'rotate-180': userMenuOpen }"></i>
+             :class="{ 'rotate-180': userMenuOpen }"
+             aria-hidden="true"></i>
         </button>
 
         <!-- Dropdown Menu -->
         <div
+          id="user-dropdown-menu"
           x-show="userMenuOpen"
           x-transition:enter="animate-slide-down"
           x-transition:leave="animate-fade-out"
           class="dropdown-menu"
+          role="menu"
           style="display: none;"
         >
           {% if user.is_authenticated %}
@@ -91,31 +99,31 @@
             </div>
 
             <!-- Menu Items -->
-            <a href="{% url 'home' %}" class="dropdown-item">
-              <i class="bi bi-house-door mr-2"></i>
+            <a href="{% url 'home' %}" class="dropdown-item" role="menuitem">
+              <i class="bi bi-house-door mr-2" aria-hidden="true"></i>
               Dashboard
             </a>
 
-            <a href="#" class="dropdown-item">
-              <i class="bi bi-person mr-2"></i>
+            <a href="#" class="dropdown-item" role="menuitem">
+              <i class="bi bi-person mr-2" aria-hidden="true"></i>
               Meu Perfil
             </a>
 
-            <a href="#" class="dropdown-item">
-              <i class="bi bi-gear mr-2"></i>
+            <a href="#" class="dropdown-item" role="menuitem">
+              <i class="bi bi-gear mr-2" aria-hidden="true"></i>
               Configurações
             </a>
 
-            <div class="dropdown-divider"></div>
+            <div class="dropdown-divider" role="separator"></div>
 
             <!-- Logout -->
-            <a href="{% url 'logout' %}" class="dropdown-item text-red-400 hover:text-red-300">
-              <i class="bi bi-box-arrow-right mr-2"></i>
+            <a href="{% url 'logout' %}" class="dropdown-item text-red-400 hover:text-red-300" role="menuitem">
+              <i class="bi bi-box-arrow-right mr-2" aria-hidden="true"></i>
               Sair
             </a>
           {% else %}
-            <a href="{% url 'login' %}" class="dropdown-item">
-              <i class="bi bi-box-arrow-in-right mr-2"></i>
+            <a href="{% url 'login' %}" class="dropdown-item" role="menuitem">
+              <i class="bi bi-box-arrow-in-right mr-2" aria-hidden="true"></i>
               Entrar
             </a>
           {% endif %}
@@ -140,6 +148,7 @@
 
   <!-- Mobile Sidebar (slide-in from left) -->
   <div
+    id="mobile-sidebar"
     x-show="mobileMenuOpen"
     x-transition:enter="transition ease-out duration-300 transform"
     x-transition:enter-start="-translate-x-full"
@@ -148,16 +157,18 @@
     x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
     class="fixed left-0 top-0 h-screen w-64 bg-bg-surface border-r border-border-default z-50 md:hidden overflow-y-auto scrollbar-custom"
+    role="navigation"
+    aria-label="Menu mobile"
     style="display: none;"
   >
     <!-- Mobile Sidebar Header -->
     <div class="flex items-center justify-between p-4 border-b border-border-default">
       <div class="flex items-center gap-3">
-        <i class="bi bi-graph-up-arrow text-2xl text-gradient-primary"></i>
+        <i class="bi bi-graph-up-arrow text-2xl text-gradient-primary" aria-hidden="true"></i>
         <span class="font-display font-bold text-xl text-gradient-primary">InvestSIO</span>
       </div>
-      <button @click="mobileMenuOpen = false" class="btn btn-icon btn-ghost">
-        <i class="bi bi-x-lg"></i>
+      <button @click="mobileMenuOpen = false" class="btn btn-icon btn-ghost" aria-label="Fechar menu mobile">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -165,13 +176,13 @@
     <div class="sidebar-nav mt-2">
       <!-- Dashboard -->
       <a href="{% url 'home' %}" class="sidebar-link">
-        <i class="bi bi-house-door"></i>
+        <i class="bi bi-house-door" aria-hidden="true"></i>
         <span>Dashboard</span>
       </a>
 
       <!-- Corretoras -->
       <a href="{% url 'broker_list' %}" class="sidebar-link">
-        <i class="bi bi-safe2"></i>
+        <i class="bi bi-safe2" aria-hidden="true"></i>
         <span>Corretoras</span>
       </a>
 
@@ -180,30 +191,33 @@
         <button
           @click="ativosOpen = !ativosOpen"
           class="sidebar-link w-full justify-between"
+          :aria-expanded="ativosOpen"
+          aria-controls="mobile-ativos-submenu"
         >
           <div class="flex items-center gap-3">
-            <i class="bi bi-currency-exchange"></i>
+            <i class="bi bi-currency-exchange" aria-hidden="true"></i>
             <span>Ativos</span>
           </div>
           <i class="bi bi-chevron-down text-xs transition-transform"
-             :class="{ 'rotate-180': ativosOpen }"></i>
+             :class="{ 'rotate-180': ativosOpen }"
+             aria-hidden="true"></i>
         </button>
 
-        <div x-show="ativosOpen" x-collapse class="ml-4 mt-1 space-y-1">
+        <div id="mobile-ativos-submenu" x-show="ativosOpen" x-collapse class="ml-4 mt-1 space-y-1">
           <a href="{% url 'ticker_list' category='FII' %}" class="sidebar-link">
-            <i class="bi bi-building-up"></i>
+            <i class="bi bi-building-up" aria-hidden="true"></i>
             <span>FIIs</span>
           </a>
           <a href="{% url 'ticker_list' category='Ação' %}" class="sidebar-link">
-            <i class="bi bi-cash-coin"></i>
+            <i class="bi bi-cash-coin" aria-hidden="true"></i>
             <span>Ações BR</span>
           </a>
           <a href="{% url 'ticker_list' category='Stock' %}" class="sidebar-link">
-            <i class="bi bi-currency-dollar"></i>
+            <i class="bi bi-currency-dollar" aria-hidden="true"></i>
             <span>Ações USA</span>
           </a>
           <a href="{% url 'ticker_list' category='ETF' %}" class="sidebar-link">
-            <i class="bi bi-graph-up-arrow"></i>
+            <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
             <span>ETFs</span>
           </a>
         </div>
@@ -214,26 +228,29 @@
         <button
           @click="negociacoesOpen = !negociacoesOpen"
           class="sidebar-link w-full justify-between"
+          :aria-expanded="negociacoesOpen"
+          aria-controls="mobile-negociacoes-submenu"
         >
           <div class="flex items-center gap-3">
-            <i class="bi bi-arrow-left-right"></i>
+            <i class="bi bi-arrow-left-right" aria-hidden="true"></i>
             <span>Negociações</span>
           </div>
           <i class="bi bi-chevron-down text-xs transition-transform"
-             :class="{ 'rotate-180': negociacoesOpen }"></i>
+             :class="{ 'rotate-180': negociacoesOpen }"
+             aria-hidden="true"></i>
         </button>
 
-        <div x-show="negociacoesOpen" x-collapse class="ml-4 mt-1 space-y-1">
+        <div id="mobile-negociacoes-submenu" x-show="negociacoesOpen" x-collapse class="ml-4 mt-1 space-y-1">
           <a href="{% url 'inflow_list' %}" class="sidebar-link">
-            <i class="bi bi-arrow-down-circle"></i>
+            <i class="bi bi-arrow-down-circle" aria-hidden="true"></i>
             <span>Compras</span>
           </a>
           <a href="{% url 'outflow_list' %}" class="sidebar-link">
-            <i class="bi bi-arrow-up-circle"></i>
+            <i class="bi bi-arrow-up-circle" aria-hidden="true"></i>
             <span>Vendas</span>
           </a>
           <a href="{% url 'negociations' %}" class="sidebar-link">
-            <i class="bi bi-bar-chart"></i>
+            <i class="bi bi-bar-chart" aria-hidden="true"></i>
             <span>Consolidado</span>
           </a>
         </div>
@@ -244,22 +261,25 @@
         <button
           @click="dividendosOpen = !dividendosOpen"
           class="sidebar-link w-full justify-between"
+          :aria-expanded="dividendosOpen"
+          aria-controls="mobile-dividendos-submenu"
         >
           <div class="flex items-center gap-3">
-            <i class="bi bi-cash"></i>
+            <i class="bi bi-cash" aria-hidden="true"></i>
             <span>Dividendos</span>
           </div>
           <i class="bi bi-chevron-down text-xs transition-transform"
-             :class="{ 'rotate-180': dividendosOpen }"></i>
+             :class="{ 'rotate-180': dividendosOpen }"
+             aria-hidden="true"></i>
         </button>
 
-        <div x-show="dividendosOpen" x-collapse class="ml-4 mt-1 space-y-1">
+        <div id="mobile-dividendos-submenu" x-show="dividendosOpen" x-collapse class="ml-4 mt-1 space-y-1">
           <a href="{% url 'dividend_list' %}" class="sidebar-link">
-            <i class="bi bi-list-ul"></i>
+            <i class="bi bi-list-ul" aria-hidden="true"></i>
             <span>Lista</span>
           </a>
           <a href="#" class="sidebar-link">
-            <i class="bi bi-bell"></i>
+            <i class="bi bi-bell" aria-hidden="true"></i>
             <span>Alertas</span>
           </a>
         </div>
@@ -270,11 +290,11 @@
     <div class="p-4 border-t border-border-default mt-auto">
       <div class="space-y-2">
         <a href="{% url 'inflow_create' %}" class="btn btn-success w-full">
-          <i class="bi bi-plus-circle"></i>
+          <i class="bi bi-plus-circle" aria-hidden="true"></i>
           <span>Nova Compra</span>
         </a>
         <a href="{% url 'outflow_create' %}" class="btn btn-danger w-full">
-          <i class="bi bi-dash-circle"></i>
+          <i class="bi bi-dash-circle" aria-hidden="true"></i>
           <span>Nova Venda</span>
         </a>
       </div>

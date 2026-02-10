@@ -14,10 +14,10 @@
 {% endcomment %}
 
 {% with btn_variant=action_variant|default:"primary" %}
-<div class="empty-state {{ class }}">
+<div class="empty-state {{ class }}" role="status">
   {% if icon %}
     <div class="empty-state-icon">
-      <i class="{{ icon }} text-6xl"></i>
+      <i class="{{ icon }} text-6xl" aria-hidden="true"></i>
     </div>
   {% endif %}
 

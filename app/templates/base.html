@@ -25,6 +25,11 @@
 </head>
 
 <body class="bg-bg-base text-text-primary min-h-screen flex flex-col">
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-white focus:rounded-lg focus:shadow-lg">
+    Pular para o conteúdo principal
+  </a>
+
   <!-- Header -->
   {% include "components/_header.html" %}
 
@@ -35,11 +40,11 @@
       {% include "components/_sidebar.html" %}
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-4 md:p-6 lg:p-8">
+    <!-- Main Content Area (with left margin to account for fixed sidebar on desktop) -->
+    <main id="main-content" class="flex-1 p-4 md:p-6 lg:p-8 md:ml-64" role="main">
       <!-- Messages/Alerts -->
       {% if messages %}
-        <div class="mb-6 space-y-3" x-data="{ messages: [] }" x-init="messages = {{ messages|length }}">
+        <div class="mb-6 space-y-3" x-data="{ messages: [] }" x-init="messages = {{ messages|length }}" role="alert" aria-live="polite">
           {% for message in messages %}
             <div
               class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}"
@@ -52,13 +57,13 @@
               <!-- Icon based on message type -->
               <div class="flex-shrink-0">
                 {% if message.tags == 'error' %}
-                  <i class="bi bi-exclamation-circle-fill text-lg"></i>
+                  <i class="bi bi-exclamation-circle-fill text-lg" aria-hidden="true"></i>
                 {% elif message.tags == 'success' %}
-                  <i class="bi bi-check-circle-fill text-lg"></i>
+                  <i class="bi bi-check-circle-fill text-lg" aria-hidden="true"></i>
                 {% elif message.tags == 'warning' %}
-                  <i class="bi bi-exclamation-triangle-fill text-lg"></i>
+                  <i class="bi bi-exclamation-triangle-fill text-lg" aria-hidden="true"></i>
                 {% else %}
-                  <i class="bi bi-info-circle-fill text-lg"></i>
+                  <i class="bi bi-info-circle-fill text-lg" aria-hidden="true"></i>
                 {% endif %}
               </div>
 
@@ -71,9 +76,9 @@
               <button
                 @click="show = false"
                 class="flex-shrink-0 text-current hover:opacity-70 transition-opacity"
-                aria-label="Fechar"
+                aria-label="Fechar alerta"
               >
-                <i class="bi bi-x-lg"></i>
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
               </button>
             </div>
           {% endfor %}
